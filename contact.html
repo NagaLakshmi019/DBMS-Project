@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - TripNest</title>
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href=css/contact.css>
+</head>
+<body>
+
+  <!-- ================= CUSTOM CURSOR ================= -->
+<div class="cursor" id="cursor">
+  <svg class="cursor-ring" width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="url(#cursorGrad)" stroke-width="1.5"/>
+    <defs>
+      <radialGradient id="cursorGrad">
+        <stop offset="0%" stop-color="#60A5FA"/>
+        <stop offset="100%" stop-color="#2563EB"/>
+      </radialGradient>
+    </defs>
+  </svg>
+  <div class="cursor-dot"></div>
+  <svg class="cursor-plane" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/>
+  </svg>
+</div>
+
+  <!-- ==========================================
+     STICKY GLASS NAVBAR
+  =========================================== -->
+  <header class="navbar-wrapper">
+    <nav class="navbar container">
+      <a href="index.html" class="nav-logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" fill="none"/>
+          <path d="M2.5 12h19M12 2.5a15.3 15.3 0 0 1 4 9.5 15.3 15.3 0 0 1-4 9.5 15.3 15.3 0 0 1-4-9.5 15.3 15.3 0 0 1 4-9.5z"/>
+        </svg>
+        <span class="logo-text">Trip<span class="text-accent">Nest</span></span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="destinations.html" class="nav-link">Destinations</a></li>
+        <li><a href="hotels.html" class = "nav-link">Hotels</a></li>
+        <li><a href="packages.html" class="nav-link">Packages</a></li>
+        <li><a href="plan-trip.html" class="nav-link">Plan Trip</a></li>
+        <li><a href="about.html" class="nav-link">About Us</a></li>
+        <li><a href="contact.html" class="nav-link active">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn-link">Log In</a>
+        <a href="register.html" class="btn-gradient">Register</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- ==========================================
+     1. HERO SECTION
+  =========================================== -->
+  <section class="contact-hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <span class="section-tag light">Get In Touch</span>
+      <h1 class="hero-title">Contact TripNest</h1>
+      <p class="hero-subtitle">
+        We’re here to help you plan your next unforgettable journey.
+      </p>
+    </div>
+  </section>
+
+
+  <main>
+    <!-- ==========================================
+       2. CONTACT INFO & FORM SECTION
+    =========================================== -->
+    <section id="contact-main" class="section-padding">
+      <div class="container">
+        <div class="contact-grid">
+          
+          <!-- Contact Info Side Card -->
+          <div class="contact-info-card">
+            <div class="info-header">
+              <h2 class="info-title">Let’s Talk Travel</h2>
+              <p class="info-subtitle">Have questions or need assistance with your booking? Reach out to our global team.</p>
+            </div>
+
+            <div class="info-list">
+              <!-- Email Item -->
+              <div class="info-item">
+                <div class="info-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </div>
+                <div class="info-details">
+                  <span class="info-label">Email Us</span>
+                  <a href="mailto:info@tripnest.com" class="info-value">info@tripnest.com</a>
+                </div>
+              </div>
+
+              <!-- Phone Item -->
+              <div class="info-item">
+                <div class="info-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                </div>
+                <div class="info-details">
+                  <span class="info-label">Call Anytime</span>
+                  <a href="tel:+18005558747" class="info-value">+1 (800) 555-8747</a>
+                </div>
+              </div>
+
+              <!-- Address Item -->
+              <div class="info-item">
+                <div class="info-icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <div class="info-details">
+                  <span class="info-label">Headquarters</span>
+                  <span class="info-value">New York, USA</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social Media Connections -->
+            <div class="social-box">
+              <h4 class="social-title">Connect with us:</h4>
+              <div class="social-icons">
+                <a href="#" class="social-btn" aria-label="Facebook">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </a>
+                <a href="#" class="social-btn" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                <a href="#" class="social-btn" aria-label="X">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="#" class="social-btn" aria-label="LinkedIn">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form Panel -->
+          <div class="contact-form-card">
+            <h2 class="form-title">Send Us a Message</h2>
+            <p class="form-subtitle">Fill out the form below and our concierge team will respond within 2 hours.</p>
+
+            <form class="contact-form" action="#" method="POST" onsubmit="return false;">
+              <div class="form-grid">
+                <!-- Full Name -->
+                <div class="form-group">
+                  <label for="fullname" class="form-label">Full Name</label>
+                  <div class="input-wrapper">
+                    <svg class="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <input type="text" id="fullname" name="fullname" class="form-input" placeholder="John Doe" required />
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                  <label for="email" class="form-label">Email Address</label>
+                  <div class="input-wrapper">
+                    <svg class="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                      <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" required />
+                  </div>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                  <label for="phone" class="form-label">Phone Number</label>
+                  <div class="input-wrapper">
+                    <svg class="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 000-0000" />
+                  </div>
+                </div>
+
+                <!-- Subject -->
+                <div class="form-group">
+                  <label for="subject" class="form-label">Subject</label>
+                  <div class="input-wrapper">
+                    <svg class="input-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <input type="text" id="subject" name="subject" class="form-input" placeholder="e.g. Booking Inquiry" required />
+                  </div>
+                </div>
+
+                <!-- Message (Full Width) -->
+                <div class="form-group full-width">
+                  <label for="message" class="form-label">Your Message</label>
+                  <div class="input-wrapper">
+                    <textarea id="message" name="message" class="form-input form-textarea" rows="4" placeholder="How can we help you plan your next trip?" required></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="btn-gradient btn-full">
+                <span>Send Message</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       3. OFFICE LOCATIONS SECTION
+    =========================================== -->
+    <section id="offices" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Global Presence</span>
+          <h2 class="section-title">Our Office Locations</h2>
+          <p class="section-subtitle">Visit our physical travel hubs located in major cities worldwide</p>
+        </div>
+
+        <div class="offices-grid">
+          <!-- Office 1: New York -->
+          <article class="office-card">
+            <div class="office-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=600&q=80" alt="New York Office" class="office-img" />
+              <span class="office-badge">Headquarters</span>
+            </div>
+            <div class="office-content">
+              <h3 class="office-city">New York</h3>
+              <p class="office-address">550 5th Avenue, Suite 1200<br>New York, NY 10036, USA</p>
+              <a href="tel:+18005558747" class="office-phone">+1 (800) 555-8747</a>
+            </div>
+          </article>
+
+          <!-- Office 2: London -->
+          <article class="office-card">
+            <div class="office-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80" alt="London Office" class="office-img" />
+            </div>
+            <div class="office-content">
+              <h3 class="office-city">London</h3>
+              <p class="office-address">25 Regent Street, St James's<br>London SW1Y 44B, UK</p>
+              <a href="tel:+442079460912" class="office-phone">+44 20 7946 0912</a>
+            </div>
+          </article>
+
+          <!-- Office 3: Singapore -->
+          <article class="office-card">
+            <div class="office-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=600&q=80" alt="Singapore Office" class="office-img" />
+            </div>
+            <div class="office-content">
+              <h3 class="office-city">Singapore</h3>
+              <p class="office-address">1 Marina Boulevard, #28-01<br>Singapore 018989</p>
+              <a href="tel:+6567890123" class="office-phone">+65 6789 0123</a>
+            </div>
+          </article>
+
+          <!-- Office 4: Dubai -->
+          <article class="office-card">
+            <div class="office-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80" alt="Dubai Office" class="office-img" />
+            </div>
+            <div class="office-content">
+              <h3 class="office-city">Dubai</h3>
+              <p class="office-address">Burj Plaza, Downtown Dubai<br>PO Box 12345, UAE</p>
+              <a href="tel:+97143214567" class="office-phone">+971 4 321 4567</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       4. INTERACTIVE MAP SECTION
+    =========================================== -->
+    <section id="map-section" class="section-padding">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Find Us</span>
+          <h2 class="section-title">Explore Headquarters on Map</h2>
+          <p class="section-subtitle">Located in the heart of Manhattan, New York</p>
+        </div>
+
+        <div class="map-card">
+          <!-- Responsive Google Map Iframe -->
+          <iframe 
+            class="map-iframe"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215707164412!2d-73.98012822342377!3d40.75512297138706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25901358b1f79%3A0x6a0c5c3b31333!2s550%205th%20Ave%2C%20New%20York%2C%20NY%2010036!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            title="TripNest Headquarters Map">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       5. FREQUENTLY ASKED QUESTIONS (FAQ)
+    =========================================== -->
+    <section id="faq" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">FAQ</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Quick answers to common questions about booking and travel planning</p>
+        </div>
+
+        <div class="faq-list">
+          <!-- FAQ 1 -->
+          <article class="faq-card">
+            <h3 class="faq-question">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              How do I book a vacation package on TripNest?
+            </h3>
+            <p class="faq-answer">
+              Browsing and booking is easy! Navigate to our "Packages" or "Destinations" tab, select your preferred holiday package, choose your dates, and click "Book Package". You will receive instant confirmation via email.
+            </p>
+          </article>
+
+          <!-- FAQ 2 -->
+          <article class="faq-card">
+            <h3 class="faq-question">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Can I customize an existing travel itinerary?
+            </h3>
+            <p class="faq-answer">
+              Yes! We offer fully customizable itineraries. Contact our concierge team via the contact form above with your specific requests, and we will tailor flight, stay, and excursion options to your needs.
+            </p>
+          </article>
+
+          <!-- FAQ 3 -->
+          <article class="faq-card">
+            <h3 class="faq-question">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              What is TripNest's cancellation and refund policy?
+            </h3>
+            <p class="faq-answer">
+              We offer free cancellation up to 48 hours prior to check-in on most hotel bookings and packages. Full details are listed transparently on each booking confirmation page.
+            </p>
+          </article>
+
+          <!-- FAQ 4 -->
+          <article class="faq-card">
+            <h3 class="faq-question">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Does TripNest offer 24/7 customer support during my trip?
+            </h3>
+            <p class="faq-answer">
+              Absolutely. Our global support team operates 24/7. You can reach us by phone at +1 (800) 555-8747 or email us anytime for immediate assistance during your trip.
+            </p>
+          </article>
+
+          <!-- FAQ 5 -->
+          <article class="faq-card">
+            <h3 class="faq-question">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              How do I request special accommodations or group discounts?
+            </h3>
+            <p class="faq-answer">
+              For group bookings of 10 or more travelers, or for specific accessibility requests, please submit a message above selecting "Group Booking" in the subject line.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- ==========================================
+     6. FOOTER SECTION
+  =========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <span class="logo-text">Trip<span class="text-primary">Nest</span></span>
+          </a>
+          <p class="footer-desc">
+            Your luxury gateway to exploring the world. Booking premium hotels, curated vacation packages, and unforgettable experiences with confidence.
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="X" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-col">
+            <h4 class="footer-heading">Company</h4>
+            <ul class="footer-menu">
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Blog & News</a></li>
+              <li><a href="#">Partnerships</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Destinations</h4>
+            <ul class="footer-menu">
+              <li><a href="#">Paris, France</a></li>
+              <li><a href="#">Bali, Indonesia</a></li>
+              <li><a href="#">Kyoto, Japan</a></li>
+              <li><a href="#">Maldives Islands</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Support</h4>
+            <ul class="footer-menu">
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 TripNest Travel Inc. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

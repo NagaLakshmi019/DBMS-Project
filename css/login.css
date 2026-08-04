@@ -1,0 +1,456 @@
+/* ==========================================
+   DESIGN SYSTEM & VARIABLES
+=========================================== */
+:root {
+  --primary-blue: #2563eb;
+  --secondary-sky: #38bdf8;
+  --accent-green: #22c55e;
+  --bg-color: #f8fafc;
+  --white-card: #ffffff;
+  --dark-footer: #0f172a;
+  
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --border-color: #e2e8f0;
+
+  --font-family: 'Poppins', sans-serif;
+
+  --radius-btn: 12px;
+  --radius-card: 20px;
+
+  --gradient-cta: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 20px 30px -10px rgba(37, 99, 235, 0.2);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  font-family: var(--font-family);
+  color: var(--text-main);
+  background-color: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================
+   FULL-SCREEN BACKGROUND WRAPPER
+=========================================== */
+.login-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  /* Premium Unsplash travel image with overlay */
+  background: 
+    linear-gradient(135deg, rgba(15, 23, 42, 0.65) 0%, rgba(37, 99, 235, 0.45) 100%),
+    url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  background-attachment: fixed;
+}
+
+/* Floating Back to Home Button */
+.back-home-btn {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-btn);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transition);
+  z-index: 10;
+}
+
+.back-home-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(-4px);
+  color: #ffffff;
+}
+
+/* ==========================================
+   GLASSMORPHISM LOGIN CARD
+=========================================== */
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-card);
+  padding: 40px 36px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: var(--transition);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Brand Header */
+.brand-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  color: var(--primary-blue);
+}
+
+.logo-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--dark-footer);
+  letter-spacing: -0.5px;
+}
+
+.text-accent {
+  color: var(--secondary-sky);
+}
+
+.brand-tagline {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* Login Titles */
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-footer);
+  margin-bottom: 4px;
+}
+
+.welcome-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   FORM CONTROLS & INPUTS
+=========================================== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--dark-footer);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-light);
+  transition: var(--transition);
+  pointer-events: none;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  color: var(--text-main);
+  background: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-input::placeholder {
+  color: #a0aec0;
+}
+
+.form-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.form-input:focus + .input-icon,
+.input-wrapper:focus-within .input-icon {
+  color: var(--primary-blue);
+}
+
+/* Form Options (Remember Me & Forgot Link) */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.825rem;
+  margin-top: -2px;
+}
+
+.checkbox-container {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 18px;
+  width: 18px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 5px;
+  margin-right: 8px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  border-color: var(--primary-blue);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-label {
+  color: var(--text-muted);
+}
+
+.forgot-link {
+  color: var(--primary-blue);
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  color: #1d4ed8;
+}
+
+/* ==========================================
+   BUTTONS & ACTIONS
+=========================================== */
+.btn-gradient {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--gradient-cta);
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.btn-gradient:active {
+  transform: translateY(0);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+  padding: 0 12px;
+}
+
+/* Google Sign-In Button */
+.btn-google {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #ffffff;
+  color: var(--dark-footer);
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.btn-google:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Card Footer Link */
+.card-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.register-link {
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================
+   RESPONSIVE STYLES
+=========================================== */
+@media (max-width: 576px) {
+  .login-wrapper {
+    padding: 20px 16px;
+  }
+
+  .login-card {
+    padding: 30px 22px;
+    border-radius: 16px;
+  }
+
+  .back-home-btn {
+    top: 16px;
+    left: 16px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .welcome-title {
+    font-size: 1.35rem;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media(hover:none){ body{cursor:auto;} .cursor{display:none;} button,a{cursor:pointer;} }
+
+/* =============== CUSTOM CURSOR =============== */
+.cursor{position:fixed;top:0;left:0;width:0;height:0;pointer-events:none;z-index:9999;}
+.cursor-ring{position:absolute;top:-20px;left:-20px;transition:transform .15s ease, opacity .2s ease;}
+.cursor-dot{position:absolute;top:-3px;left:-3px;width:6px;height:6px;border-radius:50%;background:var(--primary);box-shadow:0 0 10px 2px rgba(37,99,235,.5);}
+.cursor-plane{position:absolute;top:-9px;left:-9px;opacity:0;transform:scale(.5) rotate(0deg);transition:opacity .2s ease, transform .2s ease;}
+.cursor.hover-card .cursor-ring{transform:scale(1.8);opacity:.4;}
+.cursor.hover-card .cursor-plane{opacity:1;transform:scale(1) rotate(-30deg);}
+.cursor.hover-btn .cursor-ring{transform:scale(1.4);border-color:var(--primary);}
+.cursor.click .cursor-ring{transform:scale(2.4);opacity:.15;}

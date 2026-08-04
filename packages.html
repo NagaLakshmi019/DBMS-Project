@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Packages — TripNest | Curated Journeys for Every Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/packages.css">
+</head>
+<body>
+
+<!-- ================= CUSTOM CURSOR ================= -->
+<div class="cursor" id="cursor">
+  <svg class="cursor-ring" width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="url(#cursorGrad)" stroke-width="1.5"/>
+    <defs>
+      <radialGradient id="cursorGrad">
+        <stop offset="0%" stop-color="#60A5FA"/>
+        <stop offset="100%" stop-color="#2563EB"/>
+      </radialGradient>
+    </defs>
+  </svg>
+  <div class="cursor-dot"></div>
+  <svg class="cursor-plane" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/>
+  </svg>
+</div>
+
+<!-- ================= PAGE LOADER ================= -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" class="loader-plane">
+      <path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/>
+    </svg>
+    <span>TripNest</span>
+  </div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="15" fill="#2563EB"/>
+          <path d="M8 15L15 9L22 15L15 21L8 15Z" fill="#fff" opacity="0.9"/>
+        </svg>
+      </span>
+      Trip<span class="logo-accent">Nest</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="packages.html" class="active">Packages<span class="nav-underline"></span></a>
+      <a href="plan-trip.html">Plan Trip</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-text">Log In</a>
+      <a href="register.htmls" class="btn btn-primary btn-sm magnetic">Register</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 1. HERO SECTION ================= -->
+<section class="hero" id="hero">
+  <div class="hero-bg-decor">
+    <svg class="float-svg cloud-1" width="90" height="50" viewBox="0 0 90 50" fill="none"><path d="M20 40c-9 0-16-6-16-14 0-7 5-13 12-14 2-8 9-12 17-11 7 1 12 6 13 13 8 0 14 6 14 13 0 7-7 13-15 13H20z" fill="#DBEAFE"/></svg>
+    <svg class="float-svg cloud-2" width="70" height="40" viewBox="0 0 90 50" fill="none"><path d="M20 40c-9 0-16-6-16-14 0-7 5-13 12-14 2-8 9-12 17-11 7 1 12 6 13 13 8 0 14 6 14 13 0 7-7 13-15 13H20z" fill="#EFF6FF"/></svg>
+    <svg class="float-svg compass-1" width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <circle cx="30" cy="30" r="27" stroke="#2563EB" stroke-width="2" fill="#fff"/>
+      <path d="M30 12L36 30L30 48L24 30Z" fill="#60A5FA"/>
+    </svg>
+    <svg class="float-svg plane-1" width="46" height="46" viewBox="0 0 24 24" fill="none"><path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/></svg>
+    <svg class="float-svg sparkle-1" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5L12 0z" fill="#60A5FA"/></svg>
+    <svg class="float-svg sparkle-2" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5L12 0z" fill="#2563EB"/></svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="badge reveal-up">
+        <span class="badge-dot">✦</span> Handpicked Global Journeys
+      </div>
+      <h1 class="hero-title">
+        <span class="split-line">Curated Journeys</span>
+        <span class="split-line grad-text">for Every Explorer</span>
+      </h1>
+      <p class="hero-sub reveal-up">
+        From beach escapes to mountain summits, discover all-inclusive travel packages
+        designed by experts and priced with total transparency.
+      </p>
+      <div class="hero-cta reveal-up">
+        <a href="#featured" class="btn btn-primary btn-lg magnetic" data-scroll="#featured">
+          Explore Packages
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#builder" class="btn btn-glass btn-lg magnetic" data-scroll="#builder">
+          Build Custom Package
+        </a>
+      </div>
+      <div class="hero-stats reveal-up">
+        <div class="stat">
+          <span class="stat-num" data-count="380">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Curated Packages</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-count="64">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Countries Covered</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-count="97">0</span><span class="stat-plus">%</span>
+          <span class="stat-label">Traveler Satisfaction</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="collage">
+        <div class="collage-card card-1 parallax" data-depth="0.03">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80" alt="Santorini package">
+          <div class="collage-glow"></div>
+        </div>
+        <div class="collage-card card-2 parallax" data-depth="0.06">
+          <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=500&q=80" alt="Bali package">
+        </div>
+        <div class="collage-card card-3 parallax" data-depth="0.045">
+          <img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=500&q=80" alt="Mountain package">
+        </div>
+
+        <div class="float-chip chip-1 parallax" data-depth="0.08">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/></svg>
+          <div><strong>Maldives Escape</strong><span>7 Days · $2,450</span></div>
+        </div>
+        <div class="float-chip chip-2 parallax" data-depth="0.1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="#2563EB" stroke-width="1.6"/><path d="M3 9h18" stroke="#2563EB" stroke-width="1.6"/></svg>
+          <div><strong>Passport Ready</strong><span>Visa assistance included</span></div>
+        </div>
+        <div class="float-badge parallax" data-depth="0.12">
+          <span class="pulse-dot"></span> 1,240 booked this month
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span></span>
+  </div>
+</section>
+
+<!-- ================= 2. PACKAGE SEARCH ================= -->
+<section class="search-section">
+  <div class="container">
+    <form class="search-panel reveal-up" id="searchPanel">
+      <div class="search-field">
+        <label>Destination</label>
+        <select name="destination">
+          <option value="">Anywhere</option>
+          <option>Europe</option>
+          <option>Asia</option>
+          <option>Africa</option>
+          <option>Americas</option>
+          <option>Oceania</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Budget</label>
+        <select name="budget">
+          <option value="">Any Budget</option>
+          <option value="low">Under $1,000</option>
+          <option value="mid">$1,000 – $3,000</option>
+          <option value="high">$3,000 – $6,000</option>
+          <option value="lux">$6,000+</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Duration</label>
+        <select name="duration">
+          <option value="">Any Length</option>
+          <option>3–5 Days</option>
+          <option>6–9 Days</option>
+          <option>10–14 Days</option>
+          <option>15+ Days</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Travelers</label>
+        <select name="travelers">
+          <option>1 Traveler</option>
+          <option selected>2 Travelers</option>
+          <option>3–4 Travelers</option>
+          <option>5+ Travelers</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Travel Style</label>
+        <select name="style">
+          <option value="">Any Style</option>
+          <option>Luxury</option>
+          <option>Adventure</option>
+          <option>Relaxation</option>
+          <option>Cultural</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Season</label>
+        <select name="season">
+          <option value="">Flexible</option>
+          <option>Spring</option>
+          <option>Summer</option>
+          <option>Autumn</option>
+          <option>Winter</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary search-btn magnetic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Search Packages
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ================= 3. PACKAGE CATEGORIES ================= -->
+<section class="categories-section" id="categories">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Browse By Style</span>
+      <h2 class="reveal-up">Find Your Kind of Journey</h2>
+      <p class="reveal-up">Every traveler is different — explore packages sorted by the experience you're chasing.</p>
+    </div>
+    <div class="category-grid">
+      <!-- Category cards injected via repeated markup -->
+      <div class="cat-card reveal-up" data-filter="beach">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&q=80" alt="Beach Escapes"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M6 9c2 0 3 1.5 6 1.5S16 9 18 9M4 21c3-2 13-2 16 0" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <span class="cat-badge">120 Trips</span>
+        <h3>Beach Escapes</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="mountain">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80" alt="Mountain Adventures"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 20l6-11 4 6 3-5 5 10H3z" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <span class="cat-badge">86 Trips</span>
+        <h3>Mountain Adventures</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="luxury">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80" alt="Luxury Tours"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 18h16M5 18l1.5-9L12 13l5.5-4L19 18" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <span class="cat-badge">54 Trips</span>
+        <h3>Luxury Tours</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="safari">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=400&q=80" alt="Wildlife Safari"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 17c2-6 5-9 8-9s6 3 8 9" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="8" r="1.4" fill="#2563EB"/></svg></div>
+        <span class="cat-badge">41 Trips</span>
+        <h3>Wildlife Safari</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="honeymoon">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80" alt="Honeymoon"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s-8-5-8-11a5 5 0 019-3 5 5 0 019 3c0 6-8 11-8 11z" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <span class="cat-badge">33 Trips</span>
+        <h3>Honeymoon</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="family">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=400&q=80" alt="Family Vacation"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="2.5" stroke="#2563EB" stroke-width="1.6"/><circle cx="16" cy="8" r="2.5" stroke="#2563EB" stroke-width="1.6"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5M11 20c0-3 2-5 5-5s5 2 5 5" stroke="#2563EB" stroke-width="1.6"/></svg></div>
+        <span class="cat-badge">78 Trips</span>
+        <h3>Family Vacation</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="backpacking">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=400&q=80" alt="Solo Backpacking"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="6" y="8" width="12" height="13" rx="3" stroke="#2563EB" stroke-width="1.6"/><path d="M9 8V6a3 3 0 016 0v2" stroke="#2563EB" stroke-width="1.6"/></svg></div>
+        <span class="cat-badge">62 Trips</span>
+        <h3>Solo Backpacking</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="adventure">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1530866495561-507c9faab153?w=400&q=80" alt="Adventure Sports"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20L14 4l3 6 3-3 0 13H4z" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <span class="cat-badge">29 Trips</span>
+        <h3>Adventure Sports</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="pilgrimage">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=400&q=80" alt="Pilgrimage"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M7 8l5-5 5 5" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="cat-badge">18 Trips</span>
+        <h3>Pilgrimage</h3>
+      </div>
+      <div class="cat-card reveal-up" data-filter="cruise">
+        <div class="cat-img"><img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?w=400&q=80" alt="Cruise Holidays"></div>
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 19c2 1 4 1 6 0s4-1 6 0 4 1 4 0M6 19V9h12v10" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <span class="cat-badge">37 Trips</span>
+        <h3>Cruise Holidays</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. FEATURED PACKAGES ================= -->
+<section class="featured-section" id="featured">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Editor's Picks</span>
+      <h2 class="reveal-up">Featured Packages</h2>
+      <p class="reveal-up">Our most booked, best rated, all-inclusive journeys this season.</p>
+    </div>
+    <div class="package-grid" id="packageGrid"><!-- populated by JS --></div>
+    <div class="load-more-wrap">
+      <button class="btn btn-outline magnetic" id="loadMoreBtn">Load More Packages</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. CUSTOM TRIP BUILDER ================= -->
+<section class="builder-section" id="builder">
+  <div class="container">
+    <div class="section-head light">
+      <span class="eyebrow reveal-up">Build It Your Way</span>
+      <h2 class="reveal-up">Design Your Own Package</h2>
+      <p class="reveal-up">Pick your preferences and watch your itinerary — and price — come together live.</p>
+    </div>
+
+    <div class="builder-panel reveal-up">
+      <div class="builder-progress">
+        <div class="builder-progress-bar" id="builderProgress"></div>
+      </div>
+      <div class="builder-grid">
+        <div class="builder-field">
+          <label>Destination</label>
+          <select id="bDestination">
+            <option value="1200">Southeast Asia</option>
+            <option value="1800">Europe</option>
+            <option value="2200">Americas</option>
+            <option value="1500">Africa</option>
+            <option value="2600">Oceania</option>
+          </select>
+        </div>
+        <div class="builder-field">
+          <label>Days: <span id="bDaysVal">7</span></label>
+          <input type="range" id="bDays" min="2" max="21" value="7">
+        </div>
+        <div class="builder-field">
+          <label>Travel Style</label>
+          <select id="bStyle">
+            <option value="1.0">Standard</option>
+            <option value="1.4">Premium</option>
+            <option value="2.0">Luxury</option>
+          </select>
+        </div>
+        <div class="builder-field">
+          <label>Accommodation</label>
+          <select id="bStay">
+            <option value="80">3-Star Hotel</option>
+            <option value="150">4-Star Hotel</option>
+            <option value="320">5-Star Resort</option>
+            <option value="500">Private Villa</option>
+          </select>
+        </div>
+        <div class="builder-field">
+          <label>Transport</label>
+          <select id="bTransport">
+            <option value="200">Economy Flights</option>
+            <option value="600">Business Flights</option>
+            <option value="150">Rail & Road</option>
+          </select>
+        </div>
+        <div class="builder-field">
+          <label>Meals</label>
+          <select id="bMeals">
+            <option value="30">Breakfast Only</option>
+            <option value="55">Half Board</option>
+            <option value="90">Full Board</option>
+          </select>
+        </div>
+        <div class="builder-field">
+          <label>Guide</label>
+          <select id="bGuide">
+            <option value="0">Self-Guided</option>
+            <option value="45">Local Guide (Daily)</option>
+            <option value="90">Private Guide (Daily)</option>
+          </select>
+        </div>
+        <div class="builder-field checkboxes">
+          <label>Activities</label>
+          <div class="chip-toggle-group">
+            <label class="chip-toggle"><input type="checkbox" value="80" checked> Snorkeling</label>
+            <label class="chip-toggle"><input type="checkbox" value="120"> Hiking Tour</label>
+            <label class="chip-toggle"><input type="checkbox" value="60"> City Tour</label>
+            <label class="chip-toggle"><input type="checkbox" value="200"> Safari Drive</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="builder-price-card">
+        <span class="builder-price-label">Live Price Estimate</span>
+        <div class="builder-price" id="builderPrice">$0</div>
+        <span class="builder-price-sub">per person, all-inclusive</span>
+        <a href="#" class="btn btn-primary magnetic" id="builderCta">Request This Package</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. PACKAGE COMPARISON ================= -->
+<section class="compare-section" id="compare">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Choose Your Tier</span>
+      <h2 class="reveal-up">Compare Package Tiers</h2>
+      <p class="reveal-up">Every tier includes our signature service — the difference is in the details.</p>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card reveal-up">
+        <h3>Basic</h3>
+        <div class="compare-price">$899<span>/person</span></div>
+        <ul>
+          <li>3-Star Accommodation</li>
+          <li>Economy Flights</li>
+          <li>Breakfast Included</li>
+          <li>Group Transfers</li>
+          <li class="off">Private Guide</li>
+          <li class="off">Lounge Access</li>
+        </ul>
+        <a href="#" class="btn btn-outline full magnetic">Choose Basic</a>
+      </div>
+      <div class="compare-card reveal-up">
+        <h3>Premium</h3>
+        <div class="compare-price">$1,699<span>/person</span></div>
+        <ul>
+          <li>4-Star Accommodation</li>
+          <li>Direct Flights</li>
+          <li>Half Board Meals</li>
+          <li>Private Transfers</li>
+          <li>Shared Guide</li>
+          <li class="off">Lounge Access</li>
+        </ul>
+        <a href="#" class="btn btn-outline full magnetic">Choose Premium</a>
+      </div>
+      <div class="compare-card featured-card reveal-up">
+        <span class="most-popular">Most Popular</span>
+        <h3>Luxury</h3>
+        <div class="compare-price">$2,950<span>/person</span></div>
+        <ul>
+          <li>5-Star Resort</li>
+          <li>Business Flights</li>
+          <li>Full Board Meals</li>
+          <li>Private Transfers</li>
+          <li>Private Guide</li>
+          <li>Lounge Access</li>
+        </ul>
+        <a href="#" class="btn btn-primary full magnetic">Choose Luxury</a>
+      </div>
+      <div class="compare-card reveal-up">
+        <h3>VIP</h3>
+        <div class="compare-price">$5,400<span>/person</span></div>
+        <ul>
+          <li>Private Villa / Suite</li>
+          <li>First Class Flights</li>
+          <li>Full Board + Perks</li>
+          <li>Chauffeur Service</li>
+          <li>24/7 Concierge</li>
+          <li>Lounge Access</li>
+        </ul>
+        <a href="#" class="btn btn-outline full magnetic">Choose VIP</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. INTERACTIVE ITINERARY ================= -->
+<section class="itinerary-section" id="itinerary">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Sample Journey</span>
+      <h2 class="reveal-up">7-Day Santorini Escape Itinerary</h2>
+      <p class="reveal-up">A day-by-day look at what a signature TripNest package feels like.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-line"><div class="timeline-progress" id="timelineProgress"></div></div>
+
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 1</span>
+          <h4>Arrival & Sunset Welcome</h4>
+          <p>Land in Santorini, private transfer to your caldera-view suite, welcome dinner at sunset.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 2</span>
+          <h4>Sightseeing in Oia</h4>
+          <p>Explore whitewashed streets, blue-domed churches, and iconic viewpoints across Oia.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 3</span>
+          <h4>Volcano Adventure</h4>
+          <p>Boat trip to the volcanic islet, hot springs swim, and a hike to the crater rim.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">4</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 4</span>
+          <h4>Culture & Wine Trails</h4>
+          <p>Visit ancient Akrotiri ruins followed by a guided tasting at a family-run vineyard.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">5</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 5</span>
+          <h4>Spa & Relaxation</h4>
+          <p>A free day at leisure — infinity pool, spa treatments, or simply the caldera view.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">6</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 6</span>
+          <h4>Local Markets & Shopping</h4>
+          <p>Browse artisan boutiques in Fira and pick up keepsakes from local jewelers.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot">7</div>
+        <div class="timeline-card">
+          <span class="day-tag">Day 7</span>
+          <h4>Departure</h4>
+          <p>Farewell breakfast with a caldera view, then a private transfer to the airport.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 8. WORLD PACKAGE MAP ================= -->
+<section class="worldmap-section" id="worldmap">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Global Reach</span>
+      <h2 class="reveal-up">Explore Our Package Map</h2>
+      <p class="reveal-up">Hover a pin to preview the destination, click to jump to its packages.</p>
+    </div>
+    <div class="worldmap-panel reveal-up">
+      <svg viewBox="0 0 1000 500" class="world-svg" id="worldSvg">
+        <path d="M470 90c-9 0-16 5-16 5s-14-2-14 6c0 5 6 6 6 6s-10 3-10 10c0 8 12 8 12 8s-6 8 2 12c6 3 14-2 14-2s2 8 12 6c8-2 8-10 8-10s10 4 14-4c3-6-3-11-3-11s10-2 8-10c-2-6-10-6-10-6s4-8-4-10c-6-1-9 4-9 4s-2-6-10-4z" fill="#DBEAFE" opacity="0.7"></path>
+        <ellipse cx="230" cy="150" rx="120" ry="80" fill="#E0EAFE"/>
+        <ellipse cx="230" cy="330" rx="80" ry="110" fill="#E0EAFE"/>
+        <ellipse cx="520" cy="130" rx="90" ry="70" fill="#E0EAFE"/>
+        <ellipse cx="540" cy="300" rx="70" ry="100" fill="#E0EAFE"/>
+        <ellipse cx="700" cy="150" rx="150" ry="90" fill="#E0EAFE"/>
+        <ellipse cx="820" cy="360" rx="60" ry="50" fill="#E0EAFE"/>
+
+        <path id="route1" d="M230 150 Q 400 60 520 130" stroke="#93C5FD" stroke-width="2" stroke-dasharray="6 6" fill="none"/>
+        <path id="route2" d="M520 130 Q 620 100 700 150" stroke="#93C5FD" stroke-width="2" stroke-dasharray="6 6" fill="none"/>
+        <path id="route3" d="M230 150 Q 130 260 230 330" stroke="#93C5FD" stroke-width="2" stroke-dasharray="6 6" fill="none"/>
+
+        <g class="pin" data-name="North America" data-info="Top pick: Rocky Mountain Explorer · from $1,890" transform="translate(230,150)">
+          <circle r="14" fill="#2563EB" opacity="0.15" class="pin-pulse"/>
+          <circle r="6" fill="#2563EB"/>
+        </g>
+        <g class="pin" data-name="Europe" data-info="Top pick: Santorini Escape · from $2,450" transform="translate(520,130)">
+          <circle r="14" fill="#2563EB" opacity="0.15" class="pin-pulse"/>
+          <circle r="6" fill="#2563EB"/>
+        </g>
+        <g class="pin" data-name="Asia" data-info="Top pick: Bali Wellness Retreat · from $1,320" transform="translate(700,150)">
+          <circle r="14" fill="#2563EB" opacity="0.15" class="pin-pulse"/>
+          <circle r="6" fill="#2563EB"/>
+        </g>
+        <g class="pin" data-name="South America" data-info="Top pick: Patagonia Trek · from $2,100" transform="translate(230,330)">
+          <circle r="14" fill="#2563EB" opacity="0.15" class="pin-pulse"/>
+          <circle r="6" fill="#2563EB"/>
+        </g>
+        <g class="pin" data-name="Africa" data-info="Top pick: Serengeti Safari · from $3,400" transform="translate(540,300)">
+          <circle r="14" fill="#2563EB" opacity="0.15" class="pin-pulse"/>
+          <circle r="6" fill="#2563EB"/>
+        </g>
+        <g class="pin" data-name="Oceania" data-info="Top pick: Great Barrier Reef Cruise · from $2,780" transform="translate(820,360)">
+          <circle r="14" fill="#2563EB" opacity="0.15" class="pin-pulse"/>
+          <circle r="6" fill="#2563EB"/>
+        </g>
+
+        <g id="mapPlane" transform="translate(230,150)">
+          <path d="M0 -6L10 0L0 6L-3 1L-8 1L-8 -1L-3 -1Z" fill="#2563EB"/>
+        </g>
+      </svg>
+      <div class="map-info" id="mapInfo">
+        <span class="eyebrow">Hover a region</span>
+        <h4 id="mapInfoName">North America</h4>
+        <p id="mapInfoText">Top pick: Rocky Mountain Explorer · from $1,890</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 9. INCLUDED SERVICES ================= -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">What's Included</span>
+      <h2 class="reveal-up">Every Package Comes Ready</h2>
+      <p class="reveal-up">No hidden costs — here's what's already built into your price.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M2 12L21 3L15 21L11 13L2 12Z" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <h4>Flights</h4><p>Round-trip airfare included</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 21V10l9-6 9 6v11M8 21v-6h8v6" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <h4>Hotels</h4><p>Handpicked stays, every night</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 3c4 0 4 4 8 4M6 14c4 0 4-3 8-3" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h4>Meals</h4><p>Curated dining experiences</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="10" rx="2" stroke="#2563EB" stroke-width="1.6"/><circle cx="7.5" cy="18" r="1.4" fill="#2563EB"/><circle cx="16.5" cy="18" r="1.4" fill="#2563EB"/></svg>
+        <h4>Transfers</h4><p>Airport & city transport</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="#2563EB" stroke-width="1.6"/><circle cx="12" cy="10" r="3" stroke="#2563EB" stroke-width="1.6"/></svg>
+        <h4>Visa</h4><p>Documentation support</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2563EB" stroke-width="1.6"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6" stroke="#2563EB" stroke-width="1.6"/></svg>
+        <h4>Guide</h4><p>Expert local guides</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z" stroke="#2563EB" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <h4>Insurance</h4><p>Full travel coverage</p>
+      </div>
+      <div class="service-card reveal-up">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2563EB" stroke-width="1.6"/><path d="M12 8v4l3 2" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h4>24/7 Support</h4><p>Help whenever you need it</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10. EXCLUSIVE OFFERS ================= -->
+<section class="offers-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Don't Miss Out</span>
+      <h2 class="reveal-up">Exclusive Offers</h2>
+      <p class="reveal-up">Time-limited deals across our most loved packages.</p>
+    </div>
+    <div class="offers-grid">
+      <div class="offer-card offer-shine reveal-up">
+        <span class="offer-tag">Limited Deal</span>
+        <h3>Save 25% on Bali Retreats</h3>
+        <p>Book any Bali wellness package before it's gone.</p>
+        <div class="countdown" data-hours="36">
+          <div><span class="cd-num" data-unit="h">36</span><span class="cd-label">Hrs</span></div>
+          <div><span class="cd-num" data-unit="m">00</span><span class="cd-label">Min</span></div>
+          <div><span class="cd-num" data-unit="s">00</span><span class="cd-label">Sec</span></div>
+        </div>
+        <a href="#" class="btn btn-primary btn-sm magnetic">Grab Deal</a>
+      </div>
+      <div class="offer-card offer-dark reveal-up">
+        <span class="offer-tag">Early Bird</span>
+        <h3>15% Off Bookings 90 Days Out</h3>
+        <p>Plan ahead and lock in early bird pricing on any package.</p>
+        <a href="#" class="btn btn-glass btn-sm magnetic">Learn More</a>
+      </div>
+      <div class="offer-card offer-accent reveal-up">
+        <span class="offer-tag">Festival Offer</span>
+        <h3>Free Upgrade This Season</h3>
+        <p>Complimentary room upgrade on all Luxury tier bookings.</p>
+        <a href="#" class="btn btn-outline btn-sm magnetic">Claim Now</a>
+      </div>
+      <div class="offer-card offer-light reveal-up">
+        <span class="offer-tag">Student Discount</span>
+        <h3>10% Off With Valid Student ID</h3>
+        <p>Applicable on Backpacking and Adventure packages.</p>
+        <a href="#" class="btn btn-outline btn-sm magnetic">Verify & Save</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11. CUSTOMER STORIES ================= -->
+<section class="stories-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Traveler Stories</span>
+      <h2 class="reveal-up">Loved By Explorers Worldwide</h2>
+    </div>
+    <div class="stories-track-wrap reveal-up">
+      <div class="stories-track" id="storiesTrack">
+        <div class="story-card">
+          <div class="stars">★★★★★</div>
+          <p>"The Santorini itinerary was flawless — every transfer, every meal, exactly as promised."</p>
+          <div class="story-person">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Traveler">
+            <div><strong>Ava Thompson</strong><span>Santorini, Greece</span></div>
+          </div>
+        </div>
+        <div class="story-card">
+          <div class="stars">★★★★★</div>
+          <p>"Our custom trip builder quote matched the final invoice to the dollar. Refreshing honesty."</p>
+          <div class="story-person">
+            <img src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=100&q=80" alt="Traveler">
+            <div><strong>Marcus Lee</strong><span>Kyoto, Japan</span></div>
+          </div>
+        </div>
+        <div class="story-card">
+          <div class="stars">★★★★★</div>
+          <p>"Safari guide was exceptional. TripNest handled visas, transfers, everything, stress-free."</p>
+          <div class="story-person">
+            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&q=80" alt="Traveler">
+            <div><strong>Priya Nair</strong><span>Serengeti, Tanzania</span></div>
+          </div>
+        </div>
+        <div class="story-card">
+          <div class="stars">★★★★★</div>
+          <p>"Best honeymoon we could've asked for. The Maldives package felt genuinely bespoke."</p>
+          <div class="story-person">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Traveler">
+            <div><strong>Daniel & Sara Kim</strong><span>Maldives</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 12. TRAVEL GALLERY ================= -->
+<section class="gallery-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Moments Worth Chasing</span>
+      <h2 class="reveal-up">Travel Gallery</h2>
+    </div>
+    <div class="gallery-masonry" id="galleryMasonry">
+      <div class="gallery-item" data-caption="Santorini, Greece"><img loading="lazy" src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=500&q=80" alt="Santorini"></div>
+      <div class="gallery-item" data-caption="Bali, Indonesia"><img loading="lazy" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80" alt="Bali"></div>
+      <div class="gallery-item" data-caption="Swiss Alps"><img loading="lazy" src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&q=80" alt="Swiss Alps"></div>
+      <div class="gallery-item" data-caption="Serengeti, Tanzania"><img loading="lazy" src="https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=500&q=80" alt="Serengeti"></div>
+      <div class="gallery-item" data-caption="Kyoto, Japan"><img loading="lazy" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=500&q=80" alt="Kyoto"></div>
+      <div class="gallery-item" data-caption="Maldives"><img loading="lazy" src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=500&q=80" alt="Maldives"></div>
+      <div class="gallery-item" data-caption="Patagonia"><img loading="lazy" src="https://images.unsplash.com/photo-1478827387698-1527781a4887?w=500&q=80" alt="Patagonia"></div>
+      <div class="gallery-item" data-caption="Amalfi Coast"><img loading="lazy" src="https://images.unsplash.com/photo-1533105045747-b17aacd6d0ea?w=500&q=80" alt="Amalfi Coast"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <span class="lightbox-caption" id="lightboxCaption"></span>
+</div>
+
+<!-- ================= 13. FAQ ================= -->
+<section class="faq-section" id="faq">
+  <div class="container narrow">
+    <div class="section-head">
+      <span class="eyebrow reveal-up">Need To Know</span>
+      <h2 class="reveal-up">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal-up">
+        <button class="faq-q">
+          <span>What's included in the package price?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Every package includes flights, accommodation, listed meals, transfers, and 24/7 support. Optional add-ons like private guides are clearly marked before checkout.</p></div>
+      </div>
+      <div class="faq-item reveal-up">
+        <button class="faq-q">
+          <span>Can I customize a featured package?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Yes — use the Custom Trip Builder to adjust duration, accommodation tier, transport, and activities on any package, with live price updates as you go.</p></div>
+      </div>
+      <div class="faq-item reveal-up">
+        <button class="faq-q">
+          <span>What is your cancellation policy?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Full refunds are available up to 30 days before departure. Between 30 and 14 days, a partial credit applies. Full terms are shown at checkout.</p></div>
+      </div>
+      <div class="faq-item reveal-up">
+        <button class="faq-q">
+          <span>Do you offer travel insurance?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Standard travel insurance is bundled into every package. Premium and VIP tiers include enhanced coverage for medical and trip interruption.</p></div>
+      </div>
+      <div class="faq-item reveal-up">
+        <button class="faq-q">
+          <span>How far in advance should I book?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>We recommend booking 60–90 days ahead for the best rates and availability, though last-minute packages are often available within 2 weeks.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 14. NEWSLETTER ================= -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-card reveal-up">
+      <div class="newsletter-text">
+        <span class="eyebrow">Stay In The Loop</span>
+        <h2>Get Fresh Packages In Your Inbox</h2>
+        <p>Join 40,000+ travelers receiving new deals, seasonal drops, and travel tips.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <input type="email" placeholder="you@example.com" id="newsletterEmail" required>
+          <button type="submit" class="btn btn-primary magnetic">Subscribe</button>
+        </form>
+        <span class="newsletter-msg" id="newsletterMsg"></span>
+      </div>
+      <div class="newsletter-art">
+        <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
+          <circle cx="110" cy="90" r="80" fill="#DBEAFE"/>
+          <path d="M40 90L110 60L180 90L110 120L40 90Z" fill="#2563EB"/>
+          <path d="M60 100v25l50 20 50-20v-25" stroke="#2563EB" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= 15. FOOTER ================= -->
+<footer class="footer">
+  <svg class="footer-route" viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0 30 Q 300 0 600 30 T 1200 30" stroke="#1E3A8A" stroke-width="1.5" stroke-dasharray="8 8" fill="none"/>
+    <g id="footerPlane" transform="translate(0,30)"><path d="M0 -5L9 0L0 5L-2 1L-7 1L-7 -1L-2 -1Z" fill="#60A5FA"/></g>
+  </svg>
+  <div class="container footer-grid">
+    <div class="footer-col brand-col">
+      <a href="#" class="logo light">
+        <span class="logo-icon">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="15" fill="#3B82F6"/><path d="M8 15L15 9L22 15L15 21L8 15Z" fill="#fff" opacity="0.9"/></svg>
+        </span>
+        Trip<span class="logo-accent">Nest</span>
+      </a>
+      <p>Curated journeys, transparent pricing, and support that travels with you.</p>
+      <div class="social-icons">
+        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="#fff" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1" fill="#fff"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3c-2 0-3.5 1.5-3.5 3.5V12H8v3h2.5v6h3v-6H16l.5-3h-3V9.7c0-.5.3-.7.7-.7z" fill="#fff"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 5.5c-.7.3-1.5.6-2.3.7.8-.5 1.4-1.3 1.7-2.3-.8.5-1.7.8-2.6 1a4 4 0 00-6.9 3.7A11.5 11.5 0 013 4.9a4.1 4.1 0 001.2 5.4c-.6 0-1.2-.2-1.7-.5v.1c0 2 1.4 3.6 3.2 4a4 4 0 01-1.8.1 4 4 0 003.7 2.8A8 8 0 012 18.6a11.3 11.3 0 006.2 1.8c7.4 0 11.5-6.4 11.5-11.9v-.5c.8-.6 1.5-1.3 2-2.1z" fill="#fff"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Explore</h5>
+      <a href="#">Home</a><a href="#">Destinations</a><a href="#">Hotels</a><a href="#">Packages</a>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="#">About Us</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Support</h5>
+      <a href="#">Help Center</a><a href="#">Cancellation Policy</a><a href="#">Travel Insurance</a><a href="#">Terms & Privacy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 TripNest. All rights reserved.</p>
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</footer>
+
+<!-- ================= MODALS ================= -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="bookingModal">
+    <button class="modal-close" data-close>✕</button>
+    <span class="eyebrow">Booking Request</span>
+    <h3 id="modalTitle">Package Name</h3>
+    <p>Fill in your details and our travel team will confirm availability within 24 hours.</p>
+    <form class="modal-form" id="bookingForm">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <input type="date" required>
+      <button type="submit" class="btn btn-primary full magnetic">Confirm Request</button>
+    </form>
+  </div>
+
+  <div class="modal itinerary-modal" id="itineraryModal">
+    <button class="modal-close" data-close>✕</button>
+    <span class="eyebrow">Full Itinerary</span>
+    <h3 id="itineraryModalTitle">Package Name</h3>
+    <div class="modal-itinerary-list" id="itineraryModalList"></div>
+  </div>
+</div>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/packages.js"></script>
+</body>
+</html>

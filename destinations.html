@@ -1,0 +1,1359 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripNest | World-Class Luxury Destinations & Journeys</title>
+  
+  <!-- Google Fonts: Poppins & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <link rel="stylesheet" href="css/destinations.css" />
+</head>
+<body>
+
+   <!-- ================= CUSTOM CURSOR ================= -->
+<div class="cursor" id="cursor">
+  <svg class="cursor-ring" width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="url(#cursorGrad)" stroke-width="1.5"/>
+    <defs>
+      <radialGradient id="cursorGrad">
+        <stop offset="0%" stop-color="#60A5FA"/>
+        <stop offset="100%" stop-color="#2563EB"/>
+      </radialGradient>
+    </defs>
+  </svg>
+  <div class="cursor-dot"></div>
+  <svg class="cursor-plane" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/>
+  </svg>
+</div>
+
+  <!-- ==========================================
+     0. PRELOADER & PAGE CURTAIN
+  =========================================== -->
+  <div id="preloader" class="preloader">
+    <div class="preloader-glass">
+      <div class="preloader-compass">
+        <svg viewBox="0 0 100 100" class="compass-svg">
+          <circle cx="50" cy="50" r="46" class="compass-ring" />
+          <polygon points="50,10 58,45 85,50 58,55 50,90 42,55 15,50 42,45" class="compass-pointer" />
+        </svg>
+      </div>
+      <h1 class="loader-logo">Trip<span class="text-gradient">Nest</span></h1>
+      <p class="loader-status">Curating Billion-Dollar Luxury Experiences...</p>
+    </div>
+  </div>
+
+  <!-- ==========================================
+     FIXED NAVBAR
+  =========================================== -->
+  <header class="navbar-wrapper" id="main-header">
+    <nav class="navbar container">
+      <a href="index.html" class="nav-logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" fill="none"/>
+          <path d="M2.5 12h19M12 2.5a15.3 15.3 0 0 1 4 9.5 15.3 15.3 0 0 1-4 9.5 15.3 15.3 0 0 1-4-9.5 15.3 15.3 0 0 1 4-9.5z"/>
+        </svg>
+        <span class="logo-text">Trip<span class="text-accent">Nest</span></span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="destinations.html" class="nav-link active">Destinations</a></li>
+        <li><a href="hotels.html" class="nav-link">Hotels</a></li>
+        <li><a href="packages.html" class="nav-link">Packages</a></li>
+        <li><a href="plan-trip.html" class="nav-link">Plan Trip</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn-link">Log In</a>
+        <a href="register.html" class="btn-gradient ripple-btn glow-btn">Register</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <main>
+    <!-- ==========================================
+       1. LUXURY HERO SECTION
+    =========================================== -->
+    <section class="hero-section" id="hero">
+      <div class="hero-bg-slider">
+        <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=2000&q=85');"></div>
+        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85');"></div>
+        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=2000&q=85');"></div>
+      </div>
+      <div class="hero-overlay"></div>
+
+      <!-- Floating Animated Parallax Props -->
+      <div class="hero-parallax-props">
+        <div class="prop prop-plane" data-depth="0.2">✈</div>
+        <div class="prop prop-cloud cloud-1" data-depth="0.1">☁</div>
+        <div class="prop prop-cloud cloud-2" data-depth="0.15">☁</div>
+        <div class="prop prop-balloon" data-depth="0.3">🎈</div>
+        <div class="prop prop-passport" data-depth="0.25">🛂</div>
+        <div class="prop prop-compass" data-depth="0.18">🧭</div>
+        <div class="prop prop-suitcase" data-depth="0.22">🧳</div>
+        <div class="prop prop-globe" data-depth="0.12">🌐</div>
+      </div>
+
+      <div class="container hero-content-wrapper">
+        <div class="hero-badge-wrap gsap-reveal">
+          <span class="luxury-badge">✨ WORLD-CLASS LUXURY EXPEDITIONS</span>
+        </div>
+
+        <h1 class="hero-title gsap-reveal">
+          Explore The World's Most <span class="text-gradient">Beautiful Destinations</span>
+        </h1>
+        
+        <p class="hero-subtitle gsap-reveal">
+          Discover breathtaking places across the globe, curated bespoke itineraries, and create unforgettable memories with TripNest.
+        </p>
+
+        <div class="hero-ctas gsap-reveal">
+          <a href="#smart-finder" class="btn-gradient btn-hero ripple-btn glow-btn">
+            <span>Explore Now</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#world-explorer" class="btn-glass btn-hero ripple-btn">
+            <span>View World Map</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        </div>
+
+        <!-- Floating Live Hero Stats Widget -->
+        <div class="hero-stats-glass glass-card gsap-reveal">
+          <div class="stat-pill">
+            <span class="stat-dot green"></span>
+            <span><strong>1,240+</strong> Active Adventurers</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-pill">
+            <span class="stat-dot blue"></span>
+            <span><strong>120+</strong> Countries Available</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animated Scroll Down Prompt -->
+      <a href="#smart-finder" class="scroll-down-btn" aria-label="Scroll Down">
+        <div class="mouse-track">
+          <div class="mouse-wheel"></div>
+        </div>
+      </a>
+    </section>
+
+
+    <!-- ==========================================
+       2. AI SMART DESTINATION FINDER
+    =========================================== -->
+    <section id="smart-finder" class="search-section">
+      <div class="container">
+        <div class="search-glass-card glass-card gsap-scroll">
+          <div class="search-card-header">
+            <span class="search-tag">AI INTELLIGENT SEARCH ENGINE</span>
+            <h2 class="search-heading">Find Your Perfect Journey</h2>
+          </div>
+
+          <!-- Toggles Row -->
+          <div class="finder-toggles-row">
+            <label class="toggle-pill active">
+              <input type="checkbox" id="toggle-luxury" checked>
+              <span>💎 Luxury Stays</span>
+            </label>
+            <label class="toggle-pill">
+              <input type="checkbox" id="toggle-adventure">
+              <span>🧗 Adventure</span>
+            </label>
+            <label class="toggle-pill">
+              <input type="checkbox" id="toggle-family">
+              <span>👨‍👩‍👧‍👦 Family Friendly</span>
+            </label>
+          </div>
+
+          <form id="ai-search-form" class="finder-grid-form" onsubmit="return false;">
+            <div class="form-group">
+              <label>🔍 Destination</label>
+              <input type="text" id="ai-keyword" placeholder="City or landmark..." class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label>🏳️ Country</label>
+              <input type="text" id="ai-country" placeholder="e.g. France, Japan..." class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label>🌎 Continent</label>
+              <select id="ai-continent" class="form-select">
+                <option value="all">All Continents</option>
+                <option value="europe">Europe</option>
+                <option value="asia">Asia</option>
+                <option value="north-america">North America</option>
+                <option value="south-america">South America</option>
+                <option value="africa">Africa</option>
+                <option value="oceania">Oceania</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>💰 Max Budget</label>
+              <select id="ai-budget" class="form-select">
+                <option value="all">Any Budget</option>
+                <option value="800">Under $800</option>
+                <option value="1500">Under $1,500</option>
+                <option value="2500">Under $2,500</option>
+                <option value="5000">$2,500+</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>🌤️ Ideal Weather</label>
+              <select id="ai-weather" class="form-select">
+                <option value="all">Any Weather</option>
+                <option value="sunny">Tropical / Sunny</option>
+                <option value="mild">Mild / Mediterranean</option>
+                <option value="snow">Snow / Alpine</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>✨ Travel Style</label>
+              <select id="ai-style" class="form-select">
+                <option value="all">All Styles</option>
+                <option value="Luxury">Luxury</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Beach">Beach</option>
+                <option value="Wildlife">Wildlife</option>
+                <option value="Historical">Historical</option>
+                <option value="Honeymoon">Honeymoon</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>📅 Travel Month</label>
+              <select id="ai-month" class="form-select">
+                <option value="all">Any Month</option>
+                <option value="Jan">January</option>
+                <option value="Apr">April</option>
+                <option value="Jul">July</option>
+                <option value="Oct">October</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>⏱️ Trip Duration</label>
+              <select id="ai-duration" class="form-select">
+                <option value="all">Any Duration</option>
+                <option value="short">3 - 5 Days</option>
+                <option value="medium">6 - 9 Days</option>
+                <option value="long">10+ Days</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>⭐ Min Rating</label>
+              <select id="ai-rating" class="form-select">
+                <option value="all">Any Rating</option>
+                <option value="4.7">4.7+ Stars</option>
+                <option value="4.9">4.9+ Stars</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>👥 Travelers</label>
+              <select id="ai-guests" class="form-select">
+                <option value="1">1 Person</option>
+                <option value="2">2 Persons</option>
+                <option value="4">4+ Family</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <button type="submit" id="btn-ai-search" class="btn-gradient btn-full ripple-btn glow-btn">
+                <span>Search Destinations</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       3. INTERACTIVE SVG WORLD EXPLORER
+    =========================================== -->
+    <section id="world-explorer" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">GLOBAL DISCOVERY MAP</span>
+          <h2 class="section-title">Interactive World Explorer</h2>
+          <p class="section-subtitle">Hover over continents to inspect live travel statistics, average budgets, and flight routes.</p>
+        </div>
+
+        <div class="world-map-grid gsap-scroll">
+          <!-- Custom Vector Map Container -->
+          <div class="svg-map-card glass-card">
+            <svg class="world-svg-interactive" viewBox="0 0 1000 500">
+              <!-- Flight Animation Paths -->
+              <path d="M 200,160 Q 400,60 520,130" class="flight-route-path route-1" />
+              <path d="M 520,130 Q 680,60 780,180" class="flight-route-path route-2" />
+              <path d="M 520,130 Q 550,280 510,300" class="flight-route-path route-3" />
+
+              <!-- Continents Shapes -->
+              <g class="svg-continent" data-continent="europe" data-name="Europe" data-cities="Paris, Rome, Venice, Santorini" data-budget="$1,100" data-weather="19°C Mild" data-season="May - Sep" data-attractions="Eiffel Tower, Colosseum, Swiss Alps" data-count="18 Destinations">
+                <path d="M460,90 Q560,80 580,180 T480,190 Z" class="continent-path europe-path" />
+                <circle cx="520" cy="130" r="7" class="glowing-dot" />
+                <text x="500" y="115" class="map-text">Europe</text>
+              </g>
+
+              <g class="svg-continent" data-continent="asia" data-name="Asia" data-cities="Tokyo, Kyoto, Bali, Singapore, Dubai" data-budget="$850" data-weather="28°C Warm" data-season="Oct - Apr" data-attractions="Mount Fuji, Rice Terraces, Burj Khalifa" data-count="22 Destinations">
+                <path d="M600,90 Q820,70 850,230 T620,240 Z" class="continent-path asia-path" />
+                <circle cx="720" cy="160" r="7" class="glowing-dot" />
+                <text x="700" y="145" class="map-text">Asia</text>
+              </g>
+
+              <g class="svg-continent" data-continent="north-america" data-name="North America" data-cities="New York, Los Angeles, Banff, Vancouver" data-budget="$1,350" data-weather="22°C Clear" data-season="Jun - Sep" data-attractions="Times Square, Grand Canyon, Lake Louise" data-count="12 Destinations">
+                <path d="M150,90 Q250,70 320,170 T220,290 T100,210 Z" class="continent-path na-path" />
+                <circle cx="210" cy="160" r="7" class="glowing-dot" />
+                <text x="180" y="145" class="map-text">North America</text>
+              </g>
+
+              <g class="svg-continent" data-continent="south-america" data-name="South America" data-cities="Rio de Janeiro, Machu Picchu, Buenos Aires" data-budget="$920" data-weather="26°C Sunny" data-season="Dec - Mar" data-attractions="Christ Redeemer, Incan Trail, Iguazu Falls" data-count="10 Destinations">
+                <path d="M260,300 Q320,320 300,440 T220,390 Z" class="continent-path sa-path" />
+                <circle cx="270" cy="360" r="7" class="glowing-dot" />
+                <text x="240" y="345" class="map-text">South America</text>
+              </g>
+
+              <g class="svg-continent" data-continent="africa" data-name="Africa" data-cities="Cape Town, Serengeti, Marrakech, Cairo" data-budget="$980" data-weather="27°C Dry" data-season="Jun - Oct" data-attractions="Table Mountain, Great Migration, Pyramids" data-count="11 Destinations">
+                <path d="M470,200 Q580,210 560,370 T450,290 Z" class="continent-path africa-path" />
+                <circle cx="510" cy="280" r="7" class="glowing-dot" />
+                <text x="490" y="265" class="map-text">Africa</text>
+              </g>
+
+              <g class="svg-continent" data-continent="oceania" data-name="Oceania" data-cities="Sydney, Melbourne, Queenstown, Fiji" data-budget="$1,250" data-weather="24°C Coastal" data-season="Nov - Mar" data-attractions="Sydney Opera House, Great Barrier Reef" data-count="9 Destinations">
+                <path d="M780,290 Q900,300 880,420 T750,370 Z" class="continent-path oceania-path" />
+                <circle cx="820" cy="340" r="7" class="glowing-dot" />
+                <text x="790" y="325" class="map-text">Oceania</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Dynamic Hover Info Card -->
+          <div class="map-info-glass glass-card" id="map-info-panel">
+            <span class="region-badge" id="map-region-badge">REGION INSIGHTS</span>
+            <h3 class="region-title" id="map-region-title">Select A Continent</h3>
+            <p class="region-desc" id="map-region-desc">Hover over any region on the vector map to inspect flight trends, budget metrics, and top cities.</p>
+
+            <div class="region-stats-table">
+              <div class="r-row"><span>Top Cities:</span> <strong id="m-cities">-</strong></div>
+              <div class="r-row"><span>Avg. Budget:</span> <strong id="m-budget" class="text-accent">-</strong></div>
+              <div class="r-row"><span>Weather:</span> <strong id="m-weather">-</strong></div>
+              <div class="r-row"><span>Best Season:</span> <strong id="m-season">-</strong></div>
+              <div class="r-row"><span>Attractions:</span> <strong id="m-attractions">-</strong></div>
+              <div class="r-row"><span>Destinations:</span> <strong id="m-count" class="text-primary">-</strong></div>
+            </div>
+
+            <button id="btn-explore-continent" class="btn-gradient btn-full ripple-btn" style="margin-top: 20px;">
+              <span>Explore Region Destinations</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       4. TRENDING DESTINATIONS
+    =========================================== -->
+    <section id="trending" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header-flex gsap-scroll">
+          <div>
+            <span class="section-tag">POPULAR NOW</span>
+            <h2 class="section-title">Trending Destinations</h2>
+          </div>
+          <div class="slider-controls">
+            <button id="btn-trend-prev" class="circle-btn" aria-label="Previous">‹</button>
+            <button id="btn-trend-next" class="circle-btn" aria-label="Next">›</button>
+          </div>
+        </div>
+
+        <div class="trending-track-wrapper gsap-scroll">
+          <div class="trending-track" id="trending-slider-track">
+            
+            <div class="trending-card glass-card">
+              <div class="t-img-box">
+                <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80" alt="Paris" />
+                <span class="t-badge">🔥 #1 Trending</span>
+                <button class="wishlist-btn">♥</button>
+              </div>
+              <div class="t-content">
+                <span class="t-city">Paris, France 🇫🇷</span>
+                <div class="t-meta">
+                  <span>Popularity: <strong>99%</strong></span>
+                  <span>Bookings: <strong>14.2k/mo</strong></span>
+                </div>
+                <div class="t-footer">
+                  <span class="t-price">$850 <small>/person</small></span>
+                  <span class="t-trend">▲ +12% Demand</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="trending-card glass-card">
+              <div class="t-img-box">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80" alt="Bali" />
+                <span class="t-badge">🔥 #2 Trending</span>
+                <button class="wishlist-btn">♥</button>
+              </div>
+              <div class="t-content">
+                <span class="t-city">Bali, Indonesia 🇮🇩</span>
+                <div class="t-meta">
+                  <span>Popularity: <strong>98%</strong></span>
+                  <span>Bookings: <strong>18.5k/mo</strong></span>
+                </div>
+                <div class="t-footer">
+                  <span class="t-price">$620 <small>/person</small></span>
+                  <span class="t-trend">▲ +18% Demand</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="trending-card glass-card">
+              <div class="t-img-box">
+                <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80" alt="Dubai" />
+                <span class="t-badge">🔥 #3 Trending</span>
+                <button class="wishlist-btn">♥</button>
+              </div>
+              <div class="t-content">
+                <span class="t-city">Dubai, UAE 🇦🇪</span>
+                <div class="t-meta">
+                  <span>Popularity: <strong>97%</strong></span>
+                  <span>Bookings: <strong>11.8k/mo</strong></span>
+                </div>
+                <div class="t-footer">
+                  <span class="t-price">$920 <small>/person</small></span>
+                  <span class="t-trend">▲ +8% Demand</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="trending-card glass-card">
+              <div class="t-img-box">
+                <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80" alt="Santorini" />
+                <span class="t-badge">🔥 #4 Trending</span>
+                <button class="wishlist-btn">♥</button>
+              </div>
+              <div class="t-content">
+                <span class="t-city">Santorini, Greece 🇬🇷</span>
+                <div class="t-meta">
+                  <span>Popularity: <strong>96%</strong></span>
+                  <span>Bookings: <strong>9.4k/mo</strong></span>
+                </div>
+                <div class="t-footer">
+                  <span class="t-price">$1,100 <small>/person</small></span>
+                  <span class="t-trend">▲ +15% Demand</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="trending-card glass-card">
+              <div class="t-img-box">
+                <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Kyoto" />
+                <span class="t-badge">🔥 #5 Trending</span>
+                <button class="wishlist-btn">♥</button>
+              </div>
+              <div class="t-content">
+                <span class="t-city">Kyoto, Japan 🇯🇵</span>
+                <div class="t-meta">
+                  <span>Popularity: <strong>98%</strong></span>
+                  <span>Bookings: <strong>13.1k/mo</strong></span>
+                </div>
+                <div class="t-footer">
+                  <span class="t-price">$940 <small>/person</small></span>
+                  <span class="t-trend">▲ +22% Demand</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       5. FEATURED LUXURY DESTINATION
+    =========================================== -->
+    <section id="featured-spotlight" class="section-padding">
+      <div class="container">
+        <div class="featured-cinematic-card glass-card gsap-scroll">
+          <div class="f-media-wrap">
+            <div class="f-slider-images" id="featured-slider">
+              <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=85" alt="Maldives" class="f-slide active"/>
+              <img src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=1200&q=85" alt="Maldives Villa" class="f-slide"/>
+            </div>
+            <span class="f-badge">💎 VIP PRIVATE ISLAND PICK</span>
+            <button class="play-video-trigger" id="btn-play-video" aria-label="Play video">▶</button>
+          </div>
+
+          <div class="f-info-wrap">
+            <span class="spotlight-tag">DESTINATION OF THE MONTH</span>
+            <h2 class="f-headline">Overwater Paradise in Maldives</h2>
+            <div class="f-rating-row">
+              <span class="stars">★★★★★</span>
+              <span>4.98 (1,420 VIP Reviews)</span>
+            </div>
+
+            <p class="f-desc">
+              Experience the pinnacle of tropical indulgence. Glass-floor water bungalows suspended above coral lagoons, 24/7 personal butler service, private sunset cruises, and spa retreats.
+            </p>
+
+            <div class="f-perks-grid">
+              <span>✨ Private Seaplane Transfers</span>
+              <span>🥂 Michelin-Star Gourmet Dining</span>
+              <span>🤿 Unlimited Reef Scuba Diving</span>
+              <span>💆 Spa Treatment Vouchers</span>
+            </div>
+
+            <div class="f-action-row">
+              <div>
+                <span class="old-price">$2,400</span>
+                <span class="new-price">$1,850 <small>/ person</small></span>
+              </div>
+              <div class="f-btns">
+                <a href="#smart-finder" class="btn-gradient ripple-btn glow-btn">Book Now</a>
+                <button class="btn-glass-dark ripple-btn" onclick="alert('Package brochure requested!')">Explore Package</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       6. DESTINATION CARDS (THE HEART - 60+ GRID)
+    =========================================== -->
+    <section id="destinations-grid-section" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">CURATED COLLECTION</span>
+          <h2 class="section-title">Explore All Destinations</h2>
+          <p class="section-subtitle">Over 60+ handpicked luxury destinations across all six continents.</p>
+        </div>
+
+        <!-- Continent Filter Tabs -->
+        <div class="continent-filter-pills gsap-scroll" id="continent-pills-bar">
+          <button class="pill-btn active" data-continent="all">🌐 All Continents</button>
+          <button class="pill-btn" data-continent="europe">🌍 Europe</button>
+          <button class="pill-btn" data-continent="asia">🌏 Asia</button>
+          <button class="pill-btn" data-continent="north-america">🌎 North America</button>
+          <button class="pill-btn" data-continent="south-america">🌎 South America</button>
+          <button class="pill-btn" data-continent="africa">🌍 Africa</button>
+          <button class="pill-btn" data-continent="oceania">🌏 Oceania</button>
+        </div>
+
+        <!-- Main 60+ Grid Container Rendered via JS -->
+        <div id="destinations-master-grid" class="destinations-master-grid">
+          <!-- Dynamically Injected by JS -->
+        </div>
+
+        <div class="load-more-wrap text-center gsap-scroll">
+          <button id="btn-load-more" class="btn-gradient btn-hero ripple-btn">
+            <span>Load More Destinations</span>
+          </button>
+          <p id="grid-status-label" class="status-label">Showing 9 of 60 Destinations</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       7. EXPLORE BY TRAVEL STYLE (14 CARDS)
+    =========================================== -->
+    <section id="travel-styles" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">PERSONALIZED EXPERIENCES</span>
+          <h2 class="section-title">Explore By Travel Style</h2>
+          <p class="section-subtitle">Find destinations tailored specifically to your unique passion.</p>
+        </div>
+
+        <div class="styles-flex-grid gsap-scroll">
+          <div class="style-card-3d" data-style="Luxury">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">💎</span>
+              <h3 class="s-title">Luxury</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Adventure">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🧗</span>
+              <h3 class="s-title">Adventure</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Beach">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🏖️</span>
+              <h3 class="s-title">Beach</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Wildlife">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🦁</span>
+              <h3 class="s-title">Wildlife</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Photography">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">📷</span>
+              <h3 class="s-title">Photography</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Road Trip">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🚗</span>
+              <h3 class="s-title">Road Trip</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Mountains">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">⛰️</span>
+              <h3 class="s-title">Mountains</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Camping">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">⛺</span>
+              <h3 class="s-title">Camping</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Nature">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🌿</span>
+              <h3 class="style-name">Nature</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Food">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🍷</span>
+              <h3 class="s-title">Food</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Cruise">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1548574505-5e2386903d8f?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🚢</span>
+              <h3 class="s-title">Cruise</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Historical">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">🏛️</span>
+              <h3 class="s-title">Historical</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Honeymoon">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">💍</span>
+              <h3 class="s-title">Honeymoon</h3>
+            </div>
+          </div>
+
+          <div class="style-card-3d" data-style="Family">
+            <div class="style-bg" style="background-image: url('https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="style-overlay">
+              <span class="s-icon">👨‍👩‍👧‍👦</span>
+              <h3 class="s-title">Family</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       8. BUCKET LIST EXPERIENCES
+    =========================================== -->
+    <section id="bucket-list" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">ONCE IN A LIFETIME</span>
+          <h2 class="section-title">Bucket List Experiences</h2>
+          <p class="section-subtitle">Top 10 iconic world experiences every traveler must accomplish.</p>
+        </div>
+
+        <div class="bucket-grid gsap-scroll">
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=600&q=80" alt="Northern Lights" />
+            <div class="b-overlay">
+              <span class="b-tag">Reykjavik, Iceland</span>
+              <h3>Northern Lights Chase</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80" alt="Santorini" />
+            <div class="b-overlay">
+              <span class="b-tag">Santorini, Greece</span>
+              <h3>Aegean Sunset Yachting</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1582967788606-a171c1080cb0?auto=format&fit=crop&w=600&q=80" alt="Reef" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Cairns, Australia</span>
+              <h3>Great Barrier Reef Scuba</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=600&q=80" alt="Safari" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Serengeti, Tanzania</span>
+              <h3>Big Five African Safari</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80" alt="Swiss Alps" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Zermatt, Switzerland</span>
+              <h3>Swiss Alps Glacier Skiing</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=600&q=80" alt="Machu Picchu" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Cusco, Peru</span>
+              <h3>Inca Trail Hike to Machu Picchu</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1641128324972-af3212f0f6bd?auto=format&fit=crop&w=600&q=80" alt="Cappadocia" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Cappadocia, Turkey</span>
+              <h3>Hot Air Balloon Sunrise</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80" alt="Maldives" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Male Atoll, Maldives</span>
+              <h3>Bioluminescent Lagoon Swimming</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80" alt="Bali" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Ubud, Bali</span>
+              <h3>Sacred Jungle Temple Retreat</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+
+          <div class="bucket-card">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="Antarctica" />
+            <div class="bucket-overlay">
+              <span class="b-tag">Antarctica Peninsula</span>
+              <h3>Polar Ice Expedition Cruise</h3>
+              <a href="#smart-finder" class="b-cta">Book Journey →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       9. BEST TIME TO VISIT
+    =========================================== -->
+    <section id="best-time" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">SEASONAL INTELLIGENCE</span>
+          <h2 class="section-title">Best Time To Visit</h2>
+          <p class="section-subtitle">Select a month to inspect optimal weather windows and destination recommendations.</p>
+        </div>
+
+        <div class="month-selector-bar gsap-scroll" id="month-bar">
+          <button class="m-pill active" data-month="Jan">Jan</button>
+          <button class="m-pill" data-month="Feb">Feb</button>
+          <button class="m-pill" data-month="Mar">Mar</button>
+          <button class="m-pill" data-month="Apr">Apr</button>
+          <button class="m-pill" data-month="May">May</button>
+          <button class="m-pill" data-month="Jun">Jun</button>
+          <button class="m-pill" data-month="Jul">Jul</button>
+          <button class="m-pill" data-month="Aug">Aug</button>
+          <button class="m-pill" data-month="Sep">Sep</button>
+          <button class="m-pill" data-month="Oct">Oct</button>
+          <button class="m-pill" data-month="Nov">Nov</button>
+          <button class="m-pill" data-month="Dec">Dec</button>
+        </div>
+
+        <div class="month-card-display glass-card gsap-scroll" id="month-display-card">
+          <h3 id="m-display-title">Recommended for January</h3>
+          <p id="m-display-desc">Peak season for tropical beach escapes in Southeast Asia, skiing in the Swiss Alps, and summer trips to South America.</p>
+          <div class="m-chips-wrap" id="m-chips-container">
+            <!-- Filled via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       10. TRAVEL BUDGET PLANNER
+    =========================================== -->
+    <section id="budget-calculator" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">FINANCIAL ESTIMATOR</span>
+          <h2 class="section-title">Travel Budget Calculator</h2>
+          <p class="section-subtitle">Estimate your total trip expenditure instantly with interactive metrics.</p>
+        </div>
+
+        <div class="calc-grid glass-card gsap-scroll">
+          <div class="calc-inputs">
+            <div class="c-field">
+              <label>👥 Number of Travelers: <strong id="lbl-travelers">2</strong></label>
+              <input type="range" id="range-travelers" min="1" max="10" value="2" class="range-slider" />
+            </div>
+
+            <div class="c-field">
+              <label>⏱️ Trip Duration: <strong id="lbl-days">7 Days</strong></label>
+              <input type="range" id="range-days" min="3" max="30" value="7" class="range-slider" />
+            </div>
+
+            <div class="c-field">
+              <label>🏨 Luxury Tier</label>
+              <select id="calc-tier" class="form-select">
+                <option value="150">Boutique Luxury ($150/day)</option>
+                <option value="350" selected>5-Star Deluxe ($350/day)</option>
+                <option value="750">Ultra VIP Private Resort ($750/day)</option>
+              </select>
+            </div>
+
+            <div class="c-field">
+              <label>✈ Flight Class</label>
+              <select id="calc-flight" class="form-select">
+                <option value="400">Economy Class ($400/person)</option>
+                <option value="1200" selected>Business Class ($1,200/person)</option>
+                <option value="3500">First Class ($3,500/person)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="calc-results-box">
+            <span class="res-tag">ESTIMATED TOTAL EXPENDITURE</span>
+            <h3 class="calc-total" id="calc-total-val">$6,100</h3>
+            
+            <div class="calc-breakdown-bar">
+              <div class="bar-seg seg-flight" id="seg-flight" style="width: 40%;" title="Flights"></div>
+              <div class="bar-seg seg-stay" id="seg-stay" style="width: 45%;" title="Hotels"></div>
+              <div class="bar-seg seg-food" id="seg-food" style="width: 15%;" title="Dining & Activities"></div>
+            </div>
+
+            <div class="calc-legend">
+              <span><small class="dot flight"></small> Flights: <strong id="lbl-flight-cost">$2,400</strong></span>
+              <span><small class="dot stay"></small> Stay: <strong id="lbl-stay-cost">$2,450</strong></span>
+              <span><small class="dot food"></small> Dining & Perks: <strong id="lbl-food-cost">$1,250</strong></span>
+            </div>
+
+            <button class="btn-gradient btn-full ripple-btn" style="margin-top: 24px;" onclick="alert('Budget estimate saved to your trip planner!')">
+              Save Calculation
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       11. VISA INFORMATION CHECKER
+    =========================================== -->
+    <section id="visa-info" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">PASSPORT & IMMIGRATION</span>
+          <h2 class="section-title">Visa Requirements Checker</h2>
+          <p class="section-subtitle">Check visa entry policies for your target destination.</p>
+        </div>
+
+        <div class="visa-checker-box glass-card gsap-scroll">
+          <div class="visa-form-row">
+            <div class="v-group">
+              <label>🛂 Your Passport Country</label>
+              <select id="visa-origin" class="form-select">
+                <option value="US">United States 🇺🇸</option>
+                <option value="UK">United Kingdom 🇬🇧</option>
+                <option value="EU">European Union 🇪🇺</option>
+                <option value="CA">Canada 🇨🇦</option>
+                <option value="AU">Australia 🇦🇺</option>
+                <option value="IN">India 🇮🇳</option>
+                <option value="AE">UAE 🇦🇪</option>
+              </select>
+            </div>
+
+            <div class="v-group">
+              <label>📍 Destination Country</label>
+              <select id="visa-target" class="form-select">
+                <option value="FR">France 🇫🇷</option>
+                <option value="JP">Japan 🇯🇵</option>
+                <option value="ID">Indonesia (Bali) 🇮🇩</option>
+                <option value="AE">UAE (Dubai) 🇦🇪</option>
+                <option value="MV">Maldives 🇲🇻</option>
+                <option value="TZ">Tanzania 🇹🇿</option>
+              </select>
+            </div>
+
+            <button id="btn-check-visa" class="btn-gradient ripple-btn">Check Entry Policy</button>
+          </div>
+
+          <div id="visa-result-card" class="visa-result-status glass-card">
+            <span class="v-status-badge green" id="visa-badge">VISA FREE / 90 DAYS</span>
+            <h4 id="visa-title">Visa Not Required</h4>
+            <p id="visa-desc">US Passport holders can enter France for up to 90 days without a visa for tourist purposes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       12. FLIGHT DEALS
+    =========================================== -->
+    <section id="flight-deals" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">EXCLUSIVE PARTNERSHIPS</span>
+          <h2 class="section-title">Featured Flight Deals</h2>
+          <p class="section-subtitle">Discounted premium flight rates negotiated directly with leading airlines.</p>
+        </div>
+
+        <div class="flights-grid gsap-scroll">
+          <div class="flight-card glass-card">
+            <div class="flight-head">
+              <span class="airline-badge">Emirates 🇦🇪</span>
+              <span class="discount-pill">30% OFF</span>
+            </div>
+            <div class="flight-route-display">
+              <div class="point"><strong>JFK</strong><small>New York</small></div>
+              <div class="f-line">✈ 7h 45m</div>
+              <div class="point"><strong>CDG</strong><small>Paris</small></div>
+            </div>
+            <div class="flight-foot">
+              <span class="f-price">$680 <small>Roundtrip</small></span>
+              <button class="btn-gradient btn-sm ripple-btn">Book Flight</button>
+            </div>
+          </div>
+
+          <div class="flight-card glass-card">
+            <div class="flight-head">
+              <span class="airline-badge">Singapore Airlines 🇸🇬</span>
+              <span class="discount-pill">25% OFF</span>
+            </div>
+            <div class="flight-route-display">
+              <div class="point"><strong>LAX</strong><small>Los Angeles</small></div>
+              <div class="f-line">✈ 10h 20m</div>
+              <div class="point"><strong>HND</strong><small>Tokyo</small></div>
+            </div>
+            <div class="flight-foot">
+              <span class="f-price">$840 <small>Roundtrip</small></span>
+              <button class="btn-gradient btn-sm ripple-btn">Book Flight</button>
+            </div>
+          </div>
+
+          <div class="flight-card glass-card">
+            <div class="flight-head">
+              <span class="airline-badge">Qatar Airways 🇶🇦</span>
+              <span class="discount-pill">35% OFF</span>
+            </div>
+            <div class="flight-route-display">
+              <div class="point"><strong>LHR</strong><small>London</small></div>
+              <div class="f-line">✈ 11h 15m</div>
+              <div class="point"><strong>MLE</strong><small>Maldives</small></div>
+            </div>
+            <div class="flight-foot">
+              <span class="f-price">$910 <small>Roundtrip</small></span>
+              <button class="btn-gradient btn-sm ripple-btn">Book Flight</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       13. TRAVEL STATISTICS
+    =========================================== -->
+    <section id="stats" class="stats-banner-section">
+      <div class="container">
+        <div class="stats-grid" id="stats-counter-box">
+          <div class="stat-card">
+            <span class="stat-number" data-target="120">0</span><span class="stat-plus">+</span>
+            <p class="stat-label">Countries Covered</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-target="1500">0</span><span class="stat-plus">+</span>
+            <p class="stat-label">Destinations</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-target="750">0</span><span class="stat-plus">k+</span>
+            <p class="stat-label">Bookings Completed</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-target="15000">0</span><span class="stat-plus">+</span>
+            <p class="stat-label">Verified Hotels</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-target="500">0</span><span class="stat-plus">k+</span>
+            <p class="stat-label">Happy Travelers</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-target="250">0</span><span class="stat-plus">+</span>
+            <p class="stat-label">Partner Airlines</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       14. PINTEREST MASONRY PHOTO GALLERY
+    =========================================== -->
+    <section id="gallery" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">VISUAL GALLERY</span>
+          <h2 class="section-title">World Photo Gallery</h2>
+          <p class="section-subtitle">Real moments captured by TripNest travelers around the globe.</p>
+        </div>
+
+        <div class="masonry-gallery gsap-scroll">
+          <div class="masonry-item" data-lightbox="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=85">
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80" alt="Paris" />
+            <div class="g-badge-overlay">
+              <span>📍 Paris, France</span>
+              <small>📷 Photo by Elena Rostova</small>
+            </div>
+          </div>
+
+          <div class="masonry-item" data-lightbox="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=85">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Kyoto" />
+            <div class="g-badge-overlay">
+              <span>📍 Kyoto, Japan</span>
+              <small>📷 Photo by Kenji Sato</small>
+            </div>
+          </div>
+
+          <div class="masonry-item" data-lightbox="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=85">
+            <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80" alt="Santorini" />
+            <div class="g-badge-overlay">
+              <span>📍 Santorini, Greece</span>
+              <small>📷 Photo by Mateo Rossi</small>
+            </div>
+          </div>
+
+          <div class="masonry-item" data-lightbox="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1200&q=85">
+            <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80" alt="Swiss Alps" />
+            <div class="g-badge-overlay">
+              <span>📍 Swiss Alps</span>
+              <small>📷 Photo by Lucas Weber</small>
+            </div>
+          </div>
+
+          <div class="masonry-item" data-lightbox="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=85">
+            <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80" alt="Maldives" />
+            <div class="g-badge-overlay">
+              <span>📍 Maldives Islands</span>
+              <small>📷 Photo by Chloe Martin</small>
+            </div>
+          </div>
+
+          <div class="masonry-item" data-lightbox="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=85">
+            <img src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=600&q=80" alt="Rio" />
+            <div class="g-badge-overlay">
+              <span>📍 Rio de Janeiro, Brazil</span>
+              <small>📷 Photo by Gabriel Silva</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       15. WHY CHOOSE TRIPNEST
+    =========================================== -->
+    <section id="why-us" class="section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">BILLION-DOLLAR SERVICE</span>
+          <h2 class="section-title">Why Choose TripNest</h2>
+          <p class="section-subtitle">We combine luxury hospitality with industry-leading booking security.</p>
+        </div>
+
+        <div class="features-grid gsap-scroll">
+          <div class="feature-card glass-card">
+            <div class="f-icon">🏷️</div>
+            <h3>Best Price Guarantee</h3>
+            <p>We price-match verified luxury stay listings to guarantee unbeatable value on every booking.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="f-icon">🏨</div>
+            <h3>Verified Luxury Hotels</h3>
+            <p>Every hotel and resort passes rigorous 50-point quality inspections before entering our catalog.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="f-icon">🔒</div>
+            <h3>Secure Payments</h3>
+            <p>256-bit encrypted checkout supporting major credit cards, Apple Pay, and wire transfers.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="f-icon">🔄</div>
+            <h3>Easy Cancellation</h3>
+            <p>Enjoy flexible free cancellation up to 48 hours before check-in on most holiday packages.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="f-icon">🎧</div>
+            <h3>24/7 VIP Support</h3>
+            <p>Dedicated travel specialists available round-the-clock via phone, WhatsApp, and live chat.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="f-icon">🌍</div>
+            <h3>Trusted Worldwide</h3>
+            <p>Over 500,000+ satisfied travelers rely on TripNest for flawless global vacation planning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       16. CUSTOMER REVIEWS (SLIDER)
+    =========================================== -->
+    <section id="reviews" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center gsap-scroll">
+          <span class="section-tag">AUTHENTIC FEEDBACK</span>
+          <h2 class="section-title">Traveler Stories</h2>
+          <p class="section-subtitle">Read real reviews from our global community.</p>
+        </div>
+
+        <div class="testimonial-box glass-card gsap-scroll">
+          <div class="testimonial-track" id="testimonial-track">
+            
+            <div class="test-item active">
+              <div class="test-stars">★★★★★</div>
+              <p class="test-text">"TripNest organized our entire 10-day honeymoon in Bali. From private infinity pool villas to private speedboat transfers, everything was executed flawlessly!"</p>
+              <div class="test-author">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Sarah" />
+                <div>
+                  <h4>Sarah Jenkins 🇺🇸</h4>
+                  <small>Visited: Bali, Indonesia</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="test-item">
+              <div class="test-stars">★★★★★</div>
+              <p class="test-text">"The 24/7 VIP concierge saved our trip when our flight was rescheduled. They updated our Swiss Alps hotel booking within minutes with zero extra fee!"</p>
+              <div class="test-author">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="David" />
+                <div>
+                  <h4>David Miller 🇬🇧</h4>
+                  <small>Visited: Swiss Alps</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="test-item">
+              <div class="test-stars">★★★★★</div>
+              <p class="test-text">"The smart search filter helped us discover hidden gems in Japan that we wouldn't have found anywhere else. Absolutely world-class experience!"</p>
+              <div class="test-author">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Elena" />
+                <div>
+                  <h4>Elena Rostova 🇩🇪</h4>
+                  <small>Visited: Kyoto, Japan</small>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="test-dots-bar" id="test-dots-container">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+       17. NEWSLETTER
+    =========================================== -->
+    <section id="newsletter" class="section-padding-sm">
+      <div class="container">
+        <div class="newsletter-glass-card glass-card gsap-scroll">
+          <div class="news-plane">✈</div>
+          
+          <div class="news-content">
+            <span class="section-tag light">SECRET DISCOUNTS</span>
+            <h2 class="news-title">Get Exclusive Luxury Travel Offers</h2>
+            <p class="news-subtitle">Subscribe to receive secret discounts up to 30% off, destination guides, and VIP luxury travel updates.</p>
+
+            <form id="newsletter-form" class="news-form" onsubmit="return false;">
+              <input type="email" id="news-input-email" placeholder="Enter your email address..." class="news-input" required />
+              <button type="submit" class="btn-gradient ripple-btn glow-btn">
+                <span>Subscribe</span>
+              </button>
+            </form>
+
+            <p id="news-success" class="news-success-text hidden">
+              🎉 Congratulations! You are now subscribed to VIP secret travel deals.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="lightbox-modal">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <img src="" id="lightbox-img" alt="Enlarged gallery photo" />
+  </div>
+
+
+  <!-- ==========================================
+     18. ULTRA PREMIUM FOOTER
+  =========================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <span class="logo-text">Trip<span class="text-primary">Nest</span></span>
+          </a>
+          <p class="footer-desc">
+            Your luxury gateway to exploring the world. Booking premium hotels, curated vacation packages, and unforgettable experiences with confidence.
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="X" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="social-link">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-col">
+            <h4 class="footer-heading">Company</h4>
+            <ul class="footer-menu">
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Blog & News</a></li>
+              <li><a href="#">Partnerships</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Destinations</h4>
+            <ul class="footer-menu">
+              <li><a href="#">Paris, France</a></li>
+              <li><a href="#">Bali, Indonesia</a></li>
+              <li><a href="#">Kyoto, Japan</a></li>
+              <li><a href="#">Maldives Islands</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Support</h4>
+            <ul class="footer-menu">
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 TripNest Travel Inc. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script src="js/destinations.js"></script>
+</body>
+</html>
+

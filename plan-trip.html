@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Your Trip — TripNest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/plan-trip.css">
+</head>
+<body>
+
+  <!-- ================= CUSTOM CURSOR ================= -->
+<div class="cursor" id="cursor">
+  <svg class="cursor-ring" width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="url(#cursorGrad)" stroke-width="1.5"/>
+    <defs>
+      <radialGradient id="cursorGrad">
+        <stop offset="0%" stop-color="#60A5FA"/>
+        <stop offset="100%" stop-color="#2563EB"/>
+      </radialGradient>
+    </defs>
+  </svg>
+  <div class="cursor-dot"></div>
+  <svg class="cursor-plane" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/>
+  </svg>
+</div>
+
+
+<!-- =========================================================
+     NAVBAR
+     ========================================================= -->
+<header class="tn-navbar">
+  <div class="container tn-navbar__inner">
+    <a href="index.html" class="tn-logo">
+      <svg viewBox="0 0 32 32" fill="none"><path d="M16 2c-5 4-8 10-8 16 0 6.6 5.4 12 8 12s8-5.4 8-12c0-6-3-12-8-16Z" fill="currentColor" opacity=".15"/><path d="M16 4C11.6 7.4 9 12.6 9 18c0 5.6 4.4 10 7 10s7-4.4 7-10c0-5.4-2.6-10.6-7-14Z" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="17" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+      TripNest
+    </a>
+
+    <nav>
+      <ul class="tn-nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="hotels.html">Hotels</a></li>
+        <li><a href="packages.html">Packages</a></li>
+        <li><a href="plan-trip.html" class="is-active">Plan Trip</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html"></a>Contact</li>
+
+      </ul>
+    </nav>
+
+    <div class="tn-nav-actions">
+      <a href="login.html" class="btn btn-ghost">Log in</a>
+      <a href="register.html" class="btn btn-primary btn-magnetic">Register</a>
+      <button class="tn-nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+<section class="pt-hero">
+  <svg class="pt-hero__plane" viewBox="0 0 64 64" fill="none"><path d="M4 34l50-16-14 32-6-12-14 6-6-10z" fill="var(--blue-500)" opacity=".85"/></svg>
+  <div class="container">
+    <span class="pt-hero__eyebrow">✦ Trip Planner</span>
+    <h1>Design a journey that feels <span>entirely yours</span></h1>
+    <p>Pick a destination, curate your stay, and watch your dream trip come together — in real time.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     MAIN LAYOUT
+     ========================================================= -->
+<div class="pt-progress-mobile">
+  <div class="container">
+    <div class="pt-progress-mobile__track"><div class="pt-progress-mobile__fill" id="mobileFill"></div></div>
+    <div class="pt-progress-mobile__label"><span id="mobileStepLabel">Destination</span><span id="mobilePctLabel">0%</span></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="pt-layout">
+
+    <!-- ===================================================
+         TRIP PROGRESS SIDEBAR
+         =================================================== -->
+    <aside class="pt-sidebar">
+      <div class="pt-sidebar__title">Trip Progress</div>
+      <ul class="pt-steps" id="stepsList">
+        <div class="pt-steps__fill" id="stepsFill"></div>
+        <li class="pt-step is-active" data-step="0">
+          <span class="pt-step__dot">1</span>
+          <span class="pt-step__label">Destination</span>
+        </li>
+        <li class="pt-step" data-step="1">
+          <span class="pt-step__dot">2</span>
+          <span class="pt-step__label">Hotels</span>
+        </li>
+        <li class="pt-step" data-step="2">
+          <span class="pt-step__dot">3</span>
+          <span class="pt-step__label">Packages</span>
+        </li>
+        <li class="pt-step" data-step="3">
+          <span class="pt-step__dot">4</span>
+          <span class="pt-step__label">Budget</span>
+        </li>
+        <li class="pt-step" data-step="4">
+          <span class="pt-step__dot">5</span>
+          <span class="pt-step__label">Dates &amp; Travelers</span>
+        </li>
+        <li class="pt-step" data-step="5">
+          <span class="pt-step__dot">6</span>
+          <span class="pt-step__label">Review</span>
+        </li>
+      </ul>
+      <div class="pt-sidebar__pct">
+        <span>Completion</span>
+        <b id="sidebarPct">0%</b>
+      </div>
+    </aside>
+
+    <!-- ===================================================
+         PLANNER PANELS
+         =================================================== -->
+    <main>
+
+      <!-- STEP 1 — DESTINATION -->
+      <section class="pt-panel pt-step-panel" data-panel="0">
+        <div class="pt-panel__head">
+          <span class="pt-panel__eyebrow">Step 1 of 6</span>
+          <h2>Where to?</h2>
+          <p>Choose the destination that's calling you.</p>
+        </div>
+        <div class="pt-option-grid" data-group="destination">
+          <div class="pt-option-card" data-value="Santorini, Greece" data-price="From $1,240">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <h3>Santorini, Greece</h3>
+            <p class="pt-price">From $1,240</p>
+            <p class="pt-meta">Aegean coastlines · Sunset views</p>
+          </div>
+          <div class="pt-option-card" data-value="Kyoto, Japan" data-price="From $1,480">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <h3>Kyoto, Japan</h3>
+            <p class="pt-price">From $1,480</p>
+            <p class="pt-meta">Temples · Gardens · Culture</p>
+          </div>
+          <div class="pt-option-card" data-value="Banff, Canada" data-price="From $980">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <h3>Banff, Canada</h3>
+            <p class="pt-price">From $980</p>
+            <p class="pt-meta">Mountains · Lakes · Trails</p>
+          </div>
+        </div>
+        <div class="pt-panel__nav">
+          <span></span>
+          <button class="btn btn-primary btn-magnetic" data-next>Continue <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 2 — HOTELS -->
+      <section class="pt-panel pt-step-panel" data-panel="1" hidden>
+        <div class="pt-panel__head">
+          <span class="pt-panel__eyebrow">Step 2 of 6</span>
+          <h2>Choose your stay</h2>
+          <p>Handpicked hotels near your destination.</p>
+        </div>
+        <div class="pt-option-grid" data-group="hotel">
+          <div class="pt-option-card" data-value="Azure Cliff Resort" data-price="$310/night">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <h3>Azure Cliff Resort</h3>
+            <p class="pt-price">$310/night</p>
+            <p class="pt-meta">5★ · Infinity pool</p>
+          </div>
+          <div class="pt-option-card" data-value="The Nest Boutique Hotel" data-price="$190/night">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <h3>The Nest Boutique</h3>
+            <p class="pt-price">$190/night</p>
+            <p class="pt-meta">4★ · Rooftop dining</p>
+          </div>
+          <div class="pt-option-card" data-value="Harbor View Suites" data-price="$245/night">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <h3>Harbor View Suites</h3>
+            <p class="pt-price">$245/night</p>
+            <p class="pt-meta">4.5★ · Spa access</p>
+          </div>
+        </div>
+        <div class="pt-panel__nav">
+          <button class="btn btn-outline" data-back>Back</button>
+          <button class="btn btn-primary btn-magnetic" data-next>Continue <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 3 — PACKAGES -->
+      <section class="pt-panel pt-step-panel" data-panel="2" hidden>
+        <div class="pt-panel__head">
+          <span class="pt-panel__eyebrow">Step 3 of 6</span>
+          <h2>Pick a travel style</h2>
+          <p>Every package is curated end-to-end.</p>
+        </div>
+        <div class="pt-option-grid" data-group="package">
+          <div class="pt-option-card" data-value="Explorer" data-price="Flights + Stay">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12l19-8-8 19-2-8-9-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <h3>Explorer</h3>
+            <p class="pt-price">Flights + Stay</p>
+            <p class="pt-meta">Independent, flexible pacing</p>
+          </div>
+          <div class="pt-option-card" data-value="Signature" data-price="All-inclusive">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12l19-8-8 19-2-8-9-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <h3>Signature</h3>
+            <p class="pt-price">All-inclusive</p>
+            <p class="pt-meta">Guided, curated experiences</p>
+          </div>
+          <div class="pt-option-card" data-value="Private Escape" data-price="Fully bespoke">
+            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12l19-8-8 19-2-8-9-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <h3>Private Escape</h3>
+            <p class="pt-price">Fully bespoke</p>
+            <p class="pt-meta">Dedicated concierge</p>
+          </div>
+        </div>
+        <div class="pt-panel__nav">
+          <button class="btn btn-outline" data-back>Back</button>
+          <button class="btn btn-primary btn-magnetic" data-next>Continue <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 4 — BUDGET -->
+      <section class="pt-panel pt-step-panel" data-panel="3" hidden>
+        <div class="pt-panel__head">
+          <span class="pt-panel__eyebrow">Step 4 of 6</span>
+          <h2>Set your budget</h2>
+          <p>We'll tailor suggestions around this range.</p>
+        </div>
+        <div class="pt-budget-display">
+          <div class="amount">$<span id="budgetValue">2500</span> <span>total</span></div>
+        </div>
+        <input type="range" min="800" max="8000" step="100" value="2500" class="pt-slider" id="budgetSlider">
+        <div class="pt-budget-tiers">
+          <div class="pt-tier" data-tier="Comfort">Comfort</div>
+          <div class="pt-tier is-active" data-tier="Premium">Premium</div>
+          <div class="pt-tier" data-tier="Luxury">Luxury</div>
+        </div>
+        <div class="pt-panel__nav">
+          <button class="btn btn-outline" data-back>Back</button>
+          <button class="btn btn-primary btn-magnetic" data-next>Continue <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 5 — DATES & TRAVELERS -->
+      <section class="pt-panel pt-step-panel" data-panel="4" hidden>
+        <div class="pt-panel__head">
+          <span class="pt-panel__eyebrow">Step 5 of 6</span>
+          <h2>Dates &amp; travelers</h2>
+          <p>Lock in your travel window and party size.</p>
+        </div>
+        <div class="pt-field-grid">
+          <div class="pt-field">
+            <label for="startDate">Departure</label>
+            <input type="date" id="startDate">
+          </div>
+          <div class="pt-field">
+            <label for="endDate">Return</label>
+            <input type="date" id="endDate">
+          </div>
+          <div class="pt-field">
+            <label for="travelers">Travelers</label>
+            <select id="travelers">
+              <option>1 traveler</option>
+              <option selected>2 travelers</option>
+              <option>3 travelers</option>
+              <option>4+ travelers</option>
+            </select>
+          </div>
+          <div class="pt-field">
+            <label for="mealPref">Meal preference</label>
+            <select id="mealPref">
+              <option>No preference</option>
+              <option>Vegetarian</option>
+              <option>Vegan</option>
+              <option>Halal</option>
+            </select>
+          </div>
+        </div>
+        <div class="pt-weather-strip" id="weatherStrip">
+          <div class="pt-weather-day"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><div class="d">Day 1</div><div class="t">27°</div></div>
+          <div class="pt-weather-day"><svg viewBox="0 0 24 24" fill="none"><path d="M6 15a4 4 0 1 1 1-7.9A5 5 0 0 1 17 9a3.5 3.5 0 0 1-1 6.9H6Z" stroke="currentColor" stroke-width="1.6"/></svg><div class="d">Day 2</div><div class="t">25°</div></div>
+          <div class="pt-weather-day"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><div class="d">Day 3</div><div class="t">28°</div></div>
+          <div class="pt-weather-day"><svg viewBox="0 0 24 24" fill="none"><path d="M6 15a4 4 0 1 1 1-7.9A5 5 0 0 1 17 9a3.5 3.5 0 0 1-1 6.9H6Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><div class="d">Day 4</div><div class="t">22°</div></div>
+          <div class="pt-weather-day"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><div class="d">Day 5</div><div class="t">26°</div></div>
+        </div>
+        <div class="pt-panel__nav">
+          <button class="btn btn-outline" data-back>Back</button>
+          <button class="btn btn-primary btn-magnetic" data-next>Continue <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 6 — REVIEW -->
+      <section class="pt-panel pt-step-panel" data-panel="5" hidden>
+        <div class="pt-panel__head">
+          <span class="pt-panel__eyebrow">Step 6 of 6</span>
+          <h2>Review your trip</h2>
+          <p>Everything looks good? Let's make it official.</p>
+        </div>
+        <div class="pt-review-list" id="reviewList">
+          <!-- populated by JS -->
+        </div>
+        <div class="pt-panel__nav">
+          <button class="btn btn-outline" data-back>Back</button>
+          <button class="btn btn-primary btn-magnetic" id="finishBtn">Complete My Trip <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===================================================
+         FLOATING TRIP SUMMARY
+         =================================================== -->
+    <aside class="pt-summary" id="tripSummary">
+      <div class="pt-sheet-toggle" id="sheetToggle">
+        <div class="pt-summary__head" style="margin-bottom:0;">
+          <h3>Your Trip</h3>
+          <div class="pt-ring-wrap">
+            <svg viewBox="0 0 56 56">
+              <circle class="pt-ring-track" cx="28" cy="28" r="24"/>
+              <circle class="pt-ring-fill" id="ringFill" cx="28" cy="28" r="24"/>
+            </svg>
+            <div class="pt-ring-pct" id="ringPct">0%</div>
+          </div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display:none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2"/></svg>
+      </div>
+
+      <div class="pt-summary__list">
+        <div class="pt-summary__row"><span class="ic">📍</span><span class="txt"><span class="lbl">Destination</span><span class="val is-empty" data-field="destination">Not selected</span></span></div>
+        <div class="pt-summary__row"><span class="ic">🏨</span><span class="txt"><span class="lbl">Hotel</span><span class="val is-empty" data-field="hotel">Not selected</span></span></div>
+        <div class="pt-summary__row"><span class="ic">🎒</span><span class="txt"><span class="lbl">Package</span><span class="val is-empty" data-field="package">Not selected</span></span></div>
+        <div class="pt-summary__row"><span class="ic">📅</span><span class="txt"><span class="lbl">Dates</span><span class="val is-empty" data-field="dates">Not set</span></span></div>
+        <div class="pt-summary__row"><span class="ic">👥</span><span class="txt"><span class="lbl">Travelers</span><span class="val" data-field="travelers">2 travelers</span></span></div>
+        <div class="pt-summary__row"><span class="ic">💰</span><span class="txt"><span class="lbl">Budget</span><span class="val is-counting" data-field="budget">$2,500</span></span></div>
+        <div class="pt-summary__row"><span class="ic">⏳</span><span class="txt"><span class="lbl">Duration</span><span class="val is-empty" data-field="duration">Not set</span></span></div>
+      </div>
+
+      <div class="pt-summary__actions">
+        <button class="btn btn-outline btn-magnetic" id="saveTripBtn">Save Trip</button>
+        <button class="btn btn-ghost" id="shareTripBtn">Share Trip</button>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- =========================================================
+     COMPLETION CELEBRATION LAYER
+     ========================================================= -->
+<div class="pt-celebration-layer" id="celebrationLayer">
+  <div class="pt-glow-wash" id="glowWash"></div>
+  <svg class="pt-route-svg" id="routeSvg" viewBox="0 0 1600 900" preserveAspectRatio="none">
+    <path class="pt-route-path" id="routePath" d="M -50 700 C 300 500, 700 750, 1000 450 S 1500 250, 1700 150"/>
+  </svg>
+  <svg class="pt-fly-plane" id="flyPlane" viewBox="0 0 64 64" fill="none"><path d="M4 34l50-16-14 32-6-12-14 6-6-10z" fill="currentColor"/></svg>
+</div>
+
+<!-- =========================================================
+     SUCCESS MODAL
+     ========================================================= -->
+<div class="pt-modal-backdrop" id="modalBackdrop">
+  <div class="pt-modal" id="successModal">
+    <button class="pt-modal__close" id="modalClose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="pt-modal__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+    <h2>✨ Your Dream Journey is Ready</h2>
+    <p class="pt-modal__sub">Every detail, curated and confirmed.</p>
+    <div class="pt-modal__grid">
+      <div class="cell"><div class="lbl">Destination</div><div class="val" data-modal="destination">—</div></div>
+      <div class="cell"><div class="lbl">Hotel</div><div class="val" data-modal="hotel">—</div></div>
+      <div class="cell"><div class="lbl">Package</div><div class="val" data-modal="package">—</div></div>
+      <div class="cell"><div class="lbl">Budget</div><div class="val" data-modal="budget">—</div></div>
+      <div class="cell"><div class="lbl">Duration</div><div class="val" data-modal="duration">—</div></div>
+      <div class="cell"><div class="lbl">Travelers</div><div class="val" data-modal="travelers">—</div></div>
+    </div>
+    <div class="pt-modal__actions">
+      <button class="btn btn-primary btn-magnetic">Proceed to Booking</button>
+      <button class="btn btn-outline btn-magnetic" id="downloadBtn">Download Itinerary</button>
+      <button class="btn btn-ghost" id="restartBtn">Start New Plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer class="tn-footer">
+  <div class="container">
+    <div class="tn-footer__grid">
+      <div class="tn-footer__brand">
+        <div class="tn-logo">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C11.6 7.4 9 12.6 9 18c0 5.6 4.4 10 7 10s7-4.4 7-10c0-5.4-2.6-10.6-7-14Z" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="17" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+          TripNest
+        </div>
+        <p>Premium travel planning, designed around how you actually want to explore the world.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul><li><a href="destinations.html">Destinations</a></li><li><a href="hotels.html">Hotels</a></li><li><a href="packages.html">Packages</a></li></ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul><li><a href="about.html">About</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul><li><a href="help.html">Help Center</a></li><li><a href="terms.html">Terms</a></li><li><a href="privacy.html">Privacy</a></li></ul>
+      </div>
+    </div>
+    <div class="tn-footer__bottom">
+      <span>© 2026 TripNest. All rights reserved.</span>
+      <div class="tn-footer__social">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none"><path d="M22 5.9c-.7.3-1.5.5-2.3.6.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4 4 0 0 0-6.9 3.7A11.5 11.5 0 0 1 3.7 4.7a4 4 0 0 0 1.3 5.4c-.6 0-1.2-.2-1.7-.5v.1a4 4 0 0 0 3.3 4 4 4 0 0 1-1.8.1 4 4 0 0 0 3.8 2.8A8 8 0 0 1 2 18.6a11.4 11.4 0 0 0 6.2 1.8c7.5 0 11.6-6.5 11.6-12v-.5c.8-.6 1.5-1.3 2.2-2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3a3 3 0 0 0-3 3v2H8v3h3v6h3v-6h2.6l.4-3H14V9.6c0-.3.1-.6.6-.6Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/plan-trip.js"></script>
+</body>
+</html>

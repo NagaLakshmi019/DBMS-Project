@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripNest | Explore The World Without Limits</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Project Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<!-- ================= CUSTOM CURSOR ================= -->
+<div class="cursor" id="cursor">
+  <svg class="cursor-ring" width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="url(#cursorGrad)" stroke-width="1.5"/>
+    <defs>
+      <radialGradient id="cursorGrad">
+        <stop offset="0%" stop-color="#60A5FA"/>
+        <stop offset="100%" stop-color="#2563EB"/>
+      </radialGradient>
+    </defs>
+  </svg>
+  <div class="cursor-dot"></div>
+  <svg class="cursor-plane" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M2 12L21 3L15 21L11 13L2 12Z" fill="#2563EB"/>
+  </svg>
+</div>
+    <!-- ============================= -->
+    <!-- NAVBAR SECTION -->
+    <!-- ============================= -->s
+    <header class="navbar" id="navbar">
+        <div class="navbar__container">
+
+            <!-- Logo -->
+            <a href="index.html" class="navbar__logo">
+                <i class="fa-solid fa-earth-asia navbar__logo-icon"></i>
+                <span class="navbar__logo-text">TripNest</span>
+            </a>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar__toggle" id="navbarToggle" aria-label="Toggle navigation menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- Navigation Links -->
+            <nav class="navbar__menu" id="navbarMenu">
+                <ul class="navbar__links">
+                    <li class="navbar__item"><a href="index.html" class="navbar__link navbar__link--active">Home</a></li>
+                    <li class="navbar__item"><a href="destinations.html" class="navbar__link">Destinations</a></li>
+                    <li class="navbar__item"><a href="packages.html" class="navbar__link">Packages</a></li>
+                    <li class="navbar__item"><a href="hotels.html" class="navbar__link">Hotels</a></li>
+                    <li class="navbar__item"><a href="plan-trip.html" class="navbar__link">Plan Trip</a></li>
+                    <li class="navbar__item"><a href="about.html" class="navbar__link">About</a></li>
+                    <li class="navbar__item"><a href="contact.html" class="navbar__link">Contact</a></li>
+                </ul>
+
+                <!-- Auth Buttons -->
+                <div class="navbar__auth">
+                    <a href="login.html" class="btn btn--outline">Login</a>
+                    <a href="register.html" class="btn btn--primary">Register</a>
+                </div>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- ============================= -->
+    <!-- HERO SECTION -->
+    <!-- ============================= -->
+    <section class="hero" id="hero">
+        <div class="hero__overlay"></div>
+
+        <div class="hero__content">
+            <h1 class="hero__heading">Explore the World Without Limits</h1>
+            <p class="hero__subheading">Plan, Book and Manage Your Dream Journey in One Place.</p>
+
+            <div class="hero__cta-group">
+                <a href="destinations.html" class="btn btn--primary btn--large">
+                    <i class="fa-solid fa-compass"></i>
+                    Explore Destinations
+                </a>
+                <a href="plan-trip.html" class="btn btn--secondary btn--large">
+                    <i class="fa-solid fa-route"></i>
+                    Plan My Trip
+                </a>
+            </div>
+        </div>
+
+        <!-- Floating Search Card -->
+        <div class="search-card" id="searchCard">
+            <form class="search-card__form" action="#" method="get">
+
+                <div class="search-card__field">
+                    <label for="searchDestination" class="search-card__label">Destination</label>
+                    <i class="fa-solid fa-location-dot search-card__icon"></i>
+                    <input type="text" id="searchDestination" name="destination" class="search-card__input" placeholder=" " autocomplete="off">
+                </div>
+
+                <div class="search-card__field">
+                    <label for="searchCheckIn" class="search-card__label">Check-In</label>
+                    <i class="fa-solid fa-calendar-days search-card__icon"></i>
+                    <input type="date" id="searchCheckIn" name="checkin" class="search-card__input" placeholder=" ">
+                </div>
+
+                <div class="search-card__field">
+                    <label for="searchCheckOut" class="search-card__label">Check-Out</label>
+                    <i class="fa-solid fa-calendar-check search-card__icon"></i>
+                    <input type="date" id="searchCheckOut" name="checkout" class="search-card__input" placeholder=" ">
+                </div>
+
+                <div class="search-card__field">
+                    <label for="searchGuests" class="search-card__label">Guests</label>
+                    <i class="fa-solid fa-user-group search-card__icon"></i>
+                    <input type="number" id="searchGuests" name="guests" min="1" class="search-card__input" placeholder=" ">
+                </div>
+
+                <button type="submit" class="btn btn--primary search-card__submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Search
+                </button>
+
+            </form>
+        </div>
+    </section>
+    <!-- ==========================================
+   1. POPULAR DESTINATIONS SECTION
+=========================================== -->
+<section id="destinations" class="section-padding">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Explore</span>
+      <h2 class="section-title">Popular Destinations</h2>
+      <p class="section-subtitle">Discover the world's most captivating places and start planning your next journey</p>
+    </div>
+
+    <div class="destinations-grid">
+      <!-- Destination Card 1 -->
+      <article class="destination-card">
+        <div class="card-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80" alt="Paris, France" class="card-img" />
+          <span class="rating-badge">
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4.9
+          </span>
+        </div>
+        <div class="destination-content">
+          <div class="destination-info">
+            <h3 class="destination-name">Paris</h3>
+            <p class="destination-country">France</p>
+          </div>
+          <div class="destination-price">
+            <span class="price-label">Starts from</span>
+            <span class="price-amount">$850</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Destination Card 2 -->
+      <article class="destination-card">
+        <div class="card-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80" alt="Bali, Indonesia" class="card-img" />
+          <span class="rating-badge">
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4.8
+          </span>
+        </div>
+        <div class="destination-content">
+          <div class="destination-info">
+            <h3 class="destination-name">Bali</h3>
+            <p class="destination-country">Indonesia</p>
+          </div>
+          <div class="destination-price">
+            <span class="price-label">Starts from</span>
+            <span class="price-amount">$620</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Destination Card 3 -->
+      <article class="destination-card">
+        <div class="card-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80" alt="Kyoto, Japan" class="card-img" />
+          <span class="rating-badge">
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4.9
+          </span>
+        </div>
+        <div class="destination-content">
+          <div class="destination-info">
+            <h3 class="destination-name">Kyoto</h3>
+            <p class="destination-country">Japan</p>
+          </div>
+          <div class="destination-price">
+            <span class="price-label">Starts from</span>
+            <span class="price-amount">$940</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Destination Card 4 -->
+      <article class="destination-card">
+        <div class="card-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80" alt="Santorini, Greece" class="card-img" />
+          <span class="rating-badge">
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4.9
+          </span>
+        </div>
+        <div class="destination-content">
+          <div class="destination-info">
+            <h3 class="destination-name">Santorini</h3>
+            <p class="destination-country">Greece</p>
+          </div>
+          <div class="destination-price">
+            <span class="price-label">Starts from</span>
+            <span class="price-amount">$1,100</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Destination Card 5 -->
+      <article class="destination-card">
+        <div class="card-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" alt="Maldives" class="card-img" />
+          <span class="rating-badge">
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            5.0
+          </span>
+        </div>
+        <div class="destination-content">
+          <div class="destination-info">
+            <h3 class="destination-name">Maldives</h3>
+            <p class="destination-country">South Asia</p>
+          </div>
+          <div class="destination-price">
+            <span class="price-label">Starts from</span>
+            <span class="price-amount">$1,250</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Destination Card 6 -->
+      <article class="destination-card">
+        <div class="card-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80" alt="Rome, Italy" class="card-img" />
+          <span class="rating-badge">
+            <svg class="star-icon" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4.8
+          </span>
+        </div>
+        <div class="destination-content">
+          <div class="destination-info">
+            <h3 class="destination-name">Rome</h3>
+            <p class="destination-country">Italy</p>
+          </div>
+          <div class="destination-price">
+            <span class="price-label">Starts from</span>
+            <span class="price-amount">$780</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+   2. WHY CHOOSE US SECTION
+=========================================== -->
+<section id="why-us" class="section-padding bg-light">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Why Us</span>
+      <h2 class="section-title">Why Choose TripNest</h2>
+      <p class="section-subtitle">Experience seamless travel planning backings by luxury standard services</p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="feature-title">Best Price Guarantee</h3>
+        <p class="feature-desc">We match any competitive pricing to ensure you always get the absolute best value for your luxury stays.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3 class="feature-title">Instant Booking</h3>
+        <p class="feature-desc">Fast, secure, and hassle-free booking confirmation with zero hidden reservation fees.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg>
+        </div>
+        <h3 class="feature-title">Handpicked Destinations</h3>
+        <p class="feature-desc">Every hotel and package in our catalog passes rigorous quality and customer satisfaction checks.</p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <h3 class="feature-title">24/7 Premium Support</h3>
+        <p class="feature-desc">Our dedicated concierge travel team is available round-the-clock to assist your journey.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+   3. FEATURED PACKAGES SECTION
+=========================================== -->
+<section id="packages" class="section-padding">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Trending</span>
+      <h2 class="section-title">Featured Holiday Packages</h2>
+      <p class="section-subtitle">Curated all-inclusive packages designed for ultimate comfort and memory-making</p>
+    </div>
+
+    <div class="packages-grid">
+      <!-- Package Card 1 -->
+      <article class="package-card">
+        <div class="package-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80" alt="Swiss Alps Tour" class="package-img" />
+          <span class="badge-featured">Popular</span>
+          <span class="duration-badge">5 Days / 4 Nights</span>
+        </div>
+        <div class="package-content">
+          <div class="package-header">
+            <h3 class="package-title">Swiss Alps Winter Wonderland</h3>
+            <p class="package-location">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Switzerland
+            </p>
+          </div>
+
+          <ul class="package-inclusions">
+            <li><span class="inc-icon">✓</span> 5-Star Hotel</li>
+            <li><span class="inc-icon">✓</span> Ski Pass Included</li>
+            <li><span class="inc-icon">✓</span> Flights Included</li>
+            <li><span class="inc-icon">✓</span> Daily Breakfast</li>
+          </ul>
+
+          <div class="package-footer">
+            <div class="package-price">
+              <span class="old-price">$1,600</span>
+              <span class="current-price">$1,299 <small>/ person</small></span>
+            </div>
+            <a href="#" class="btn-gradient">Book Package</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Package Card 2 -->
+      <article class="package-card">
+        <div class="package-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" alt="Bali Escape" class="package-img" />
+          <span class="badge-discount">20% OFF</span>
+          <span class="duration-badge">7 Days / 6 Nights</span>
+        </div>
+        <div class="package-content">
+          <div class="package-header">
+            <h3 class="package-title">Tropical Bali Luxury Retreat</h3>
+            <p class="package-location">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Ubud & Seminyak, Indonesia
+            </p>
+          </div>
+
+          <ul class="package-inclusions">
+            <li><span class="inc-icon">✓</span> Private Beach Villa</li>
+            <li><span class="inc-icon">✓</span> Full Spa Treatments</li>
+            <li><span class="inc-icon">✓</span> Island Hopping Tour</li>
+            <li><span class="inc-icon">✓</span> Airport Transfers</li>
+          </ul>
+
+          <div class="package-footer">
+            <div class="package-price">
+              <span class="old-price">$1,120</span>
+              <span class="current-price">$899 <small>/ person</small></span>
+            </div>
+            <a href="#" class="btn-gradient">Book Package</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Package Card 3 -->
+      <article class="package-card">
+        <div class="package-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80" alt="Maldives Escape" class="package-img" />
+          <span class="badge-featured">Luxury Pick</span>
+          <span class="duration-badge">4 Days / 3 Nights</span>
+        </div>
+        <div class="package-content">
+          <div class="package-header">
+            <h3 class="package-title">Maldives Overwater Paradise</h3>
+            <p class="package-location">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Male Atoll, Maldives
+            </p>
+          </div>
+
+          <ul class="package-inclusions">
+            <li><span class="inc-icon">✓</span> Water Bungalow Stay</li>
+            <li><span class="inc-icon">✓</span> All Meals & Drinks</li>
+            <li><span class="inc-icon">✓</span> Sunset Cruise</li>
+            <li><span class="inc-icon">✓</span> Scuba Diving Session</li>
+          </ul>
+
+          <div class="package-footer">
+            <div class="package-price">
+              <span class="old-price">$1,950</span>
+              <span class="current-price">$1,599 <small>/ person</small></span>
+            </div>
+            <a href="#" class="btn-gradient">Book Package</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+   4. POPULAR HOTELS SECTION
+=========================================== -->
+<section id="hotels" class="section-padding bg-light">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Accommodations</span>
+      <h2 class="section-title">Popular Luxury Hotels</h2>
+      <p class="section-subtitle">Stay at top-rated, highly recommended hotels and luxury resorts world-wide</p>
+    </div>
+
+    <div class="hotels-grid">
+      <!-- Hotel Card 1 -->
+      <article class="hotel-card">
+        <div class="hotel-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80" alt="The Ritz Paris" class="hotel-img" />
+          <span class="hotel-tag">5 Star Luxury</span>
+        </div>
+        <div class="hotel-content">
+          <div class="hotel-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-text">4.9 (420 reviews)</span>
+          </div>
+          <h3 class="hotel-title">The Ritz Hotel Paris</h3>
+          <p class="hotel-location">Paris, France</p>
+          
+          <div class="hotel-amenities">
+            <span class="amenity">Free WiFi</span>
+            <span class="amenity">Pool</span>
+            <span class="amenity">Spa</span>
+          </div>
+
+          <div class="hotel-footer">
+            <div class="hotel-price">
+              <span class="price">$450</span>
+              <span class="unit">/ night</span>
+            </div>
+            <a href="#" class="btn-outline">View Details</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Hotel Card 2 -->
+      <article class="hotel-card">
+        <div class="hotel-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80" alt="Marina Bay Sands" class="hotel-img" />
+          <span class="hotel-tag">Top Rated</span>
+        </div>
+        <div class="hotel-content">
+          <div class="hotel-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-text">4.8 (890 reviews)</span>
+          </div>
+          <h3 class="hotel-title">Marina Bay Sands</h3>
+          <p class="hotel-location">Singapore</p>
+          
+          <div class="hotel-amenities">
+            <span class="amenity">Infinity Pool</span>
+            <span class="amenity">Casino</span>
+            <span class="amenity">Bar</span>
+          </div>
+
+          <div class="hotel-footer">
+            <div class="hotel-price">
+              <span class="price">$520</span>
+              <span class="unit">/ night</span>
+            </div>
+            <a href="#" class="btn-outline">View Details</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Hotel Card 3 -->
+      <article class="hotel-card">
+        <div class="hotel-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80" alt="Ayana Resort Bali" class="hotel-img" />
+          <span class="hotel-tag">Beach Resort</span>
+        </div>
+        <div class="hotel-content">
+          <div class="hotel-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-text">4.9 (610 reviews)</span>
+          </div>
+          <h3 class="hotel-title">Ayana Resort & Spa</h3>
+          <p class="hotel-location">Bali, Indonesia</p>
+          
+          <div class="hotel-amenities">
+            <span class="amenity">Private Beach</span>
+            <span class="amenity">12 Pools</span>
+            <span class="amenity">Breakfast</span>
+          </div>
+
+          <div class="hotel-footer">
+            <div class="hotel-price">
+              <span class="price">$280</span>
+              <span class="unit">/ night</span>
+            </div>
+            <a href="#" class="btn-outline">View Details</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Hotel Card 4 -->
+      <article class="hotel-card">
+        <div class="hotel-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" alt="Villa Honegg Switzerland" class="hotel-img" />
+          <span class="hotel-tag">Alpine View</span>
+        </div>
+        <div class="hotel-content">
+          <div class="hotel-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-text">5.0 (310 reviews)</span>
+          </div>
+          <h3 class="hotel-title">Hotel Villa Honegg</h3>
+          <p class="hotel-location">Ennetbürgen, Switzerland</p>
+          
+          <div class="hotel-amenities">
+            <span class="amenity">Heated Pool</span>
+            <span class="amenity">Mountain View</span>
+            <span class="amenity">Sauna</span>
+          </div>
+
+          <div class="hotel-footer">
+            <div class="hotel-price">
+              <span class="price">$610</span>
+              <span class="unit">/ night</span>
+            </div>
+            <a href="#" class="btn-outline">View Details</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+   5. TESTIMONIALS SECTION
+=========================================== -->
+<section id="testimonials" class="section-padding">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Reviews</span>
+      <h2 class="section-title">What Our Travelers Say</h2>
+      <p class="section-subtitle">Read real feedback from thousands of satisfied travelers using TripNest</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <!-- Testimonial 1 -->
+      <article class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p class="testimonial-quote">"Booking our honeymoon through Wanderlust was the best decision! Everything from our villa in Bali to island transfers was handled effortlessly."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Sarah Jenkins" class="author-avatar" />
+          <div class="author-info">
+            <h4 class="author-name">Sarah Jenkins</h4>
+            <p class="author-role">Traveled to Bali</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Testimonial 2 -->
+      <article class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p class="testimonial-quote">"The 24/7 concierge saved our trip when our flight was delayed. They rescheduled our luxury hotel check-in without any stress or fee."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="David Miller" class="author-avatar" />
+          <div class="author-info">
+            <h4 class="author-name">David Miller</h4>
+            <p class="author-role">Traveled to Switzerland</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Testimonial 3 -->
+      <article class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p class="testimonial-quote">"Incredible value and seamless UI. I recommend Wanderlust to all my friends planning trips overseas. The hotel suggestions are spot on!"</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Elena Rostova" class="author-avatar" />
+          <div class="author-info">
+            <h4 class="author-name">Elena Rostova</h4>
+            <p class="author-role">Traveled to Greece</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+   6. NEWSLETTER SECTION
+=========================================== -->
+<section id="newsletter" class="section-padding-sm">
+  <div class="container">
+    <div class="newsletter-card">
+      <div class="newsletter-content">
+        <span class="section-tag light">Stay Updated</span>
+        <h2 class="newsletter-title">Subscribe & Get 20% Off Your First Booking</h2>
+        <p class="newsletter-subtitle">Join over 50,000+ travelers receiving weekly travel deals, insider tips, and exclusive secret discounts.</p>
+        
+        <form class="newsletter-form" action="#" method="POST" onsubmit="return false;">
+          <div class="input-wrapper">
+            <svg class="mail-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" placeholder="Enter your email address..." class="newsletter-input" required />
+          </div>
+          <button type="submit" class="btn-gradient">Subscribe Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+   7. FOOTER SECTION
+=========================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="footer-logo">
+          <span class="logo-text">Trip<span class="text-primary">Nest</span></span>
+        </a>
+        <p class="footer-desc">
+          Your luxury gateway to exploring the world. Booking premium hotels, curated vacation packages, and unforgettable experiences with confidence.
+        </p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook" class="social-link">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="social-link">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="social-link">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-menu">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog & News</a></li>
+            <li><a href="#">Partnerships</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Destinations</h4>
+          <ul class="footer-menu">
+            <li><a href="#">Paris, France</a></li>
+            <li><a href="#">Bali, Indonesia</a></li>
+            <li><a href="#">Kyoto, Japan</a></li>
+            <li><a href="#">Maldives Islands</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Support</h4>
+          <ul class="footer-menu">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">&copy; 2026 TripNest Travel Inc. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    <!-- Project JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>
