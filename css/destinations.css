@@ -310,6 +310,7 @@ body {
 
 .nav-menu { display: flex; align-items: center; gap: 28px; list-style: none; }
 
+
 .nav-link {
   font-size: 0.925rem;
   font-weight: 500;
@@ -913,6 +914,16 @@ body {
 .footer-logo { text-decoration: none; display: inline-block; margin-bottom: 16px; }
 .footer-desc { margin-bottom: 24px; line-height: 1.6; max-width: 320px; }
 .social-links { display: flex; gap: 12px; }
+
+.logo-text {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;   /* Trip color */
+}
+
+.text-primary {
+    color: #3b82f6;   /* Nest color */
+}
 
 .social-link { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: #ffffff; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: var(--transition); }
 .social-link:hover { background: var(--primary); transform: translateY(-2px); }

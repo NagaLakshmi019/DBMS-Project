@@ -173,7 +173,7 @@ body {
 .logo-text {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--dark-footer);
+  color: var(--secondary-sky);
 }
 
 .text-accent {
@@ -705,6 +705,16 @@ a.info-value:hover {
 .footer-bottom-links {
   display: flex;
   gap: 20px;
+}
+
+.logo-text {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;   /* Trip color */
+}
+
+.text-primary {
+    color: #3b82f6;   /* Nest color */
 }
 
 .footer-bottom-links a {
