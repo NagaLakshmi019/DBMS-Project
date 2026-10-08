@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Maldives Overwater Bliss', img: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600&q=80', days: 5, countries: 1, rating: 5.0, price: 4100, tag: 'Luxury', includes: ['Flights', 'Villa', 'Meals'], category: 'luxury' },
     { name: 'Kyoto Cultural Journey', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80', days: 10, countries: 1, rating: 4.8, price: 2680, tag: 'Culture', includes: ['Flights', 'Guide', 'Hotel'], category: 'family' },
     { name: 'Patagonia Trekking Expedition', img: 'https://images.unsplash.com/photo-1478827387698-1527781a4887?w=600&q=80', days: 12, countries: 2, rating: 4.9, price: 3850, tag: 'Adventure', includes: ['Flights', 'Guide', 'Camp Gear'], category: 'adventure' },
-    { name: 'Amalfi Coast Getaway', img: 'https://images.unsplash.com/photo-1533105045747-b17aacd6d0ea?w=600&q=80', days: 6, countries: 1, rating: 4.7, price: 2200, tag: 'Romantic', includes: ['Hotel', 'Meals', 'Transfers'], category: 'honeymoon' },
+    { name: 'Amalfi Coast Getaway', img : "images/amalfi", days: 6, countries: 1, rating: 4.7, price: 2200, tag: 'Romantic', includes: ['Hotel', 'Meals', 'Transfers'], category: 'honeymoon' },
     { name: 'Great Barrier Reef Cruise', img: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&q=80', days: 8, countries: 1, rating: 4.8, price: 2780, tag: 'Cruise', includes: ['Flights', 'Cabin', 'Meals'], category: 'cruise' }
   ];
 

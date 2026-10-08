@@ -21,7 +21,6 @@ const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: process.env.DB_PASS,
-  database: 'tripnest',
   waitForConnections: true,
   dateStrings: true, // DATE columns 'YYYY-MM-DD' strings ga vastayi (timezone valla 1 roju taggakunda)
   connectionLimit: 10
