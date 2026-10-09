@@ -73,12 +73,14 @@ module.exports = (app, db, wrap, auth, adminOnly, limiter) => {
     try {
       await conn.beginTransaction();
       const [b] = await conn.query(
-        `SELECT b.booking_id, b.status, b.total_price, b.travel_date, u.email, p.name AS package_name
+        `SELECT b.booking_id, b.status, b.total_price, b.travel_date, u.email, p.name AS package_name,
+                (b.hold_expires_at IS NOT NULL AND b.hold_expires_at < NOW()) AS expired
          FROM bookings b JOIN users u ON u.user_id = b.user_id JOIN packages p ON p.package_id = b.package_id
          WHERE b.booking_id = ? AND b.user_id = ? FOR UPDATE OF b`, [bookingId, req.user.user_id]);
       if (!b.length) out = [404, { error: 'Booking not found' }];
       else if (b[0].status === 'confirmed') out = [409, { error: 'Already paid' }];
       else if (b[0].status === 'cancelled') out = [400, { error: 'Booking is cancelled' }];
+      else if (b[0].expired) out = [409, { error: 'The 30 minute payment window has expired. The seats are released, please book again.' }];
       else {
         const ref = 'TN' + Date.now().toString(36).toUpperCase() + Math.floor(Math.random() * 900 + 100);
         await conn.query('INSERT INTO payments (booking_id, amount, method, txn_ref) VALUES (?,?,?,?)',
