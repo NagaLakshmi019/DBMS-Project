@@ -129,7 +129,9 @@ app.delete('/api/trips/:id', auth, wrap(async (req, res) => {
 // ---------- BOOKINGS: seat-based booking lives in booking-routes.js (POST /api/book, needs login) ----------
 app.get('/api/users/:id/bookings', auth, self, wrap(async (req, res) => {
   const [rows] = await db.query(
-    `SELECT b.booking_id, p.name AS package_name, b.travel_date, b.travelers, b.total_price, b.status
+    `SELECT b.booking_id, p.name AS package_name, b.travel_date, b.travelers, b.total_price, b.status,
+            CASE WHEN b.status = 'pending' AND b.hold_expires_at IS NOT NULL
+                 THEN GREATEST(TIMESTAMPDIFF(MINUTE, NOW(), b.hold_expires_at), 0) END AS hold_minutes_left
      FROM bookings b JOIN packages p ON b.package_id = p.package_id
      WHERE b.user_id = ? ORDER BY b.booked_at DESC`, [req.params.id]);
   res.json(rows);
@@ -211,3 +213,15 @@ app.use((err, req, res, next) => {                       // eslint-disable-line 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '127.0.0.1';            // only this computer can reach the server (set HOST=0.0.0.0 to share on your network)
 app.listen(PORT, HOST, () => console.log(`TripNest running at http://localhost:${PORT}`));
+
+// Unpaid bookings are cancelled after 30 minutes by the MySQL event ev_expire_pending_bookings (database/08).
+// If the MySQL event scheduler happens to be OFF, this backup timer calls the same procedure every minute.
+(async () => {
+  try {
+    const [[r]] = await db.query("SELECT @@event_scheduler AS s, (SELECT COUNT(*) FROM information_schema.routines WHERE routine_schema = DATABASE() AND routine_name = 'sp_expire_pending_bookings') AS has_proc");
+    if (!r.has_proc) return console.warn('Run database/08_hold_expiry_and_ratings.sql to enable the 30 minute booking hold expiry.');
+    if (String(r.s).toUpperCase() === 'ON') return console.log('Booking hold expiry: handled by the MySQL event scheduler');
+    console.warn('MySQL event scheduler is OFF: expiring unpaid bookings from Node every minute instead (or run: SET GLOBAL event_scheduler = ON;)');
+    setInterval(() => db.query('CALL sp_expire_pending_bookings()').catch((e) => console.error('expiry job failed:', e.message)), 60 * 1000);
+  } catch (e) { console.error('expiry check failed:', e.message); }
+})();

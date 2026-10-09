@@ -46,7 +46,7 @@
       const rows = await get(`/api/users/${user.user_id}/bookings`);
       if (!rows.length) return (box.innerHTML = '<p class="empty">Inka bookings levu. <a href="packages.html">Packages chudandi</a></p>');
       box.innerHTML = `<table><tr><th>Package</th><th>Travel Date</th><th>Travelers</th><th>Total</th><th>Status</th><th></th></tr>` +
-        rows.map((b) => `<tr><td>${esc(b.package_name)}</td><td>${day(b.travel_date)}</td><td>${esc(b.travelers)}</td><td>$${esc(b.total_price)}</td><td>${badge(b.status)}</td>
+        rows.map((b) => `<tr><td>${esc(b.package_name)}</td><td>${day(b.travel_date)}</td><td>${esc(b.travelers)}</td><td>$${esc(b.total_price)}</td><td>${badge(b.status)}${b.hold_minutes_left !== null && b.hold_minutes_left !== undefined ? `<div class="hold">Pay within ${b.hold_minutes_left > 0 ? b.hold_minutes_left + ' min' : '1 min'} or the seats are released</div>` : ''}</td>
           <td class="acts">${actions(b)}</td></tr>`).join('') + '</table>';
       box.querySelectorAll('.pay').forEach((b) => b.addEventListener('click', () => openPay(b.dataset)));
       box.querySelectorAll('.cancel').forEach((b) => b.addEventListener('click', () => openCancel(b.dataset)));

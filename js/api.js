@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
           { departure_id: Number(sel.value), travelers: Number(trav.value) }, user.token);
         msg.className = 'bk-msg ok';
         msg.textContent = 'Reserved ' + r.travelers + ' seat(s) for ' + fmt(r.travel_date) + '. Total $' +
-          Number(r.total_price).toLocaleString() + ' (' + r.seats_left + ' seats left on this date). ';
+          Number(r.total_price).toLocaleString() + ' (' + r.seats_left + ' seats left on this date). Pay within 30 minutes to keep them. ';
         const link = document.createElement('a');
         link.href = 'my-trips.html';
         link.textContent = 'Go to My Trips to pay';
