@@ -281,6 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openBookingModal(name) {
     document.getElementById('modalTitle').textContent = name;
+    // api.js listens to this and loads the departures / seats for the chosen package
+    document.dispatchEvent(new CustomEvent('booking:open', { detail: { packageName: name } }));
     modalOverlay.classList.add('active');
     bookingModal.classList.add('active');
     itineraryModal.classList.remove('active');
@@ -305,9 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
   modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModals(); });
   document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', closeModals));
 
+  // the modal now stays open until api.js confirms the booking (so errors like "Sold out" stay visible)
   document.getElementById('bookingForm').addEventListener('submit', e => {
     e.preventDefault();
-    closeModals();
   });
 
   /* =========================================================

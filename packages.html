@@ -885,14 +885,19 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="bookingModal">
     <button class="modal-close" data-close>✕</button>
-    <span class="eyebrow">Booking Request</span>
+    <span class="eyebrow">Book Your Seats</span>
     <h3 id="modalTitle">Package Name</h3>
-    <p>Fill in your details and our travel team will confirm availability within 24 hours.</p>
+    <p>Pick a departure date. Seats are held for you instantly; pay from My Trips to confirm.</p>
     <form class="modal-form" id="bookingForm">
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email Address" required>
-      <input type="date" required>
-      <button type="submit" class="btn btn-primary full magnetic">Confirm Request</button>
+      <label class="bk-label" for="departureSelect">Departure date</label>
+      <select id="departureSelect" required>
+        <option value="">Loading departures...</option>
+      </select>
+      <label class="bk-label" for="bkTravelers">Travelers</label>
+      <input type="number" id="bkTravelers" min="1" max="10" value="1" required>
+      <p id="seatInfo" class="seat-info"></p>
+      <button type="submit" class="btn btn-primary full magnetic" id="bkSubmit" disabled>Reserve Seats</button>
+      <p id="bkMsg" class="bk-msg" role="status"></p>
     </form>
   </div>
 

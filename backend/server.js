@@ -21,6 +21,7 @@ const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: process.env.DB_PASS,
+  database: 'tripnest',
   waitForConnections: true,
   dateStrings: true, // DATE columns 'YYYY-MM-DD' strings ga vastayi (timezone valla 1 roju taggakunda)
   connectionLimit: 10
@@ -149,21 +150,7 @@ app.delete('/api/trips/:id', wrap(async (req, res) => {
   res.json({ message: 'Trip deleted' });
 }));
 
-// ---------- BOOKINGS (packages page) ----------
-app.post('/api/bookings', wrap(async (req, res) => {
-  const { user_id, package_id, travel_date, travelers } = req.body;
-  const [result] = await db.query('CALL sp_book_package(?,?,?,?)', [user_id, package_id, travel_date, travelers || 1]);
-  res.json(result[0][0]);
-}));
-
-// packages.html booking modal: package name matrame untundi
-app.post('/api/book-by-name', wrap(async (req, res) => {
-  const { user_id, package_name, travel_date, travelers } = req.body;
-  const [p] = await db.query('SELECT package_id FROM packages WHERE name = ?', [package_name]);
-  if (!p.length) return res.status(404).json({ error: 'Package not found' });
-  const [result] = await db.query('CALL sp_book_package(?,?,?,?)', [user_id, p[0].package_id, travel_date, travelers || 1]);
-  res.json(result[0][0]);
-}));
+// ---------- BOOKINGS: seat-based booking now lives in booking-routes.js (POST /api/book, needs login) ----------
 
 // ---------- REVIEWS / WISHLIST / CONTACT ----------
 app.post('/api/reviews', wrap(async (req, res) => {
@@ -226,10 +213,17 @@ app.get('/api/admin/messages', adminOnly, wrap(async (req, res) => {
 app.patch('/api/admin/bookings/:id', adminOnly, wrap(async (req, res) => {
   const { status } = req.body;
   if (!['pending', 'confirmed', 'cancelled'].includes(status)) return res.status(400).json({ error: 'Invalid status' });
-  await db.query('UPDATE bookings SET status = ? WHERE booking_id = ?', [status, req.params.id]);
+  try {
+    await db.query('UPDATE bookings SET status = ? WHERE booking_id = ?', [status, req.params.id]);
+  } catch (e) {
+    // trg_booking_seats tried to re-take seats on a full departure; chk_seats_range refused
+    if (e.code === 'ER_CHECK_CONSTRAINT_VIOLATED') return res.status(409).json({ error: 'No seats left to re-activate this booking' });
+    throw e;
+  }
   res.json({ message: 'Updated' });
 }));
 
-   require('./extra-routes')(app, db, wrap, auth, adminOnly, session);
+require('./extra-routes')(app, db, wrap, auth, adminOnly, session);
+require('./booking-routes')(app, db, wrap, auth, adminOnly);
 
 app.listen(3000, () => console.log('TripNest running at http://localhost:3000'));

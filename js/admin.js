@@ -13,7 +13,7 @@
       body: body ? JSON.stringify(body) : undefined
     });
     if (res.status === 401 || res.status === 403) { localStorage.removeItem('tripnest_user'); deny(); }
-    if (!res.ok) throw new Error('Server error ' + res.status);
+    if (!res.ok) { const j = await res.json().catch(() => ({})); throw new Error(j.error || 'Server error ' + res.status); }
     return res.json();
   }
 
@@ -35,6 +35,21 @@
       (await api('/api/admin/emails')).map((m) => `<tr><td>${m.email_id}</td><td>${esc(m.to_email)}</td><td>${esc(m.subject)}</td><td style="white-space:normal;min-width:240px">${esc(m.body)}</td><td>${esc(m.status)}</td><td>${day(m.created_at)}</td></tr>`)),
     refunds: async () => table(['ID', 'User', 'Package', 'Booking', 'Refund', '%', 'Reference', 'Status', 'Date'],
       (await api('/api/admin/refunds')).map((r) => `<tr><td>${r.refund_id}</td><td>${esc(r.full_name)}</td><td>${esc(r.package_name)}</td><td>#${r.booking_id}</td><td>$${esc(r.amount)}</td><td>${esc(r.percent_refunded)}%</td><td>${esc(r.refund_ref)}</td><td>${esc(r.status)}</td><td>${day(r.refunded_at)}</td></tr>`)),
+    seats: async () => {
+      const [deps, pkgs] = await Promise.all([api('/api/admin/departures'), fetch('/api/packages').then((r) => r.json())]);
+      const form = `<form id="depForm" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+        <select name="package_id" required>${pkgs.map((p) => `<option value="${p.package_id}">${esc(p.name)}</option>`).join('')}</select>
+        <input type="date" name="departure_date" required>
+        <input type="number" name="seats_total" min="1" value="10" required style="width:90px" title="Total seats">
+        <button type="submit">Add departure</button> <span id="depMsg" class="err"></span></form>`;
+      const badge = { sold_out: '#DC2626', filling_fast: '#D97706', available: '#15803D' };
+      return form + table(['ID', 'Package', 'Date', 'Total', 'Booked', 'Left', 'Occupancy', 'Status'],
+        deps.map((d) => `<tr><td>${d.departure_id}</td><td>${esc(d.package_name)}</td><td>${day(d.departure_date)}</td>
+          <td><input type="number" class="seatsTotal" data-id="${d.departure_id}" value="${d.seats_total}" min="1" style="width:70px"></td>
+          <td>${esc(d.seats_booked)}</td><td>${esc(d.seats_left)}</td>
+          <td><div style="background:#E5E7EB;border-radius:6px;height:8px;width:90px"><div style="background:${badge[d.availability]};height:8px;border-radius:6px;width:${Number(d.occupancy_pct)}%"></div></div> ${esc(d.occupancy_pct)}%</td>
+          <td style="color:${badge[d.availability]};font-weight:600">${esc(d.availability.replace('_', ' '))}</td></tr>`));
+    },
     messages: async () => table(['ID', 'Name', 'Email', 'Subject', 'Message', 'Date'],
       (await api('/api/admin/messages')).map((m) => `<tr><td>${m.msg_id}</td><td>${esc(m.full_name)}</td><td>${esc(m.email)}</td><td>${esc(m.subject)}</td><td style="white-space:normal;min-width:240px">${esc(m.message)}</td><td>${day(m.created_at)}</td></tr>`)),
   };
@@ -46,6 +61,19 @@
       panel.innerHTML = await views[name]();
       panel.querySelectorAll('select.st').forEach((s) => s.addEventListener('change', () =>
         api('/api/admin/bookings/' + s.dataset.id, 'PATCH', { status: s.value }).then(loadStats)));
+      const depForm = panel.querySelector('#depForm');
+      if (depForm) depForm.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const f = new FormData(depForm);
+        try {
+          await api('/api/admin/departures', 'POST', { package_id: f.get('package_id'), departure_date: f.get('departure_date'), seats_total: f.get('seats_total') });
+          show('seats');
+        } catch (err) { panel.querySelector('#depMsg').textContent = err.message; }
+      });
+      panel.querySelectorAll('input.seatsTotal').forEach((i) => i.addEventListener('change', async () => {
+        try { await api('/api/admin/departures/' + i.dataset.id, 'PATCH', { seats_total: i.value }); show('seats'); }
+        catch (err) { alert(err.message); show('seats'); }
+      }));
     } catch (e) { panel.innerHTML = '<p class="err">Backend connect kaaledu. Server run chesi refresh cheyandi.</p>'; }
   }
 
