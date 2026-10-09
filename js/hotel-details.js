@@ -447,6 +447,11 @@ window.hotelsReady.then(function () {
     renderReviewsList();
   }
 
+  // review name/text are typed by visitors, so they must be escaped before going into innerHTML (stops stored XSS)
+  function escHtml(v) {
+    return String(v ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  }
+
   function renderReviewsList() {
     const list = reviewFilter === "all" ? hotel.reviews : hotel.reviews.filter((r) => String(r.rating) === String(reviewFilter));
     const wrap = document.getElementById("hdReviewsList");
@@ -457,14 +462,14 @@ window.hotelsReady.then(function () {
     wrap.innerHTML = list.map((r, i) => `
       <div class="hd-review">
         <div class="hd-review__head">
-          <div class="hd-review__avatar">${r.name.charAt(0)}</div>
+          <div class="hd-review__avatar">${escHtml(String(r.name).charAt(0))}</div>
           <div>
-            <div class="hd-review__name">${r.name}</div>
-            <div class="hd-review__date">${r.date}</div>
+            <div class="hd-review__name">${escHtml(r.name)}</div>
+            <div class="hd-review__date">${escHtml(r.date)}</div>
           </div>
           <div class="hd-review__stars">${starString(r.rating)}</div>
         </div>
-        <p class="hd-review__text">${r.text}</p>
+        <p class="hd-review__text">${escHtml(r.text)}</p>
         <button type="button" class="hd-review__helpful" data-helpful-idx="${i}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 22V11M2 13v7a2 2 0 0 0 2 2h12.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 18 11h-5V5a2 2 0 0 0-4 0v1L7 11"/></svg>
           Helpful (<span>${r.helpful}</span>)

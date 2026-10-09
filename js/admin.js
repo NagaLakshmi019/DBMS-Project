@@ -12,6 +12,7 @@
       method, headers: { 'Content-Type': 'application/json', 'x-auth-token': u.token },
       body: body ? JSON.stringify(body) : undefined
     });
+    if (res.status === 401 || res.status === 403) { localStorage.removeItem('tripnest_user'); deny(); } // session expired or not an admin
     if (res.status === 401 || res.status === 403) { localStorage.removeItem('tripnest_user'); deny(); }
     if (!res.ok) { const j = await res.json().catch(() => ({})); throw new Error(j.error || 'Server error ' + res.status); }
     return res.json();
@@ -26,9 +27,9 @@
       (await api('/api/admin/users')).map((u) => `<tr><td>${u.user_id}</td><td>${esc(u.full_name)}</td><td>${esc(u.email)}</td><td>${esc(u.phone)}</td><td>${esc(u.country)}</td><td>${day(u.created_at)}</td></tr>`)),
     trips: async () => table(['ID', 'User', 'Destination', 'Hotel', 'Tier', 'Dates', 'Travelers', 'Budget', 'Status'],
       (await api('/api/admin/trips')).map((t) => `<tr><td>${t.trip_id}</td><td>${esc(t.full_name)}</td><td>${esc(t.destination)}</td><td>${esc(t.hotel)}</td><td>${esc(t.package_name)}</td><td>${day(t.start_date)} → ${day(t.end_date)}</td><td>${esc(t.travelers)}</td><td>$${esc(t.budget)}</td><td>${esc(t.status)}</td></tr>`)),
-    bookings: async () => table(['ID', 'User', 'Package', 'Travel Date', 'Travelers', 'Total', 'Status'],
+    bookings: async () => table(['ID', 'User', 'Package', 'Travel Date', 'Travelers', 'Total', 'Status', 'Action'],
       (await api('/api/admin/bookings')).map((b) => `<tr><td>${b.booking_id}</td><td>${esc(b.full_name)}</td><td>${esc(b.package_name)}</td><td>${day(b.travel_date)}</td><td>${esc(b.travelers)}</td><td>$${esc(b.total_price)}</td>
-        <td><select class="st" data-id="${b.booking_id}">${['pending', 'confirmed', 'cancelled'].map((s) => `<option ${s === b.status ? 'selected' : ''}>${s}</option>`).join('')}</select></td></tr>`)),
+        <td>${esc(b.status)}</td><td>${b.status === 'cancelled' ? '—' : `<button class="cancelBk" data-id="${b.booking_id}">Cancel booking</button>`}</td></tr>`)),
     payments: async () => table(['ID', 'User', 'Booking', 'Amount', 'Method', 'Status', 'Reference', 'Paid at'],
       (await api('/api/admin/payments')).map((p) => `<tr><td>${p.payment_id}</td><td>${esc(p.full_name)}</td><td>#${p.booking_id}</td><td>$${esc(p.amount)}</td><td>${esc(p.method)}</td><td>${esc(p.status)}</td><td>${esc(p.txn_ref)}</td><td>${day(p.paid_at)}</td></tr>`)),
     emails: async () => table(['ID', 'To', 'Subject', 'Message', 'Status', 'Date'],
@@ -59,8 +60,11 @@
     panel.textContent = 'Loading…';
     try {
       panel.innerHTML = await views[name]();
-      panel.querySelectorAll('select.st').forEach((s) => s.addEventListener('change', () =>
-        api('/api/admin/bookings/' + s.dataset.id, 'PATCH', { status: s.value }).then(loadStats)));
+      panel.querySelectorAll('button.cancelBk').forEach((btn) => btn.addEventListener('click', async () => {
+        if (!confirm('Cancel booking #' + btn.dataset.id + '? Seats are released and the refund policy is applied.')) return;
+        try { await api('/api/admin/bookings/' + btn.dataset.id, 'PATCH', { status: 'cancelled' }); loadStats(); show('bookings'); }
+        catch (err) { alert(err.message); }
+      }));
       const depForm = panel.querySelector('#depForm');
       if (depForm) depForm.addEventListener('submit', async (ev) => {
         ev.preventDefault();
@@ -91,7 +95,10 @@
     show(b.dataset.t);
   });
   document.getElementById('adminLogout').addEventListener('click', (e) => {
-    e.preventDefault(); localStorage.removeItem('tripnest_user'); location.href = 'index.html';
+    e.preventDefault();
+    let u = null; try { u = JSON.parse(localStorage.getItem('tripnest_user')); } catch (err) {}
+    if (u && u.token) fetch('/api/auth/logout', { method: 'POST', headers: { 'x-auth-token': u.token }, keepalive: true }).catch(() => {});
+    localStorage.removeItem('tripnest_user'); location.href = 'index.html';
   });
   loadStats(); show('users');
 })();

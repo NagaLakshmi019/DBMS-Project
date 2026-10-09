@@ -20,6 +20,7 @@
 
   document.getElementById('logoutLink').addEventListener('click', (e) => {
     e.preventDefault();
+    fetch('/api/auth/logout', { method: 'POST', headers: { 'x-auth-token': user.token || '' }, keepalive: true }).catch(() => {});
     localStorage.removeItem('tripnest_user');
     window.location.href = 'index.html';
   });

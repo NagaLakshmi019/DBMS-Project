@@ -21,32 +21,6 @@ function currentUser() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ---------- REGISTER ----------
-  const regForm = document.querySelector('.register-form');
-  if (regForm) {
-    regForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const f = (id) => document.getElementById(id).value.trim();
-      if (document.getElementById('password').value !== document.getElementById('confirm-password').value) {
-        return alert('Passwords do not match.');
-      }
-      try {
-        const user = await apiCall('/api/register', 'POST', {
-          fullname: f('fullname'),
-          email: f('email'),
-          phone: f('phone'),
-          country: document.getElementById('country').value,
-          password: document.getElementById('password').value
-        });
-        localStorage.setItem('tripnest_user', JSON.stringify(user));
-        alert('Account created! Welcome, ' + user.name);
-        window.location.href = 'index.html';
-      } catch (err) {
-        alert(err.message);
-      }
-    });
-  }
-
   // ---------- CONTACT ----------
   const contactForm = document.querySelector('.contact-form');
   if (contactForm) {
@@ -58,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
           fullname: f('fullname'), email: f('email'), phone: f('phone'),
           subject: f('subject'), message: f('message')
         });
-        alert('Thanks! Mee message pampinchamu.');
+        alert('Thanks! Your message has been sent.');
         contactForm.reset();
       } catch (err) {
         alert(err.message);
@@ -99,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!dest || !start || !end) return; // frontend already validates required steps
       try {
         await apiCall('/api/plan-trip', 'POST', {
-          user_id: user.user_id,
           destination: dest.dataset.value,
           hotel: hotel ? hotel.dataset.value : null,
           hotel_price: hotel ? hotel.dataset.price : null,
@@ -108,9 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
           budget: Number(document.getElementById('budgetSlider').value),
           start_date: start,
           end_date: end
-        });
+        }, user.token);
       } catch (err) {
-        alert('Trip save cheyadam fail ayindi: ' + err.message);
+        if (err.message === 'Please login') { localStorage.removeItem('tripnest_user'); return requireLogin(); }
+        alert('Could not save your trip: ' + err.message);
       }
     });
   }

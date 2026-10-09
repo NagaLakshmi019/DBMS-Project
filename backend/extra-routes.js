@@ -1,41 +1,13 @@
 // TripNest - extra routes: search/filter, reviews, wishlist, payment (simulated), email log, admin lists
-const bcrypt = require('bcryptjs');
-const ADMIN_CODE = process.env.ADMIN_CODE || 'TRIPNEST-ADMIN';
+// (register / login / logout now live in auth-routes.js)
 
-module.exports = (app, db, wrap, auth, adminOnly, session) => {
+module.exports = (app, db, wrap, auth, adminOnly, limiter) => {
   const num = (v) => (v !== undefined && v !== '' && !isNaN(v) ? Number(v) : null);
-
-
-  // ---------- AUTH WITH ROLES (login / register pages: Customer + Admin tabs) ----------
-  app.post('/api/auth/register', wrap(async (req, res) => {
-    const { fullname, email, phone, country, password, role, admin_code } = req.body;
-    if (!fullname || !email || !password || password.length < 8)
-      return res.status(400).json({ error: 'Fill all required fields (password 8+ characters)' });
-    const r = role === 'admin' ? 'admin' : 'customer';
-    if (r === 'admin' && admin_code !== ADMIN_CODE) return res.status(403).json({ error: 'Invalid admin invite code' });
-    const [ex] = await db.query('SELECT user_id FROM users WHERE email = ?', [email]);
-    if (ex.length) return res.status(409).json({ error: 'Email already registered' });
-    const hash = await bcrypt.hash(password, 10);
-    const [ins] = await db.query(
-      'INSERT INTO users (full_name, email, phone, country, password_hash, role) VALUES (?,?,?,?,?,?)',
-      [fullname, email, phone || null, country || null, hash, r]);
-    res.json(session({ user_id: ins.insertId, full_name: fullname, role: r }));
-  }));
-  app.post('/api/auth/login', wrap(async (req, res) => {
-    const { email, password, as } = req.body;
-    const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-    if (!rows.length || !(await bcrypt.compare(password, rows[0].password_hash)))
-      return res.status(401).json({ error: 'Invalid email or password' });
-    const isAdmin = rows[0].role === 'admin';
-    if (as === 'admin' && !isAdmin) return res.status(403).json({ error: 'This is not an admin account' });
-    if (as === 'customer' && isAdmin) return res.status(403).json({ error: 'Admin accounts must sign in from the Admin tab' });
-    res.json(session(rows[0]));
-  }));
 
   // ---------- SEARCH + FILTER (indexed columns) ----------
   const searchRoute = (table, cfg) => app.get('/api/search/' + table, wrap(async (req, res) => {
     const q = req.query, where = [], args = [];
-    if (q.q) { where.push('(' + cfg.text.map((c) => `${c} LIKE ?`).join(' OR ') + ')'); cfg.text.forEach(() => args.push('%' + q.q + '%')); }
+    if (q.q) { q.q = String(q.q).slice(0, 60); where.push('(' + cfg.text.map((c) => `${c} LIKE ?`).join(' OR ') + ')'); cfg.text.forEach(() => args.push('%' + q.q + '%')); }
     if (num(q.min) !== null) { where.push(`${cfg.price} >= ?`); args.push(num(q.min)); }
     if (num(q.max) !== null) { where.push(`${cfg.price} <= ?`); args.push(num(q.max)); }
     if (num(q.rating) !== null) { where.push('rating >= ?'); args.push(num(q.rating)); }
@@ -58,11 +30,16 @@ module.exports = (app, db, wrap, auth, adminOnly, session) => {
     const [[a]] = await db.query('SELECT ROUND(AVG(rating),1) AS avg_rating, COUNT(*) AS total FROM reviews WHERE hotel_id = ?', [req.params.id]);
     res.json({ avg_rating: a.avg_rating, total: a.total, reviews: rows });
   }));
-  app.post('/api/hotels/:id/reviews', auth, wrap(async (req, res) => {
+  const reviewLimit = limiter({ windowMs: 60 * 60 * 1000, max: 10, keyFn: (r) => 'u' + r.user.user_id,
+    message: 'You are posting reviews too fast. Please try again later.' });
+  app.post('/api/hotels/:id/reviews', auth, reviewLimit, wrap(async (req, res) => {
     const rating = parseInt(req.body.rating, 10);
     if (!(rating >= 1 && rating <= 5)) return res.status(400).json({ error: 'Rating must be 1 to 5' });
+    const [h] = await db.query('SELECT hotel_id FROM hotels WHERE hotel_id = ?', [req.params.id]);
+    if (!h.length) return res.status(404).json({ error: 'Hotel not found' });
+    // stored as plain text; the page escapes it when showing (see hotel-details.js)
     await db.query('INSERT INTO reviews (user_id, hotel_id, rating, comment) VALUES (?,?,?,?)',
-      [req.user.user_id, req.params.id, rating, (req.body.comment || '').slice(0, 1000)]);
+      [req.user.user_id, h[0].hotel_id, rating, String(req.body.comment || '').trim().slice(0, 1000)]);
     res.json({ message: 'Review added' });
   }));
 
@@ -83,22 +60,42 @@ module.exports = (app, db, wrap, auth, adminOnly, session) => {
   }));
 
   // ---------- PAYMENT (SIMULATED, real gateway kaadu) + EMAIL LOG ----------
+  // One transaction: lock the booking row, check it, insert the payment, write the email log, commit.
+  // FOR UPDATE makes simultaneous "Pay" clicks wait in a queue, so a booking can never be charged twice.
   app.post('/api/pay', auth, wrap(async (req, res) => {
-    const { booking_id, method } = req.body;
+    const bookingId = parseInt(req.body.booking_id, 10);
+    const method = req.body.method;
+    if (!bookingId) return res.status(400).json({ error: 'booking_id is required' });
     if (!['card', 'upi', 'netbanking'].includes(method)) return res.status(400).json({ error: 'Invalid payment method' });
-    const [b] = await db.query(
-      `SELECT b.*, u.email, p.name AS package_name FROM bookings b
-       JOIN users u ON u.user_id = b.user_id JOIN packages p ON p.package_id = b.package_id
-       WHERE b.booking_id = ? AND b.user_id = ?`, [booking_id, req.user.user_id]);
-    if (!b.length) return res.status(404).json({ error: 'Booking not found' });
-    if (b[0].status === 'confirmed') return res.status(409).json({ error: 'Already paid' });
-    if (b[0].status === 'cancelled') return res.status(400).json({ error: 'Booking is cancelled' });
-    const ref = 'TN' + Date.now().toString(36).toUpperCase() + Math.floor(Math.random() * 900 + 100);
-    await db.query('INSERT INTO payments (booking_id, amount, method, txn_ref) VALUES (?,?,?,?)', [booking_id, b[0].total_price, method, ref]); // trigger: booking -> confirmed
-    await db.query('INSERT INTO email_log (user_id, to_email, subject, body) VALUES (?,?,?,?)', [
-      req.user.user_id, b[0].email, 'TripNest booking confirmed: ' + b[0].package_name,
-      `Payment of $${b[0].total_price} received (ref ${ref}). Your trip on ${String(b[0].travel_date).slice(0, 10)} is confirmed.`]);
-    res.json({ txn_ref: ref, amount: b[0].total_price, status: 'confirmed' });
+
+    const conn = await db.getConnection();
+    let out;
+    try {
+      await conn.beginTransaction();
+      const [b] = await conn.query(
+        `SELECT b.booking_id, b.status, b.total_price, b.travel_date, u.email, p.name AS package_name
+         FROM bookings b JOIN users u ON u.user_id = b.user_id JOIN packages p ON p.package_id = b.package_id
+         WHERE b.booking_id = ? AND b.user_id = ? FOR UPDATE OF b`, [bookingId, req.user.user_id]);
+      if (!b.length) out = [404, { error: 'Booking not found' }];
+      else if (b[0].status === 'confirmed') out = [409, { error: 'Already paid' }];
+      else if (b[0].status === 'cancelled') out = [400, { error: 'Booking is cancelled' }];
+      else {
+        const ref = 'TN' + Date.now().toString(36).toUpperCase() + Math.floor(Math.random() * 900 + 100);
+        await conn.query('INSERT INTO payments (booking_id, amount, method, txn_ref) VALUES (?,?,?,?)',
+          [bookingId, b[0].total_price, method, ref]);                       // trigger: booking -> confirmed
+        await conn.query('INSERT INTO email_log (user_id, to_email, subject, body) VALUES (?,?,?,?)', [
+          req.user.user_id, b[0].email, 'TripNest booking confirmed: ' + b[0].package_name,
+          `Payment of $${b[0].total_price} received (ref ${ref}). Your trip on ${String(b[0].travel_date).slice(0, 10)} is confirmed.`]);
+        out = [200, { txn_ref: ref, amount: b[0].total_price, status: 'confirmed' }];
+      }
+      if (out[0] === 200) await conn.commit(); else await conn.rollback();
+    } catch (e) {
+      await conn.rollback().catch(() => {});
+      throw e;
+    } finally {
+      conn.release();
+    }
+    res.status(out[0]).json(out[1]);
   }));
 
 
@@ -152,7 +149,7 @@ module.exports = (app, db, wrap, auth, adminOnly, session) => {
   app.post('/api/bookings/:id/cancel', auth, wrap(async (req, res) => {
     try {
       const [result] = await db.query('CALL sp_cancel_booking(?,?,?)',
-        [req.params.id, req.user.user_id, String(req.body.reason || '').slice(0, 200)]);
+        [parseInt(req.params.id, 10), req.user.user_id, String(req.body.reason || '').slice(0, 200)]);
       res.json(result[0][0]);
     } catch (e) {
       if (e.sqlState === '45000') return res.status(400).json({ error: e.sqlMessage });

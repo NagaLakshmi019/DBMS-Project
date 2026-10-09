@@ -8,7 +8,11 @@
   const day = (d) => (d ? String(d).slice(0, 10) : '—');
   const badge = (s) => `<span class="badge ${esc(s)}">${esc(s)}</span>`;
   const fail = (box) => (box.innerHTML = '<p class="err">Backend connect kaaledu. Server run chesi refresh cheyandi.</p>');
-  const logout = (e) => { e.preventDefault(); localStorage.removeItem('tripnest_user'); location.href = 'index.html'; };
+  const logout = (e) => {
+    e.preventDefault();
+    fetch('/api/auth/logout', { method: 'POST', headers: { 'x-auth-token': user.token }, keepalive: true }).catch(() => {});
+    localStorage.removeItem('tripnest_user'); location.href = 'index.html';
+  };
 
   $('hello').textContent = user.name.split(' ')[0] + "'s Trips";
   $('logoutLink').addEventListener('click', logout);

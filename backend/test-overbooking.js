@@ -8,8 +8,8 @@ const mysql = require('mysql2/promise');
 
 (async () => {
   const db = await mysql.createPool({
-    host: 'localhost', user: 'root', password: process.env.DB_PASS,
-    database: 'tripnest', dateStrings: true, connectionLimit: 20
+    host: process.env.DB_HOST || 'localhost', user: process.env.DB_USER || 'root', password: process.env.DB_PASS,
+    database: process.env.DB_NAME || 'tripnest', dateStrings: true, connectionLimit: 20
   });
 
   // temporary test data (removed at the end)
