@@ -28,10 +28,28 @@ module.exports = (app, db, wrap, auth, adminOnly) => {
     if (travelers < 1 || travelers > 10) return res.status(400).json({ error: 'Travelers must be between 1 and 10' });
     try {
       // sp_book_package = one transaction: lock departure row -> check seats -> update seats -> insert booking
-      const [result] = await db.query('CALL sp_book_package(?,?,?)', [req.user.user_id, departureId, travelers]);
+      const [result] = await db.query('CALL sp_book_package(?,?,?,NULL)', [req.user.user_id, departureId, travelers]);
       res.json(result[0][0]);
     } catch (e) {
       if (e.sqlState === '45000') return res.status(409).json({ error: e.sqlMessage }); // sold out, closed, etc.
+      throw e;
+    }
+  }));
+
+  // ---------- CUSTOMER: book the package of one of MY trips ----------
+  // The procedure checks the trip is yours, has a package, the departure belongs to that package and the trip
+  // has no active booking yet; then it holds the seats and copies the departure dates onto the trip.
+  app.post('/api/trips/:id/book', auth, wrap(async (req, res) => {
+    const tripId = parseInt(req.params.id, 10);
+    const departureId = parseInt(req.body.departure_id, 10);
+    const travelers = parseInt(req.body.travelers, 10);
+    if (!tripId || !departureId || !travelers) return res.status(400).json({ error: 'departure_id and travelers are required' });
+    if (travelers < 1 || travelers > 10) return res.status(400).json({ error: 'Travelers must be between 1 and 10' });
+    try {
+      const [result] = await db.query('CALL sp_book_package(?,?,?,?)', [req.user.user_id, departureId, travelers, tripId]);
+      res.json(result[0][0]);
+    } catch (e) {
+      if (e.sqlState === '45000') return res.status(e.sqlMessage === 'Trip not found' ? 404 : 409).json({ error: e.sqlMessage });
       throw e;
     }
   }));

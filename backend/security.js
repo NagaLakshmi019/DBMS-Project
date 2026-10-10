@@ -91,6 +91,7 @@ module.exports = (db) => {
       if (err.sqlState === '45000') return res.status(409).json({ error: err.sqlMessage }); // our own SIGNAL messages
       if (err.code === 'ER_NO_REFERENCED_ROW_2') return res.status(404).json({ error: 'Related record not found' });
       if (err.code === 'ER_DUP_ENTRY') return res.status(409).json({ error: 'That record already exists' });
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') return res.status(409).json({ error: 'This item is linked to a booking, so it cannot be deleted' });
       if (err.code === 'ER_CHECK_CONSTRAINT_VIOLATED') return res.status(400).json({ error: 'That value is not allowed' });
       res.status(500).json({ error: 'Something went wrong. Please try again.' });
     });

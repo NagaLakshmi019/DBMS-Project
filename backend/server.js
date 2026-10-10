@@ -56,10 +56,27 @@ require('./auth-routes')(app, db, wrap, auth, sec);
 // ---------- DESTINATIONS / HOTELS / PACKAGES (public, read only) ----------
 app.get('/api/destinations', wrap(async (req, res) => {
   const { continent } = req.query;
+  const sql = `SELECT d.*, h.hotels_count, h.packages_count, h.min_hotel_price, h.min_package_price
+               FROM destinations d JOIN v_destination_hub h ON h.dest_id = d.dest_id`;
   const [rows] = continent
-    ? await db.query('SELECT * FROM destinations WHERE continent = ?', [String(continent)])
-    : await db.query('SELECT * FROM destinations');
+    ? await db.query(sql + ' WHERE d.continent = ? ORDER BY d.dest_id', [String(continent)])
+    : await db.query(sql + ' ORDER BY d.dest_id');
   res.json(rows);
+}));
+
+// Everything you can do at ONE destination: its hotels and its packages (used by the trip planner).
+app.get('/api/destinations/:id/options', wrap(async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const [d] = await db.query('SELECT dest_id, name, country, price FROM destinations WHERE dest_id = ?', [id]);
+  if (!d.length) return res.status(404).json({ error: 'Destination not found' });
+  const [hotels] = await db.query(
+    `SELECT hotel_id, name, stars, price_per_night, rating, location FROM hotels WHERE dest_id = ? ORDER BY price_per_night`, [id]);
+  const [packages] = await db.query(
+    `SELECT p.package_id, p.name, p.days, p.price, p.tag, p.category,
+            (SELECT MIN(x.departure_date) FROM package_departures x
+             WHERE x.package_id = p.package_id AND x.departure_date > CURDATE() AND x.seats_left > 0) AS next_departure
+     FROM packages p WHERE p.dest_id = ? ORDER BY p.price`, [id]);
+  res.json({ destination: d[0], hotels, packages });
 }));
 
 app.get('/api/hotels', wrap(async (req, res) => {
@@ -79,47 +96,51 @@ app.get('/api/hotels/:id', wrap(async (req, res) => {
 
 app.get('/api/packages', wrap(async (req, res) => {
   const [rows] = await db.query(
-    `SELECT p.*, GROUP_CONCAT(pi.item) AS includes
-     FROM packages p LEFT JOIN package_includes pi ON p.package_id = pi.package_id
-     GROUP BY p.package_id`);
+    `SELECT p.*, d.name AS destination_name, GROUP_CONCAT(pi.item) AS includes
+     FROM packages p JOIN destinations d ON d.dest_id = p.dest_id
+     LEFT JOIN package_includes pi ON p.package_id = pi.package_id
+     GROUP BY p.package_id, d.name`);
   res.json(rows.map((p) => ({ ...p, includes: p.includes ? p.includes.split(',') : [] })));
 }));
 
 // ---------- TRIPS (plan-trip page) ----------
 // The trip always belongs to the LOGGED-IN user (taken from the token, never from the request body).
-// Destination / hotel must already exist: visitors can no longer create junk rows in the catalog.
+// Hotel and package must belong to the chosen destination: checked here for a friendly message, and enforced
+// again by the composite foreign keys in the database (database/09_destination_hub.sql).
 app.post('/api/plan-trip', auth, wrap(async (req, res) => {
-  const { destination, hotel, package_tier, travelers, budget, start_date, end_date } = req.body;
-  if (!destination || !v.isDate(start_date) || !v.isDate(end_date) || end_date < start_date)
+  const { start_date, end_date } = req.body;
+  const destId = parseInt(req.body.destination_id, 10);
+  const hotelId = req.body.hotel_id ? parseInt(req.body.hotel_id, 10) : null;
+  const packageId = req.body.package_id ? parseInt(req.body.package_id, 10) : null;
+  if (!destId || !v.isDate(start_date) || !v.isDate(end_date) || end_date < start_date)
     return res.status(400).json({ error: 'A destination and valid dates (end date after start date) are required' });
 
-  const destName = v.clean(String(destination).split(',')[0], 80);          // "Santorini, Greece" -> "Santorini"
-  const [d] = await db.query('SELECT dest_id FROM destinations WHERE name = ?', [destName]);
+  const [d] = await db.query('SELECT dest_id FROM destinations WHERE dest_id = ?', [destId]);
   if (!d.length) return res.status(404).json({ error: 'Unknown destination' });
-
-  let hotelId = null;
-  if (hotel) {
-    const [h] = await db.query('SELECT hotel_id FROM hotels WHERE name = ?', [v.clean(hotel, 120)]);
-    if (h.length) hotelId = h[0].hotel_id;
+  if (hotelId) {
+    const [h] = await db.query('SELECT 1 FROM hotels WHERE hotel_id = ? AND dest_id = ?', [hotelId, destId]);
+    if (!h.length) return res.status(400).json({ error: 'That hotel is not in the chosen destination' });
   }
-  const trav = Math.min(Math.max(parseInt(travelers, 10) || 1, 1), 20);      // "2 travelers" -> 2
-  const money = Number(budget);
+  if (packageId) {
+    const [p] = await db.query('SELECT 1 FROM packages WHERE package_id = ? AND dest_id = ?', [packageId, destId]);
+    if (!p.length) return res.status(400).json({ error: 'That package is not for the chosen destination' });
+  }
+  const trav = Math.min(Math.max(parseInt(req.body.travelers, 10) || 1, 1), 20);   // "2 travelers" -> 2
+  const money = Number(req.body.budget);
   const [r] = await db.query(
-    `INSERT INTO trips (user_id, dest_id, hotel_id, package_tier, travelers, budget, start_date, end_date)
+    `INSERT INTO trips (user_id, dest_id, hotel_id, package_id, travelers, budget, start_date, end_date)
      VALUES (?,?,?,?,?,?,?,?)`,
-    [req.user.user_id, d[0].dest_id, hotelId, v.clean(package_tier, 30) || null, trav,
-     money >= 0 && money < 10000000 ? money : null, start_date, end_date]);
-  res.json({ trip_id: r.insertId });
+    [req.user.user_id, destId, hotelId, packageId, trav, money >= 0 && money < 10000000 ? money : null, start_date, end_date]);
+  res.json({ trip_id: r.insertId, has_package: !!packageId });
 }));
 
 app.get('/api/users/:id/trips', auth, self, wrap(async (req, res) => {
-  const [rows] = await db.query(
-    `SELECT t.* FROM v_trip_details t JOIN trips x ON x.trip_id = t.trip_id WHERE x.user_id = ?`,
-    [req.params.id]);
+  const [rows] = await db.query('SELECT * FROM v_trip_details WHERE user_id = ? ORDER BY trip_id DESC', [req.params.id]);
   res.json(rows);
 }));
 
-// only the owner can delete a trip (the user_id in the WHERE clause is the ownership check)
+// only the owner can delete a trip (the user_id in the WHERE clause is the ownership check);
+// a trip that has a booking is protected by a foreign key (see wrap() in security.js -> 409)
 app.delete('/api/trips/:id', auth, wrap(async (req, res) => {
   const [r] = await db.query('DELETE FROM trips WHERE trip_id = ? AND user_id = ?', [req.params.id, req.user.user_id]);
   if (!r.affectedRows) return res.status(404).json({ error: 'Trip not found' });

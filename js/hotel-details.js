@@ -13,6 +13,14 @@ window.hotelsReady.then(function () {
   const hotelId = Number(params.get("id")) || 1;
   const hotel = HOTELS[hotelId] || HOTELS[1];
 
+  // "Plan a trip with this hotel": opens the planner with this hotel's destination and the hotel preselected
+  fetch(`/api/hotels/${hotelId}`).then((r) => (r.ok ? r.json() : null)).then((h) => {
+    const link = document.getElementById("planTripLink");
+    if (!h || !link) return;
+    link.href = `plan-trip.html?dest=${h.dest_id}&hotel=${h.hotel_id}`;
+    link.style.display = "block";
+  }).catch(() => {});
+
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------------------------------------------------------

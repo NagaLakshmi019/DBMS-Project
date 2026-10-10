@@ -32,13 +32,83 @@
       box.innerHTML = `<table><tr><th>Destination</th><th>Hotel</th><th>Package</th><th>Dates</th><th>Days</th><th>Travelers</th><th>Budget</th><th>Status</th><th></th></tr>` +
         rows.map((t) => `<tr><td>${esc(t.destination)}, ${esc(t.country)}</td><td>${esc(t.hotel)}</td><td>${esc(t.package_name)}</td>
           <td>${day(t.start_date)} → ${day(t.end_date)}</td><td>${esc(t.duration_days)}</td><td>${esc(t.travelers)}</td>
-          <td>$${esc(t.budget)}</td><td>${badge(t.status)}</td><td><button class="del" data-id="${t.trip_id}">Delete</button></td></tr>`).join('') + '</table>';
+          <td>$${esc(t.budget)}</td><td>${badge(t.status)}${t.booking_status ? `<div class="sub">Booking: ${esc(t.booking_status)}</div>` : ''}</td>
+          <td class="acts">${tripActions(t)}</td></tr>`).join('') + '</table>';
       box.querySelectorAll('.del').forEach((b) => b.addEventListener('click', async () => {
-        if (!confirm('Ee trip delete cheyala?')) return;
-        await fetch('/api/trips/' + b.dataset.id, { method: 'DELETE', headers: H }); loadTrips();
+        if (!confirm('Delete this trip?')) return;
+        const res = await fetch('/api/trips/' + b.dataset.id, { method: 'DELETE', headers: H });
+        if (!res.ok) { const d = await res.json().catch(() => ({})); alert(d.error || 'Could not delete the trip'); }
+        loadTrips();
       }));
+      box.querySelectorAll('.book').forEach((b) => b.addEventListener('click', () => openBook(b.dataset)));
+
+      // coming from the planner: /my-trips.html?book=<trip id> opens the booking window for that trip
+      const want = new URLSearchParams(location.search).get('book');
+      if (want) {
+        const btn = box.querySelector(`.book[data-id="${Number(want)}"]`);
+        history.replaceState(null, '', 'my-trips.html');
+        if (btn) openBook(btn.dataset);
+      }
     } catch (e) { if (e.message !== '401') fail(box); }
   }
+
+  // a trip with a package can be booked; a stay-only trip cannot; a booked trip points to its booking
+  function tripActions(t) {
+    if (t.booking_id) return '<span class="sub">Booked (see Package Bookings)</span>';
+    let h = t.package_id
+      ? `<button class="book" data-id="${t.trip_id}" data-pkgid="${t.package_id}" data-pkg="${esc(t.package_name)}" data-dest="${esc(t.destination)}" data-trav="${esc(t.travelers)}">Book this trip</button>`
+      : '<span class="sub">Stay only</span> ';
+    return h + `<button class="del" data-id="${t.trip_id}">Delete</button>`;
+  }
+
+  // ---------- Book a planned trip: choose a departure, seats are held for 30 minutes ----------
+  let bookTrip = null, bookDeps = [];
+  const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  function refreshBook() {
+    const d = bookDeps.find((x) => String(x.departure_id) === $('bookDep').value);
+    const n = parseInt($('bookTrav').value, 10) || 0;
+    $('bookGo').disabled = true;
+    if (!d) { $('bookSeats').textContent = ''; return; }
+    if (n < 1 || n > 10) { $('bookSeats').textContent = 'Travelers must be between 1 and 10.'; return; }
+    if (n > d.seats_left) { $('bookSeats').textContent = 'Only ' + d.seats_left + ' seat(s) left on this date.'; return; }
+    $('bookSeats').textContent = d.seats_left + ' of ' + d.seats_total + ' seats left · Total $' + (Number(d.price) * n).toLocaleString();
+    $('bookGo').disabled = false;
+  }
+  async function loadBookDepartures() {
+    $('bookGo').disabled = true; $('bookSeats').textContent = '';
+    $('bookDep').innerHTML = '<option value="">Loading departures...</option>';
+    try { bookDeps = await get('/api/departures?package_id=' + bookTrip.pkgid); }
+    catch (e) { $('bookDep').innerHTML = '<option value="">Could not load departures</option>'; return; }
+    if (!bookDeps.length) { $('bookDep').innerHTML = '<option value="">No open departures</option>'; $('bookMsg').className = 'bad'; $('bookMsg').textContent = 'There are no open departures for this package yet.'; return; }
+    $('bookDep').innerHTML = '<option value="">Choose a departure date</option>' + bookDeps.map((d) =>
+      `<option value="${d.departure_id}"${d.seats_left === 0 ? ' disabled' : ''}>${fmtDate(d.departure_date)} — ${d.seats_left === 0 ? 'Sold out' : d.seats_left + ' seats left'}</option>`).join('');
+  }
+  function openBook(d) {
+    bookTrip = d;
+    $('bookInfo').textContent = `${d.pkg} · ${d.dest}`;
+    $('bookTrav').value = Math.min(Math.max(parseInt(d.trav, 10) || 1, 1), 10);
+    $('bookMsg').textContent = ''; $('bookMsg').className = '';
+    $('bookModal').hidden = false;
+    loadBookDepartures();
+  }
+  const closeBook = () => ($('bookModal').hidden = true);
+  $('bookBack').addEventListener('click', closeBook);
+  $('bookModal').addEventListener('click', (e) => { if (e.target.id === 'bookModal') closeBook(); });
+  $('bookDep').addEventListener('change', refreshBook);
+  $('bookTrav').addEventListener('input', refreshBook);
+  $('bookGo').addEventListener('click', async () => {
+    $('bookGo').disabled = true; $('bookMsg').className = ''; $('bookMsg').textContent = 'Reserving...';
+    try {
+      const res = await fetch(`/api/trips/${bookTrip.id}/book`, { method: 'POST', headers: H,
+        body: JSON.stringify({ departure_id: Number($('bookDep').value), travelers: Number($('bookTrav').value) }) });
+      const d = await res.json();
+      if (res.status === 401) { localStorage.removeItem('tripnest_user'); location.href = 'login.html'; return; }
+      if (!res.ok) throw new Error(d.error || 'Could not book this trip');
+      $('bookMsg').className = 'ok';
+      $('bookMsg').textContent = `Seats held for ${d.hold_minutes} minutes. Pay below to confirm your trip.`;
+      setTimeout(() => { closeBook(); loadTrips(); loadBookings(); }, 1600);
+    } catch (e) { $('bookMsg').className = 'bad'; $('bookMsg').textContent = e.message; loadBookDepartures(); }
+  });
 
   async function loadBookings() {
     const box = $('bookingsBox');

@@ -136,28 +136,9 @@
           <h2>Where to?</h2>
           <p>Choose the destination that's calling you.</p>
         </div>
+        <input type="search" id="destSearch" class="pt-search" placeholder="Search destinations (e.g. Kyoto, Italy)" autocomplete="off">
         <div class="pt-option-grid" data-group="destination">
-          <div class="pt-option-card" data-value="Santorini, Greece" data-price="From $1,240">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
-            <h3>Santorini, Greece</h3>
-            <p class="pt-price">From $1,240</p>
-            <p class="pt-meta">Aegean coastlines · Sunset views</p>
-          </div>
-          <div class="pt-option-card" data-value="Kyoto, Japan" data-price="From $1,480">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
-            <h3>Kyoto, Japan</h3>
-            <p class="pt-price">From $1,480</p>
-            <p class="pt-meta">Temples · Gardens · Culture</p>
-          </div>
-          <div class="pt-option-card" data-value="Banff, Canada" data-price="From $980">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></div>
-            <h3>Banff, Canada</h3>
-            <p class="pt-price">From $980</p>
-            <p class="pt-meta">Mountains · Lakes · Trails</p>
-          </div>
+          <p class="pt-empty">Loading destinations…</p>
         </div>
         <div class="pt-panel__nav">
           <span></span>
@@ -173,27 +154,7 @@
           <p>Handpicked hotels near your destination.</p>
         </div>
         <div class="pt-option-grid" data-group="hotel">
-          <div class="pt-option-card" data-value="Azure Cliff Resort" data-price="$310/night">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-            <h3>Azure Cliff Resort</h3>
-            <p class="pt-price">$310/night</p>
-            <p class="pt-meta">5★ · Infinity pool</p>
-          </div>
-          <div class="pt-option-card" data-value="The Nest Boutique Hotel" data-price="$190/night">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-            <h3>The Nest Boutique</h3>
-            <p class="pt-price">$190/night</p>
-            <p class="pt-meta">4★ · Rooftop dining</p>
-          </div>
-          <div class="pt-option-card" data-value="Harbor View Suites" data-price="$245/night">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-            <h3>Harbor View Suites</h3>
-            <p class="pt-price">$245/night</p>
-            <p class="pt-meta">4.5★ · Spa access</p>
-          </div>
+          <p class="pt-empty">Choose a destination first to see its hotels.</p>
         </div>
         <div class="pt-panel__nav">
           <button class="btn btn-outline" data-back>Back</button>
@@ -205,31 +166,11 @@
       <section class="pt-panel pt-step-panel" data-panel="2" hidden>
         <div class="pt-panel__head">
           <span class="pt-panel__eyebrow">Step 3 of 6</span>
-          <h2>Pick a travel style</h2>
-          <p>Every package is curated end-to-end.</p>
+          <h2>Choose a package</h2>
+          <p>Packages for your destination, or just book the stay.</p>
         </div>
         <div class="pt-option-grid" data-group="package">
-          <div class="pt-option-card" data-value="Explorer" data-price="Flights + Stay">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12l19-8-8 19-2-8-9-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-            <h3>Explorer</h3>
-            <p class="pt-price">Flights + Stay</p>
-            <p class="pt-meta">Independent, flexible pacing</p>
-          </div>
-          <div class="pt-option-card" data-value="Signature" data-price="All-inclusive">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12l19-8-8 19-2-8-9-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-            <h3>Signature</h3>
-            <p class="pt-price">All-inclusive</p>
-            <p class="pt-meta">Guided, curated experiences</p>
-          </div>
-          <div class="pt-option-card" data-value="Private Escape" data-price="Fully bespoke">
-            <div class="pt-option-card__check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div class="pt-option-card__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12l19-8-8 19-2-8-9-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-            <h3>Private Escape</h3>
-            <p class="pt-price">Fully bespoke</p>
-            <p class="pt-meta">Dedicated concierge</p>
-          </div>
+          <p class="pt-empty">Choose a destination first to see its packages.</p>
         </div>
         <div class="pt-panel__nav">
           <button class="btn btn-outline" data-back>Back</button>
@@ -391,7 +332,7 @@
       <div class="cell"><div class="lbl">Travelers</div><div class="val" data-modal="travelers">—</div></div>
     </div>
     <div class="pt-modal__actions">
-      <button class="btn btn-primary btn-magnetic">Proceed to Booking</button>
+      <button class="btn btn-primary btn-magnetic" id="proceedBtn">View My Trips</button>
       <button class="btn btn-outline btn-magnetic" id="downloadBtn">Download Itinerary</button>
       <button class="btn btn-ghost" id="restartBtn">Start New Plan</button>
     </div>

@@ -161,11 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="c-chip">⏱️ ${item.duration}</span>
           </div>
 
+          ${item.hotels !== undefined ? `<div class="c-links">
+            <span>🏨 ${item.hotels} hotel${Number(item.hotels) === 1 ? '' : 's'}</span>
+            ${Number(item.packages) > 0 ? `<a href="packages.html?dest=${encodeURIComponent(item.name)}">🎒 ${item.packages} package${Number(item.packages) === 1 ? '' : 's'}</a>` : '<span>🎒 no packages yet</span>'}
+          </div>` : ''}
+
           <div class="c-foot">
             <div class="c-price">
               $${item.price} <small>/person</small>
             </div>
-            <a href="#smart-finder" class="btn-gradient btn-sm ripple-btn">Book Journey</a>
+            <a href="plan-trip.html?dest=${encodeURIComponent(item.destId || item.name)}" class="btn-gradient btn-sm ripple-btn">Plan Trip</a>
           </div>
         </div>
       `;
@@ -194,7 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
       continent: r.continent || o.continent, price: Number(r.price), rating: Number(r.rating),
       reviews: r.reviews_count || o.reviews || 0, season: r.best_season || o.season,
       weather: r.weather || o.weather || '', duration: r.duration || o.duration || '',
-      style: r.style || o.style, img: r.img_url || o.img, desc: r.description || o.desc || ''
+      style: r.style || o.style, img: r.img_url || o.img, desc: r.description || o.desc || '',
+      destId: r.dest_id, hotels: r.hotels_count, packages: r.packages_count   // hub counts (undefined for search results)
     };
   };
   // search-filters.js DB search results ni ikkada grid lo chupistundi

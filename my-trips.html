@@ -32,6 +32,20 @@
       <div class="pay-actions"><button id="payCancel" class="ghost">Cancel</button><button id="payGo" class="go">Pay now</button></div>
     </div>
   </div>
+  <div class="pay-modal" id="bookModal" hidden>
+    <div class="pay-box">
+      <h3>Book this trip</h3>
+      <p id="bookInfo" class="pay-info"></p>
+      <label class="fl" for="bookDep">Departure date</label>
+      <select id="bookDep"></select>
+      <label class="fl" for="bookTrav">Travelers</label>
+      <input type="number" id="bookTrav" min="1" max="10" value="2" />
+      <p id="bookSeats" class="est"></p>
+      <p class="pay-note">Seats are held for 30 minutes. Pay from Package Bookings below to confirm. Your trip dates are set from the departure.</p>
+      <div id="bookMsg"></div>
+      <div class="pay-actions"><button id="bookBack" class="ghost">Close</button><button id="bookGo" class="go" disabled>Reserve seats</button></div>
+    </div>
+  </div>
   <div class="pay-modal" id="cancelModal" hidden>
     <div class="pay-box">
       <h3>Cancel booking</h3>

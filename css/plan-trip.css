@@ -855,3 +855,9 @@ img, svg { display: block; max-width: 100%; }
 .cursor.hover-card .cursor-plane{opacity:1;transform:scale(1) rotate(-30deg);}
 .cursor.hover-btn .cursor-ring{transform:scale(1.4);border-color:var(--primary);}
 .cursor.click .cursor-ring{transform:scale(2.4);opacity:.15;}
+/* ---- dynamic option cards (destination hub) ---- */
+.pt-search{width:100%;padding:13px 16px;border:1.5px solid #E2E8F0;border-radius:12px;font:inherit;margin-bottom:16px;background:#fff}
+.pt-search:focus{outline:none;border-color:#2563EB}
+.pt-empty{grid-column:1/-1;color:#64748B;font-size:14.5px;padding:18px 4px;margin:0}
+.pt-hint{color:#DC2626;font-weight:600;font-size:13.5px;margin:14px 0 0}
+.pt-hint[hidden]{display:none}

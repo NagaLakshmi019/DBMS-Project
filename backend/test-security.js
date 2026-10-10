@@ -39,7 +39,11 @@ async function http(method, path, { token, body } = {}) {
     C = r.json && r.json.token ? r.json : null;
   }
 
-  const tripBody = { user_id: A.user_id, destination: 'Santorini, Greece', hotel: 'Azure Cliff Resort', package_tier: 'Explorer', travelers: '2 travelers', budget: 3000, start_date: '2027-01-10', end_date: '2027-01-15' };
+  const dests = (await http('GET', '/api/destinations')).json || [];
+  const sant = dests.find((d) => d.name === 'Santorini');
+  const santHotel = ((await http('GET', `/api/destinations/${sant.dest_id}/options`)).json || {}).hotels[0];
+  // user_id in the body is a spoofing attempt: the server must ignore it
+  const tripBody = { user_id: A.user_id, destination_id: sant.dest_id, hotel_id: santHotel.hotel_id, travelers: '2 travelers', budget: 3000, start_date: '2027-01-10', end_date: '2027-01-15' };
 
   // ---------- 1. Broken access control (IDOR) ----------
   const G1 = '1. Users must not touch each other\'s data';
@@ -158,8 +162,8 @@ async function http(method, path, { token, body } = {}) {
   check(G8, 'invalid email is rejected on the server', r.status === 400, 'got ' + r.status);
   r = await http('POST', '/api/auth/register', { body: { fullname: 'Long Pass', email: mail('lp'), password: 'a'.repeat(200) } });
   check(G8, 'password longer than 72 chars is rejected (bcrypt limit)', r.status === 400, 'got ' + r.status);
-  r = await http('POST', '/api/plan-trip', { token: A.token, body: { ...tripBody, destination: 'Fake Place <script>, Nowhere' } });
-  check(G8, 'plan-trip cannot create junk destinations', r.status === 400 || r.status === 404, 'got ' + r.status);
+  r = await http('POST', '/api/plan-trip', { token: A.token, body: { ...tripBody, destination_id: 999999 } });
+  check(G8, 'plan-trip cannot use or create an unknown destination', r.status === 400 || r.status === 404, 'got ' + r.status);
   const contact = (msg) => http('POST', '/api/contact', { body: { fullname: 'Sec Tester', email: mail('ct'), subject: 'test', message: msg } });
   r = await contact('x'.repeat(5000));
   check(G8, 'oversized contact message is rejected', r.status === 400 || r.status === 413 || r.status === 429, 'got ' + r.status);

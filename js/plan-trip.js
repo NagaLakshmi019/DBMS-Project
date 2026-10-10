@@ -21,6 +21,12 @@
     endDate: null,
     travelers: '2 travelers',
     completedSteps: new Set(),
+    destinationId: null,
+    hotelId: null,
+    packageId: null,
+    packageChosen: false,   // true once a package OR "Stay only" is picked
+    tripId: null,
+    hasPackage: false,
   };
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -62,9 +68,40 @@
   });
 
   /* ---------------------------------------------------------
-     OPTION CARD TILT + SELECTION
+     OPTION CARDS: built from the database.
+     Destinations -> (pick one) -> its hotels + its packages -> trip saved with hotel_id / package_id
      --------------------------------------------------------- */
-  $$('.pt-option-card').forEach((card) => {
+  const ICONS = {"check": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M5 13l4 4L19 7\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "destination": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Z\" stroke=\"currentColor\" stroke-width=\"1.6\"/><circle cx=\"12\" cy=\"10\" r=\"2.4\" stroke=\"currentColor\" stroke-width=\"1.6\"/></svg>", "hotel": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\"/></svg>", "package": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M2 12l19-8-8 19-2-8-9-3Z\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\"/></svg>"};
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const money = (n) => '$' + Number(n).toLocaleString();
+  const gridOf = (group) => $(`.pt-option-grid[data-group="${group}"]`);
+  const destById = new Map();
+  let destinations = [];
+
+  function cardHtml(group, item) {
+    return `<div class="pt-option-card" data-id="${esc(item.id)}" data-value="${esc(item.value)}" data-price="${esc(item.price)}">
+      <div class="pt-option-card__check">${ICONS.check}</div>
+      <div class="pt-option-card__icon">${ICONS[group]}</div>
+      <h3>${esc(item.title)}</h3>
+      <p class="pt-price">${esc(item.price)}</p>
+      <p class="pt-meta">${esc(item.meta)}</p>
+    </div>`;
+  }
+
+  function fillGrid(group, items, emptyText) {
+    const grid = gridOf(group);
+    if (!items.length) { grid.innerHTML = `<p class="pt-empty">${esc(emptyText || '')}</p>`; return; }
+    grid.innerHTML = items.map((i) => cardHtml(group, i)).join('');
+    $$('.pt-option-card', grid).forEach(bindCard);
+  }
+
+  function markSelected(card) {
+    $$('.pt-option-card', card.closest('.pt-option-grid')).forEach((c) => c.classList.remove('is-selected'));
+    card.classList.add('is-selected');
+    gsap.fromTo(card, { scale: 0.97 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+  }
+
+  function bindCard(card) {
     card.addEventListener('mousemove', (e) => {
       const r = card.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
@@ -74,22 +111,96 @@
     card.addEventListener('mouseleave', () => {
       gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.5, ease: 'power2.out' });
     });
-    card.addEventListener('click', () => {
-      const group = card.closest('.pt-option-grid');
-      $$('.pt-option-card', group).forEach((c) => c.classList.remove('is-selected'));
-      card.classList.add('is-selected');
-      const groupName = group.dataset.group;
-      const value = card.dataset.value;
-      const price = card.dataset.price;
+    card.addEventListener('click', () => choose(card.closest('.pt-option-grid').dataset.group, card));
+  }
 
-      if (groupName === 'destination') { state.destination = value; state.destinationPrice = price; }
-      if (groupName === 'hotel') { state.hotel = value; state.hotelPrice = price; }
-      if (groupName === 'package') { state.package = value; }
+  function choose(group, card) {
+    markSelected(card);
+    if (group === 'destination') { selectDestination(destById.get(Number(card.dataset.id))); return; }
+    if (group === 'hotel') { state.hotelId = Number(card.dataset.id); state.hotel = card.dataset.value; state.hotelPrice = card.dataset.price; }
+    if (group === 'package') { state.packageChosen = true; state.packageId = card.dataset.id ? Number(card.dataset.id) : null; state.package = card.dataset.value; }
+    updateSummary();
+  }
 
-      gsap.fromTo(card, { scale: 0.97 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
-      updateSummary();
-    });
-  });
+  const destLabel = (d) => `${d.name}, ${d.country}`;
+  const plural = (n, w) => `${n} ${w}${Number(n) === 1 ? '' : 's'}`;
+
+  function renderDestinations(filter = '') {
+    const q = filter.trim().toLowerCase();
+    const list = destinations.filter((d) => !q || destLabel(d).toLowerCase().includes(q));
+    fillGrid('destination', list.map((d) => ({
+      id: d.dest_id, value: destLabel(d), title: destLabel(d), price: 'From ' + money(d.price),
+      meta: `${plural(d.hotels_count, 'hotel')} · ${plural(d.packages_count, 'package')}`,
+    })), 'No destination matches your search.');
+    const sel = gridOf('destination').querySelector(`[data-id="${state.destinationId}"]`);
+    if (sel) sel.classList.add('is-selected');
+  }
+
+  // picking a destination loads ONLY its hotels and packages (hotel/package can never belong to another place)
+  async function selectDestination(d) {
+    state.destinationId = d.dest_id; state.destination = destLabel(d); state.destinationPrice = 'From ' + money(d.price);
+    state.hotelId = null; state.hotel = null; state.hotelPrice = null;
+    state.packageId = null; state.package = null; state.packageChosen = false;
+    updateSummary();
+    fillGrid('hotel', [], 'Loading hotels…');
+    fillGrid('package', [], 'Loading packages…');
+    let opt;
+    try {
+      const r = await fetch(`/api/destinations/${d.dest_id}/options`);
+      if (!r.ok) throw new Error('bad status');
+      opt = await r.json();
+    } catch (e) {
+      fillGrid('hotel', [], 'Could not load hotels. Please try again.');
+      fillGrid('package', [], 'Could not load packages. Please try again.');
+      return null;
+    }
+    if (state.destinationId !== d.dest_id) return null;               // the visitor already clicked another destination
+    fillGrid('hotel', opt.hotels.map((h) => ({
+      id: h.hotel_id, value: h.name, title: h.name, price: `${money(h.price_per_night)}/night`,
+      meta: `${h.stars}★ · ${h.rating ? h.rating + ' rating' : 'New'} · ${String(h.location || '').split(',')[0]}`,
+    })), 'No partner hotels here yet. You can continue without one.');
+    fillGrid('package', opt.packages.map((p) => ({
+      id: p.package_id, value: p.name, title: p.name, price: `${money(p.price)} / person`,
+      meta: `${p.days} days · ${p.tag || p.category || 'Package'}${p.next_departure ? ' · next ' + p.next_departure : ''}`,
+    })).concat([{ id: '', value: 'Stay only', title: 'Stay only', price: 'Hotel only', meta: 'No package, just the stay' }]));
+    return opt;
+  }
+
+  // /plan-trip.html?dest=3&hotel=1&package=1  (dest can also be a name). Used by the Destinations, Packages and Hotel pages.
+  async function applyUrlSelection() {
+    const q = new URLSearchParams(location.search);
+    const dp = q.get('dest');
+    if (!dp) return;
+    const d = /^\d+$/.test(dp) ? destById.get(Number(dp)) : destinations.find((x) => x.name.toLowerCase() === dp.toLowerCase());
+    if (!d) return;
+    const opt = await selectDestination(d);
+    const dcard = gridOf('destination').querySelector(`[data-id="${d.dest_id}"]`);
+    if (dcard) dcard.classList.add('is-selected');
+    if (!opt) return;
+    let target = 1;
+    const hcard = q.get('hotel') && gridOf('hotel').querySelector(`[data-id="${Number(q.get('hotel'))}"]`);
+    if (hcard) { markSelected(hcard); choose('hotel', hcard); target = 2; }
+    const pcard = q.get('package') && gridOf('package').querySelector(`[data-id="${Number(q.get('package'))}"]`);
+    if (pcard) { markSelected(pcard); choose('package', pcard); target = 3; }
+    for (let i = 0; i < target; i++) state.completedSteps.add(i);
+    goToStep(target, false);
+  }
+
+  async function loadDestinations() {
+    try {
+      const r = await fetch('/api/destinations');
+      if (!r.ok) throw new Error('bad status');
+      destinations = await r.json();
+    } catch (e) {
+      gridOf('destination').innerHTML = '<p class="pt-empty">Could not load destinations. Start the backend server and refresh.</p>';
+      return;
+    }
+    destinations.forEach((d) => destById.set(d.dest_id, d));
+    renderDestinations();
+    applyUrlSelection();
+  }
+  const destSearch = $('#destSearch');
+  if (destSearch) destSearch.addEventListener('input', () => renderDestinations(destSearch.value));
 
   /* ---------------------------------------------------------
      BUDGET SLIDER
@@ -143,7 +254,12 @@
     return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
+  const todayStr = new Date().toISOString().slice(0, 10);
+  if (startDateEl) startDateEl.min = todayStr;
+  if (endDateEl) endDateEl.min = todayStr;
+
   function syncDatesState() {
+    if (startDateEl.value && endDateEl) endDateEl.min = startDateEl.value;
     state.startDate = startDateEl.value || null;
     state.endDate = endDateEl.value || null;
     state.travelers = travelersEl.value;
@@ -185,8 +301,30 @@
     window.scrollTo({ top: $('.pt-panel').getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
   }
 
+  // small red message above the Back/Continue buttons of a step
+  function hint(index, text) {
+    const panel = panels[index];
+    let el = panel.querySelector('.pt-hint');
+    if (!el) { el = document.createElement('p'); el.className = 'pt-hint'; panel.querySelector('.pt-panel__nav').before(el); }
+    el.textContent = text || '';
+    el.hidden = !text;
+  }
+  function stepProblem(index) {
+    if (index === 0 && !state.destinationId) return 'Please choose a destination to continue.';
+    if (index === 2 && !state.packageChosen) return 'Choose a package, or "Stay only" if you just want the hotel.';
+    if (index === 4) {
+      syncDatesState();
+      if (!state.startDate || !state.endDate) return 'Please choose your departure and return dates.';
+      if (!durationDays()) return 'The return date must be after the departure date.';
+    }
+    return '';
+  }
+
   $$('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
+      const problem = stepProblem(state.currentStep);
+      hint(state.currentStep, problem);
+      if (problem) return;
       if (state.currentStep < TOTAL_STEPS - 1) goToStep(state.currentStep + 1);
     });
   });
@@ -230,7 +368,7 @@
   }
 
   function allRequiredFilled() {
-    return state.destination && state.hotel && state.package && state.startDate && state.endDate;
+    return state.destinationId && state.packageChosen && state.startDate && state.endDate;
   }
 
   /* ---------------------------------------------------------
@@ -434,12 +572,52 @@
       }, 2.2);
   }
 
+  const proceedBtn = $('#proceedBtn');
   if (finishBtn) {
-    finishBtn.addEventListener('click', () => {
-      state.completedSteps.add(TOTAL_STEPS - 1);
-      renderSidebar();
-      updateRing(100);
-      playCelebration();
+    finishBtn.addEventListener('click', async () => {
+      const problem = stepProblem(0) || stepProblem(2) || stepProblem(4);
+      if (problem) { hint(5, problem); return; }
+      const user = typeof currentUser === 'function' ? currentUser() : null;      // from api.js
+      if (!user || !user.token) {
+        hint(5, 'Please log in to save your trip. Taking you to the login page...');
+        setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+        return;
+      }
+      hint(5, '');
+      finishBtn.disabled = true;
+      try {
+        const r = await apiCall('/api/plan-trip', 'POST', {            // apiCall from api.js
+          destination_id: state.destinationId,
+          hotel_id: state.hotelId,
+          package_id: state.packageId,
+          travelers: state.travelers,
+          budget: state.budget,
+          start_date: state.startDate,
+          end_date: state.endDate,
+        }, user.token);
+        state.tripId = r.trip_id;
+        state.hasPackage = !!r.has_package;
+        if (proceedBtn) proceedBtn.textContent = state.hasPackage ? 'Book This Trip' : 'View My Trips';
+        state.completedSteps.add(TOTAL_STEPS - 1);
+        renderSidebar();
+        updateRing(100);
+        playCelebration();
+      } catch (err) {
+        if (err.message === 'Please login') {
+          localStorage.removeItem('tripnest_user');
+          hint(5, 'Your session expired. Please log in again.');
+          setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+        } else {
+          hint(5, 'Could not save your trip: ' + err.message);
+        }
+      } finally {
+        finishBtn.disabled = false;
+      }
+    });
+  }
+  if (proceedBtn) {
+    proceedBtn.addEventListener('click', () => {
+      window.location.href = state.hasPackage && state.tripId ? 'my-trips.html?book=' + state.tripId : 'my-trips.html';
     });
   }
 
@@ -488,6 +666,7 @@
      --------------------------------------------------------- */
   renderSidebar();
   updateSummary();
+  loadDestinations();
 })();
 
 

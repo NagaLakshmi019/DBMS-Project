@@ -55,7 +55,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       'INSERT INTO package_departures (package_id, departure_date, seats_total) VALUES (?, DATE_ADD(CURDATE(), INTERVAL 800 DAY), 5)', [pkg.package_id]);
     depId = d.insertId;
     const seatsLeft = async () => (await db.query('SELECT seats_left s FROM package_departures WHERE departure_id = ?', [depId]))[0][0].s;
-    const book = async (n) => (await db.query('CALL sp_book_package(?,?,?)', [u.user_id, depId, n]))[0][0][0];
+    const book = async (n) => (await db.query('CALL sp_book_package(?,?,?,NULL)', [u.user_id, depId, n]))[0][0][0];
 
     const unpaid = await book(2);
     const paid = await book(1);

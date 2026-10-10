@@ -201,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="pkg-body">
         <div class="pkg-meta"><span>${p.days} Days</span><span>·</span><span>${p.countries} ${p.countries > 1 ? 'Countries' : 'Country'}</span></div>
         <h3>${p.name}</h3>
+        ${p.destId ? `<a class="pkg-dest" href="plan-trip.html?dest=${p.destId}&package=${p.id}" title="Plan a trip to ${p.destName} with this package">📍 ${p.destName} · Plan a trip →</a>` : ''}
         <div class="pkg-includes">${p.includes.map(s => `<span>${s}</span>`).join('')}</div>
         <div class="pkg-footer">
           <div class="pkg-price"><strong>$${p.price.toLocaleString()}</strong><span>per person</span></div>
@@ -213,10 +214,25 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>`;
   }
 
+  // /packages.html?dest=Santorini (or a destination id) shows only that destination's packages
+  const destParam = (new URLSearchParams(location.search).get('dest') || '').trim().toLowerCase();
+  let dbLoaded = false;
+  const inDest = (p) => !destParam || !dbLoaded || String(p.destId) === destParam || String(p.destName || '').toLowerCase() === destParam;
+
   function renderPackages() {
-    grid.innerHTML = packages.slice(0, visibleCount).map(pkgCard).join('');
+    const list = packages.map((p, i) => [p, i]).filter(([p]) => inDest(p));      // keep the original index for the buttons
+    grid.innerHTML = list.slice(0, visibleCount).map(([p, i]) => pkgCard(p, i)).join('');
     attachPackageEvents();
-    if (visibleCount >= packages.length) document.getElementById('loadMoreBtn').style.display = 'none';
+    document.getElementById('loadMoreBtn').style.display = visibleCount >= list.length ? 'none' : '';
+
+    let banner = document.getElementById('destBanner');
+    if (destParam && dbLoaded) {
+      if (!banner) { banner = document.createElement('p'); banner.id = 'destBanner'; banner.className = 'dest-banner'; grid.parentNode.insertBefore(banner, grid); }
+      const name = list.length ? list[0][0].destName : decodeURIComponent(destParam);
+      banner.innerHTML = list.length
+        ? `Showing packages for <strong>${name}</strong> &middot; <a href="packages.html">Show all packages</a>`
+        : `No packages for <strong>${name}</strong> yet &middot; <a href="plan-trip.html?dest=${encodeURIComponent(destParam)}">Plan a custom trip</a> or <a href="packages.html">see all packages</a>`;
+    }
   }
 
   function attachPackageEvents() {
@@ -239,11 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const old = new Map(packages.map((x) => [x.name, x]));
     const mapped = rows.map((r) => {
       const o = old.get(r.name) || {};
-      return { name: r.name, img: r.img_url || o.img, days: r.days, countries: r.countries, rating: Number(r.rating),
+      return { id: r.package_id, destId: r.dest_id, destName: r.destination_name, name: r.name, img: r.img_url || o.img, days: r.days, countries: r.countries, rating: Number(r.rating),
                price: Number(r.price), tag: r.tag || o.tag || '', includes: (r.includes && r.includes.length ? r.includes : o.includes) || [],
                category: r.category || o.category };
     });
     packages.splice(0, packages.length, ...mapped);
+    dbLoaded = true;
     renderPackages();
   }).catch(() => {});
 

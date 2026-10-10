@@ -12,6 +12,11 @@ const mysql = require('mysql2/promise');
     database: process.env.DB_NAME || 'tripnest', dateStrings: true, connectionLimit: 20
   });
 
+  // remove leftovers of an earlier run that crashed (so this test can always start clean)
+  await db.query("UPDATE bookings SET status = 'cancelled' WHERE user_id IN (SELECT user_id FROM users WHERE email = 'overbooking-test@tripnest.local') AND status <> 'cancelled'");
+  await db.query("DELETE FROM bookings WHERE user_id IN (SELECT user_id FROM users WHERE email = 'overbooking-test@tripnest.local')");
+  await db.query('DELETE FROM package_departures WHERE departure_date = DATE_ADD(CURDATE(), INTERVAL 700 DAY) AND seats_booked = 0');
+
   // temporary test data (removed at the end)
   const [[pkg]] = await db.query('SELECT package_id FROM packages ORDER BY package_id LIMIT 1');
   await db.query(
@@ -26,7 +31,7 @@ const mysql = require('mysql2/promise');
   console.log('Departure #' + depId + ' has 3 seats. 10 people book 1 seat each at the same moment...\n');
 
   const attempts = Array.from({ length: 10 }, (_, i) =>
-    db.query('CALL sp_book_package(?,?,?)', [u.user_id, depId, 1])
+    db.query('CALL sp_book_package(?,?,?,NULL)', [u.user_id, depId, 1])
       .then(() => ({ i: i + 1, ok: true }))
       .catch((e) => ({ i: i + 1, ok: false, msg: e.sqlMessage || e.message })));
   const results = await Promise.all(attempts);

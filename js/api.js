@@ -56,38 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return user;
   }
 
-  // ---------- plan-trip.html: "Complete My Trip" ----------
-  const finishBtn = document.getElementById('finishBtn');
-  if (finishBtn) {
-    const picked = (group) =>
-      document.querySelector(`.pt-option-grid[data-group="${group}"] .pt-option-card.is-selected`);
-
-    finishBtn.addEventListener('click', async () => {
-      const user = currentUser();
-      if (!user) return requireLogin();
-      const dest = picked('destination');
-      const hotel = picked('hotel');
-      const pkg = picked('package');
-      const start = document.getElementById('startDate').value;
-      const end = document.getElementById('endDate').value;
-      if (!dest || !start || !end) return; // frontend already validates required steps
-      try {
-        await apiCall('/api/plan-trip', 'POST', {
-          destination: dest.dataset.value,
-          hotel: hotel ? hotel.dataset.value : null,
-          hotel_price: hotel ? hotel.dataset.price : null,
-          package_tier: pkg ? pkg.dataset.value : null,
-          travelers: document.getElementById('travelers').value,
-          budget: Number(document.getElementById('budgetSlider').value),
-          start_date: start,
-          end_date: end
-        }, user.token);
-      } catch (err) {
-        if (err.message === 'Please login') { localStorage.removeItem('tripnest_user'); return requireLogin(); }
-        alert('Could not save your trip: ' + err.message);
-      }
-    });
-  }
+  // plan-trip.html saving now lives in plan-trip.js (it must save first, then celebrate)
 
   // ---------- packages.html: booking modal (choose departure -> seats are reserved in the database) ----------
   const bookingForm = document.getElementById('bookingForm');
