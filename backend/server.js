@@ -45,6 +45,9 @@ const db = mysql.createPool({
   waitForConnections: true,
   dateStrings: true,
   connectionLimit: 10,
+  ssl: {
+    rejectUnauthorized: true
+}
 });
 
 const sec = security(db);
