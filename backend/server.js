@@ -235,7 +235,7 @@ app.use((err, req, res, next) => {                       // eslint-disable-line 
 });
 
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '127.0.0.1';            // only this computer can reach the server (set HOST=0.0.0.0 to share on your network)
+const HOST = process.env.HOST || '0.0.0.0';            // only this computer can reach the server (set HOST=0.0.0.0 to share on your network)
 app.listen(PORT, HOST, () => console.log(`TripNest running at http://localhost:${PORT}`));
 
 // Unpaid bookings are cancelled after 30 minutes by the MySQL event ev_expire_pending_bookings (database/08).
