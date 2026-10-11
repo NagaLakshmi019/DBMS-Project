@@ -47,7 +47,7 @@ const db = mysql.createPool({
   connectionLimit: 10,
   ssl: {
     rejectUnauthorized: true
-}
+  }
 });
 
 const sec = security(db);
@@ -134,7 +134,7 @@ app.post('/api/plan-trip', auth, wrap(async (req, res) => {
     `INSERT INTO trips (user_id, dest_id, hotel_id, package_id, travelers, budget, start_date, end_date)
      VALUES (?,?,?,?,?,?,?,?)`,
     [req.user.user_id, destId, hotelId, packageId, trav, money >= 0 && money < 10000000 ? money : null, start_date, end_date]);
-  res.json({ trip_id: r.insertId, has_package: !!packageId });
+  res.json({ trip_id: r.insertId, has_package: !!packageId, has_hotel: !!hotelId });
 }));
 
 app.get('/api/users/:id/trips', auth, self, wrap(async (req, res) => {
@@ -224,6 +224,7 @@ app.patch('/api/admin/bookings/:id', adminOnly, wrap(async (req, res) => {
 
 require('./extra-routes')(app, db, wrap, auth, adminOnly, limiter);
 require('./booking-routes')(app, db, wrap, auth, adminOnly);
+require('./hotel-routes')(app, db, wrap, auth, adminOnly, self);
 
 // ---------- last line of defence: bad JSON, too-big bodies, anything unexpected ----------
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
