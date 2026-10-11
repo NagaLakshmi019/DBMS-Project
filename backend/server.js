@@ -235,8 +235,7 @@ app.use((err, req, res, next) => {                       // eslint-disable-line 
 });
 
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '0.0.0.0';            // only this computer can reach the server (set HOST=0.0.0.0 to share on your network)
-app.listen(PORT, HOST, () => console.log(`TripNest running at http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`TripNest running on port ${PORT}`));
 
 // Unpaid bookings are cancelled after 30 minutes by the MySQL event ev_expire_pending_bookings (database/08).
 // If the MySQL event scheduler happens to be OFF, this backup timer calls the same procedure every minute.
