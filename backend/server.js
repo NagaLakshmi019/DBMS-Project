@@ -45,7 +45,7 @@ const db = mysql.createPool({
   waitForConnections: true,
   dateStrings: true,
   connectionLimit: 10,
-  ssl: process.env.DB_HOST && process.env.DB_HOST !== 'localhost' ? { rejectUnauthorized: true } : false
+  ssl: process.env.DB_HOST && process.env.DB_HOST !== 'localhost' ? { minVersion: 'TLSv1.2', rejectUnauthorized: false } : false
 });
 
 const sec = security(db);
