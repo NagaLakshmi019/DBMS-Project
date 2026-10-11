@@ -239,12 +239,15 @@ app.listen(PORT, '0.0.0.0', () => console.log(`TripNest running on port ${PORT}`
 
 // Unpaid bookings are cancelled after 30 minutes by the MySQL event ev_expire_pending_bookings (database/08).
 // If the MySQL event scheduler happens to be OFF, this backup timer calls the same procedure every minute.
-(async () => {
+setInterval(async () => {
   try {
-    const [[r]] = await db.query("SELECT @@event_scheduler AS s, (SELECT COUNT(*) FROM information_schema.routines WHERE routine_schema = DATABASE() AND routine_name = 'sp_expire_pending_bookings') AS has_proc");
-    if (!r.has_proc) return console.warn('Run database/08_hold_expiry_and_ratings.sql to enable the 30 minute booking hold expiry.');
-    if (String(r.s).toUpperCase() === 'ON') return console.log('Booking hold expiry: handled by the MySQL event scheduler');
-    console.warn('MySQL event scheduler is OFF: expiring unpaid bookings from Node every minute instead (or run: SET GLOBAL event_scheduler = ON;)');
-    setInterval(() => db.query('CALL sp_expire_pending_bookings()').catch((e) => console.error('expiry job failed:', e.message)), 60 * 1000);
-  } catch (e) { console.error('expiry check failed:', e.message); }
-})();
+    await db.query(`
+      UPDATE bookings 
+      SET booking_status = 'cancelled' 
+      WHERE booking_status = 'pending' 
+        AND booking_date < NOW() - INTERVAL 30 MINUTE
+    `);
+  } catch (e) {
+    // TiDB fallback silent check
+  }
+}, 60 * 1000);
