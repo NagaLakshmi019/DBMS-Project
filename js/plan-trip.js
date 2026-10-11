@@ -27,6 +27,7 @@
     packageChosen: false,   // true once a package OR "Stay only" is picked
     tripId: null,
     hasPackage: false,
+    hasHotel: false,
   };
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -597,7 +598,8 @@
         }, user.token);
         state.tripId = r.trip_id;
         state.hasPackage = !!r.has_package;
-        if (proceedBtn) proceedBtn.textContent = state.hasPackage ? 'Book This Trip' : 'View My Trips';
+        state.hasHotel = !!r.has_hotel;
+        if (proceedBtn) proceedBtn.textContent = state.hasPackage ? 'Book This Trip' : state.hasHotel ? 'Book The Stay' : 'View My Trips';
         state.completedSteps.add(TOTAL_STEPS - 1);
         renderSidebar();
         updateRing(100);
@@ -617,7 +619,9 @@
   }
   if (proceedBtn) {
     proceedBtn.addEventListener('click', () => {
-      window.location.href = state.hasPackage && state.tripId ? 'my-trips.html?book=' + state.tripId : 'my-trips.html';
+      window.location.href = !state.tripId ? 'my-trips.html'
+        : state.hasPackage ? 'my-trips.html?book=' + state.tripId
+        : state.hasHotel ? 'my-trips.html?stay=' + state.tripId : 'my-trips.html';
     });
   }
 

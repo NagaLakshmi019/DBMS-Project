@@ -32,7 +32,7 @@
       box.innerHTML = `<table><tr><th>Destination</th><th>Hotel</th><th>Package</th><th>Dates</th><th>Days</th><th>Travelers</th><th>Budget</th><th>Status</th><th></th></tr>` +
         rows.map((t) => `<tr><td>${esc(t.destination)}, ${esc(t.country)}</td><td>${esc(t.hotel)}</td><td>${esc(t.package_name)}</td>
           <td>${day(t.start_date)} → ${day(t.end_date)}</td><td>${esc(t.duration_days)}</td><td>${esc(t.travelers)}</td>
-          <td>$${esc(t.budget)}</td><td>${badge(t.status)}${t.booking_status ? `<div class="sub">Booking: ${esc(t.booking_status)}</div>` : ''}</td>
+          <td>$${esc(t.budget)}</td><td>${badge(t.status)}${t.booking_status ? `<div class="sub">Booking: ${esc(t.booking_status)}</div>` : t.stay_status ? `<div class="sub">Stay: ${esc(t.stay_status)}</div>` : ''}</td>
           <td class="acts">${tripActions(t)}</td></tr>`).join('') + '</table>';
       box.querySelectorAll('.del').forEach((b) => b.addEventListener('click', async () => {
         if (!confirm('Delete this trip?')) return;
@@ -41,23 +41,27 @@
         loadTrips();
       }));
       box.querySelectorAll('.book').forEach((b) => b.addEventListener('click', () => openBook(b.dataset)));
+      box.querySelectorAll('.bookstay').forEach((b) => b.addEventListener('click', () => openStay(b.dataset)));
 
       // coming from the planner: /my-trips.html?book=<trip id> opens the booking window for that trip
-      const want = new URLSearchParams(location.search).get('book');
-      if (want) {
-        const btn = box.querySelector(`.book[data-id="${Number(want)}"]`);
+      const q = new URLSearchParams(location.search);
+      const want = q.get('book'), wantStay = q.get('stay');
+      if (want || wantStay) {
+        const btn = want ? box.querySelector(`.book[data-id="${Number(want)}"]`) : box.querySelector(`.bookstay[data-id="${Number(wantStay)}"]`);
         history.replaceState(null, '', 'my-trips.html');
-        if (btn) openBook(btn.dataset);
+        if (btn) (want ? openBook : openStay)(btn.dataset);
       }
     } catch (e) { if (e.message !== '401') fail(box); }
   }
 
-  // a trip with a package can be booked; a stay-only trip cannot; a booked trip points to its booking
+  // a trip with a package can be booked; a stay-only trip books its hotel; a booked trip points to its booking
   function tripActions(t) {
     if (t.booking_id) return '<span class="sub">Booked (see Package Bookings)</span>';
-    let h = t.package_id
-      ? `<button class="book" data-id="${t.trip_id}" data-pkgid="${t.package_id}" data-pkg="${esc(t.package_name)}" data-dest="${esc(t.destination)}" data-trav="${esc(t.travelers)}">Book this trip</button>`
-      : '<span class="sub">Stay only</span> ';
+    if (t.stay_id) return '<span class="sub">Booked (see Hotel Stays)</span>';
+    let h;
+    if (t.package_id) h = `<button class="book" data-id="${t.trip_id}" data-pkgid="${t.package_id}" data-pkg="${esc(t.package_name)}" data-dest="${esc(t.destination)}" data-trav="${esc(t.travelers)}">Book this trip</button>`;
+    else if (t.hotel_id) h = `<button class="bookstay" data-id="${t.trip_id}" data-hotel="${t.hotel_id}" data-name="${esc(t.hotel)}" data-in="${day(t.start_date)}" data-out="${day(t.end_date)}" data-trav="${esc(t.travelers)}">Book the stay</button>`;
+    else h = '<span class="sub">No package or hotel</span> ';
     return h + `<button class="del" data-id="${t.trip_id}">Delete</button>`;
   }
 
@@ -110,6 +114,88 @@
     } catch (e) { $('bookMsg').className = 'bad'; $('bookMsg').textContent = e.message; loadBookDepartures(); }
   });
 
+  // ---------- Book the hotel stay of a stay-only trip (dates come from the trip, availability is per night) ----------
+  let stayTrip = null, stayRooms = [];
+  function refreshStay() {
+    const r = stayRooms.find((x) => String(x.room_id) === $('stayRoom').value);
+    const guests = parseInt($('stayGuests').value, 10) || 0;
+    $('stayGo').disabled = true;
+    if (!r) { $('stayEst').textContent = ''; return; }
+    const rooms = Math.ceil(guests / r.max_guests);
+    if (guests < 1) { $('stayEst').textContent = 'Please enter the number of guests.'; return; }
+    if (rooms > 5) { $('stayEst').textContent = 'That many guests need more than 5 rooms. Please book in parts.'; return; }
+    if (rooms > r.available) { $('stayEst').textContent = r.available > 0 ? `Only ${r.available} room(s) left for these dates, but ${guests} guest(s) need ${rooms}.` : 'Sold out for these dates.'; return; }
+    const nights = Math.round((new Date(stayTrip.out) - new Date(stayTrip.in)) / 864e5);
+    const sub = r.price * nights * rooms;
+    $('stayEst').textContent = `${rooms} room${rooms > 1 ? 's' : ''} × ${nights} night${nights > 1 ? 's' : ''} · ${r.available} available · Total $${(sub * 1.12).toFixed(2)} (incl. 12% tax)`;
+    $('stayGo').disabled = false;
+  }
+  async function loadStayRooms() {
+    $('stayGo').disabled = true; $('stayEst').textContent = '';
+    $('stayRoom').innerHTML = '<option value="">Loading rooms...</option>';
+    try { stayRooms = await get(`/api/hotels/${stayTrip.hotel}/availability?check_in=${stayTrip.in}&check_out=${stayTrip.out}`); }
+    catch (e) {
+      $('stayRoom').innerHTML = '<option value="">Rooms not available</option>';
+      $('stayMsg').className = 'bad'; $('stayMsg').textContent = 'Could not load rooms for these dates. Trip dates must be in the future.'; return;
+    }
+    $('stayRoom').innerHTML = stayRooms.map((r) => `<option value="${r.room_id}"${r.available === 0 ? ' disabled' : ''}>${esc(r.name)} — $${r.price}/night · ${r.available === 0 ? 'sold out' : r.available + ' left'}</option>`).join('');
+    const first = stayRooms.find((r) => r.available > 0);
+    if (first) $('stayRoom').value = first.room_id;
+    refreshStay();
+  }
+  function openStay(d) {
+    stayTrip = d;
+    $('stayInfo').textContent = `${d.name} · ${d.in} → ${d.out}`;
+    $('stayGuests').value = Math.min(Math.max(parseInt(d.trav, 10) || 1, 1), 20);
+    $('stayMsg').textContent = ''; $('stayMsg').className = '';
+    $('stayModal').hidden = false;
+    loadStayRooms();
+  }
+  const closeStay = () => ($('stayModal').hidden = true);
+  $('stayBack').addEventListener('click', closeStay);
+  $('stayModal').addEventListener('click', (e) => { if (e.target.id === 'stayModal') closeStay(); });
+  $('stayRoom').addEventListener('change', refreshStay);
+  $('stayGuests').addEventListener('input', refreshStay);
+  $('stayGo').addEventListener('click', async () => {
+    const r = stayRooms.find((x) => String(x.room_id) === $('stayRoom').value);
+    const guests = parseInt($('stayGuests').value, 10);
+    $('stayGo').disabled = true; $('stayMsg').className = ''; $('stayMsg').textContent = 'Reserving...';
+    try {
+      const res = await fetch(`/api/trips/${stayTrip.id}/book-stay`, { method: 'POST', headers: H,
+        body: JSON.stringify({ room_id: r.room_id, guests, rooms: Math.ceil(guests / r.max_guests) }) });
+      const d = await res.json();
+      if (res.status === 401) { localStorage.removeItem('tripnest_user'); location.href = 'login.html'; return; }
+      if (!res.ok) throw new Error(d.error || 'Could not book the stay');
+      $('stayMsg').className = 'ok';
+      $('stayMsg').textContent = `Rooms held for ${d.hold_minutes} minutes. Pay below to confirm your stay.`;
+      setTimeout(() => { closeStay(); loadTrips(); loadStays(); }, 1600);
+    } catch (e) { $('stayMsg').className = 'bad'; $('stayMsg').textContent = e.message; loadStayRooms(); }
+  });
+
+  async function loadStays() {
+    const box = $('staysBox');
+    try {
+      const rows = await get(`/api/users/${user.user_id}/hotel-bookings`);
+      if (!rows.length) return (box.innerHTML = '<p class="empty">No hotel stays yet. <a href="hotels.html">Browse hotels</a> or plan a stay-only trip.</p>');
+      box.innerHTML = `<table><tr><th>Hotel</th><th>Room</th><th>Stay</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr>` +
+        rows.map((s) => `<tr><td>${esc(s.hotel)}</td><td>${esc(s.room)}${s.rooms_count > 1 ? ' × ' + esc(s.rooms_count) : ''}</td>
+          <td>${day(s.check_in)} → ${day(s.check_out)} <div class="sub">${esc(s.nights)} night${s.nights == 1 ? '' : 's'}</div></td><td>${esc(s.guests)}</td><td>$${esc(s.total_price)}</td>
+          <td>${badge(s.status)}${s.hold_minutes_left !== null && s.hold_minutes_left !== undefined ? `<div class="hold">Pay within ${s.hold_minutes_left > 0 ? s.hold_minutes_left + ' min' : '1 min'} or the rooms are released</div>` : ''}</td>
+          <td class="acts">${stayActions(s)}</td></tr>`).join('') + '</table>';
+      box.querySelectorAll('.pay').forEach((b) => b.addEventListener('click', () => openPay(b.dataset, 'stay')));
+      box.querySelectorAll('.cancel').forEach((b) => b.addEventListener('click', () => openCancel(b.dataset, 'stay')));
+    } catch (e) { if (e.message !== '401') fail(box); }
+  }
+  function stayActions(s) {
+    let h = '';
+    const label = `${s.hotel} (${s.room})`;
+    if (s.status === 'pending') h += `<button class="pay" data-id="${s.hotel_booking_id}" data-amt="${esc(s.total_price)}" data-pkg="${esc(label)}">Pay now</button>`;
+    else if (s.status === 'confirmed') h += '<span class="paid">Paid ✓</span>';
+    if (s.status !== 'cancelled' && daysTo(s.check_in) >= 1)
+      h += `<button class="cancel" data-id="${s.hotel_booking_id}" data-amt="${esc(s.total_price)}" data-pkg="${esc(label)}" data-status="${esc(s.status)}" data-date="${day(s.check_in)}" data-fch="${s.free_cancel_hours === null ? '' : esc(s.free_cancel_hours)}" data-policy="${esc(s.cancellation)}">Cancel</button>`;
+    return h;
+  }
+
   async function loadBookings() {
     const box = $('bookingsBox');
     try {
@@ -118,8 +204,8 @@
       box.innerHTML = `<table><tr><th>Package</th><th>Travel Date</th><th>Travelers</th><th>Total</th><th>Status</th><th></th></tr>` +
         rows.map((b) => `<tr><td>${esc(b.package_name)}</td><td>${day(b.travel_date)}</td><td>${esc(b.travelers)}</td><td>$${esc(b.total_price)}</td><td>${badge(b.status)}${b.hold_minutes_left !== null && b.hold_minutes_left !== undefined ? `<div class="hold">Pay within ${b.hold_minutes_left > 0 ? b.hold_minutes_left + ' min' : '1 min'} or the seats are released</div>` : ''}</td>
           <td class="acts">${actions(b)}</td></tr>`).join('') + '</table>';
-      box.querySelectorAll('.pay').forEach((b) => b.addEventListener('click', () => openPay(b.dataset)));
-      box.querySelectorAll('.cancel').forEach((b) => b.addEventListener('click', () => openCancel(b.dataset)));
+      box.querySelectorAll('.pay').forEach((b) => b.addEventListener('click', () => openPay(b.dataset, 'package')));
+      box.querySelectorAll('.cancel').forEach((b) => b.addEventListener('click', () => openCancel(b.dataset, 'package')));
     } catch (e) { if (e.message !== '401') fail(box); }
   }
 
@@ -146,11 +232,18 @@
       h += `<button class="cancel" data-id="${b.booking_id}" data-amt="${esc(b.total_price)}" data-pkg="${esc(b.package_name)}" data-status="${esc(b.status)}" data-date="${day(b.travel_date)}">Cancel</button>`;
     return h;
   }
-  let cancelId = null;
-  function openCancel(d) {
-    cancelId = d.id;
-    $('cancelInfo').textContent = `${d.pkg} (travel date ${d.date})`;
-    const paid = d.status === 'confirmed', pct = paid ? pctFor(daysTo(d.date)) : 0;
+  let cancelId = null, cancelKind = 'package';
+  const PACKAGE_POLICY = $('cancelPolicy').textContent;
+  function openCancel(d, kind) {
+    cancelId = d.id; cancelKind = kind || 'package';
+    const stay = cancelKind === 'stay';
+    $('cancelInfo').textContent = stay ? `${d.pkg} (check-in ${d.date})` : `${d.pkg} (travel date ${d.date})`;
+    $('cancelPolicy').textContent = stay
+      ? (d.fch === '' ? 'This room type is non-refundable once paid. Unpaid stays are simply released.' : `This room type has free cancellation until ${d.fch} hours before check-in (100% refund). After that it is non-refundable. Unpaid stays need no refund. (Refunds are simulated.)`)
+      : PACKAGE_POLICY;
+    const paid = d.status === 'confirmed';
+    const hoursTo = (new Date(d.date + 'T00:00:00') - new Date()) / 36e5;
+    const pct = !paid ? 0 : stay ? (d.fch !== '' && hoursTo >= Number(d.fch) ? 100 : 0) : pctFor(daysTo(d.date));
     $('cancelEst').textContent = paid ? `If you cancel now: ${pct}% refund = $${(Number(d.amt) * pct / 100).toFixed(2)}` : 'This booking is not paid yet, so no refund is needed.';
     $('cancelMsg').textContent = ''; $('cancelMsg').className = ''; $('cancelGo').disabled = false; $('cancelModal').hidden = false;
   }
@@ -160,11 +253,11 @@
   $('cancelGo').addEventListener('click', async () => {
     $('cancelGo').disabled = true; $('cancelMsg').className = ''; $('cancelMsg').textContent = 'Cancelling…';
     try {
-      const res = await fetch(`/api/bookings/${cancelId}/cancel`, { method: 'POST', headers: H, body: JSON.stringify({ reason: $('cancelReason').value }) });
+      const res = await fetch(cancelKind === 'stay' ? `/api/hotel-bookings/${cancelId}/cancel` : `/api/bookings/${cancelId}/cancel`, { method: 'POST', headers: H, body: JSON.stringify({ reason: $('cancelReason').value }) });
       const d = await res.json(); if (!res.ok) throw new Error(d.error || 'Could not cancel');
       $('cancelMsg').className = 'ok';
       $('cancelMsg').textContent = Number(d.refund_amount) > 0 ? `Booking cancelled. Refund of $${Number(d.refund_amount).toFixed(2)} (${d.refund_percent}%) recorded.` : 'Booking cancelled. No refund applies.';
-      setTimeout(() => { closeCancel(); loadBookings(); loadRefunds(); }, 1800);
+      setTimeout(() => { closeCancel(); loadBookings(); loadStays(); loadTrips(); loadRefunds(); }, 1800);
     } catch (e) { $('cancelMsg').className = 'bad'; $('cancelMsg').textContent = e.message; $('cancelGo').disabled = false; }
   });
 
@@ -179,9 +272,9 @@
   }
 
   // ---------- Pay modal (simulated payment) ----------
-  let payId = null;
-  function openPay(d) {
-    payId = d.id; $('payInfo').textContent = `${d.pkg}: $${d.amt}`; $('payMsg').textContent = ''; $('payMsg').className = '';
+  let payId = null, payKind = 'package';
+  function openPay(d, kind) {
+    payId = d.id; payKind = kind || 'package'; $('payInfo').textContent = `${d.pkg}: $${d.amt}`; $('payMsg').textContent = ''; $('payMsg').className = '';
     $('payGo').disabled = false; $('payModal').hidden = false;
   }
   const closePay = () => ($('payModal').hidden = true);
@@ -191,12 +284,12 @@
     const method = document.querySelector('input[name="pm"]:checked').value;
     $('payGo').disabled = true; $('payMsg').className = ''; $('payMsg').textContent = 'Processing…';
     try {
-      const res = await fetch('/api/pay', { method: 'POST', headers: H, body: JSON.stringify({ booking_id: payId, method }) });
+      const res = await fetch('/api/pay', { method: 'POST', headers: H, body: JSON.stringify(payKind === 'stay' ? { hotel_booking_id: payId, method } : { booking_id: payId, method }) });
       const d = await res.json(); if (!res.ok) throw new Error(d.error || 'Payment failed');
       $('payMsg').className = 'ok'; $('payMsg').textContent = `Payment successful. Ref ${d.txn_ref}. Confirmation email saved.`;
-      setTimeout(() => { closePay(); loadBookings(); }, 1800);
+      setTimeout(() => { closePay(); loadBookings(); loadStays(); loadTrips(); }, 1800);
     } catch (e) { $('payMsg').className = 'bad'; $('payMsg').textContent = e.message; $('payGo').disabled = false; }
   });
 
-  loadTrips(); loadBookings(); loadRefunds(); loadWishlist();
+  loadTrips(); loadBookings(); loadStays(); loadRefunds(); loadWishlist();
 })();

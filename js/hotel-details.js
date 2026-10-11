@@ -373,6 +373,7 @@ window.hotelsReady.then(function () {
       btn.addEventListener("click", () => {
         selectedRoomIndex = Number(btn.dataset.selectRoom);
         document.getElementById("bkRoom").selectedIndex = selectedRoomIndex;
+        document.getElementById("bkRoom").dispatchEvent(new Event("change"));
         renderRooms();
         updateBreakdown();
         showToast(`${hotel.rooms[selectedRoomIndex].name} selected`);
@@ -611,45 +612,140 @@ window.hotelsReady.then(function () {
      =========================================================== */
   function initBookingSidebar() {
     const roomSelect = document.getElementById("bkRoom");
-    roomSelect.innerHTML = hotel.rooms.map((r, i) => `<option value="${i}">${r.name} — $${r.price}/night</option>`).join("");
+    const guestSelect = document.getElementById("bkGuests");
+    const bookBtn = document.getElementById("btnBookNow");
+    const availEl = document.getElementById("hdAvail");
+    const dbHotelId = hotel.id || hotelId;
+    let availMap = null;          // room id -> rooms still free for the chosen dates (from the database)
+    let availTimer = null;
+
+    guestSelect.innerHTML = [1, 2, 3, 4, 6].map((n) => `<option value="${n}"${n === 2 ? " selected" : ""}>${n} Guest${n > 1 ? "s" : ""}</option>`).join("");
+
+    function roomLabel(r) {
+      const left = availMap && availMap[r.id] !== undefined ? ` · ${availMap[r.id] > 0 ? availMap[r.id] + " left" : "sold out"}` : "";
+      return `${r.name} — $${r.price}/night${left}`;
+    }
+    function renderRoomOptions() {
+      roomSelect.innerHTML = hotel.rooms.map((r, i) => `<option value="${i}"${i === selectedRoomIndex ? " selected" : ""}>${roomLabel(r)}</option>`).join("");
+    }
+    renderRoomOptions();
 
     const today = new Date();
     const inD = new Date(today); inD.setDate(inD.getDate() + 7);
     const outD = new Date(inD); outD.setDate(outD.getDate() + 2);
     const fmt = (d) => d.toISOString().split("T")[0];
+    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById("bkCheckin").min = fmt(tomorrow);
     document.getElementById("bkCheckin").value = fmt(inD);
     document.getElementById("bkCheckout").value = fmt(outD);
+
+    // rooms needed = guests / people per room (a room type has a maximum number of guests)
+    function roomsNeeded() {
+      const room = hotel.rooms[selectedRoomIndex];
+      return Math.max(1, Math.ceil(guestCount() / (room.maxGuests || 2)));
+    }
+    function guestCount() { return Number(guestSelect.value) || 1; }
+    window.__hdRoomsNeeded = roomsNeeded;
+
+    // is the chosen room type bookable for the chosen dates? (message + button state)
+    function renderAvailability() {
+      const room = hotel.rooms[selectedRoomIndex];
+      const nights = getNights();
+      availEl.className = "hd-avail";
+      bookBtn.disabled = true;
+      if (nights <= 0) { availEl.textContent = "Check-out must be after check-in."; availEl.classList.add("is-bad"); return; }
+      if (nights > 30) { availEl.textContent = "You can book at most 30 nights at a time."; availEl.classList.add("is-bad"); return; }
+      const need = roomsNeeded();
+      if (need > 5) { availEl.textContent = "That many guests need more than 5 rooms. Please book in parts."; availEl.classList.add("is-bad"); return; }
+      if (!availMap) { availEl.textContent = "Checking availability…"; return; }
+      const free = availMap[room.id];
+      if (free === undefined) { availEl.textContent = "Could not check availability. Is the server running?"; availEl.classList.add("is-bad"); return; }
+      if (free >= need) {
+        availEl.textContent = `Available · ${free} room${free === 1 ? "" : "s"} left for these dates` + (need > 1 ? ` (you need ${need})` : "");
+        availEl.classList.add("is-ok");
+        bookBtn.disabled = false;
+      } else {
+        availEl.textContent = free > 0 ? `Only ${free} room${free === 1 ? "" : "s"} left for these dates, you need ${need}. Try fewer guests, other dates or another room type.` : "Sold out for these dates. Try other dates or another room type.";
+        availEl.classList.add("is-bad");
+      }
+    }
+
+    // ask the database (night by night) which room types are free; debounced so typing dates is not noisy
+    function refreshAvailability() {
+      window.clearTimeout(availTimer);
+      availMap = null;
+      renderAvailability();
+      availTimer = window.setTimeout(async () => {
+        const nights = getNights();
+        if (nights <= 0 || nights > 30) return;
+        try {
+          const r = await fetch(`/api/hotels/${dbHotelId}/availability?check_in=${document.getElementById("bkCheckin").value}&check_out=${document.getElementById("bkCheckout").value}`);
+          if (!r.ok) throw new Error("bad");
+          availMap = Object.fromEntries((await r.json()).map((x) => [x.room_id, x.available]));
+        } catch (e) { availMap = {}; }
+        renderRoomOptions();
+        renderAvailability();
+      }, 250);
+    }
+    window.refreshHotelAvailability = refreshAvailability;
 
     ["bkCheckin", "bkCheckout", "bkGuests", "bkRoom"].forEach((id) => {
       document.getElementById(id).addEventListener("change", () => {
         if (id === "bkRoom") { selectedRoomIndex = Number(roomSelect.value); renderRooms(); }
         updateBreakdown();
+        if (id === "bkRoom" || id === "bkGuests") renderAvailability(); else refreshAvailability();
       });
     });
 
     updateBreakdown();
+    refreshAvailability();
 
-    document.getElementById("btnBookNow").addEventListener("click", () => {
+    // real reservation: saved in the database, the room is held for 30 minutes
+    bookBtn.addEventListener("click", async () => {
       const nights = getNights();
       if (nights <= 0) { showToast("Check-out must be after check-in"); return; }
+      let user = null;
+      try { user = JSON.parse(localStorage.getItem("tripnest_user")); } catch (e) { /* not logged in */ }
+      if (!user || !user.token) {
+        showToast("Please log in to reserve a room");
+        window.setTimeout(() => { window.location.href = "login.html"; }, 1200);
+        return;
+      }
       const room = hotel.rooms[selectedRoomIndex];
-      const total = calcTotal();
-      document.getElementById("bookModalSummary").innerHTML = `
-        <div><span>Hotel</span><b>${hotel.name}</b></div>
-        <div><span>Room</span><b>${room.name}</b></div>
-        <div><span>Check-in</span><b>${document.getElementById("bkCheckin").value}</b></div>
-        <div><span>Check-out</span><b>${document.getElementById("bkCheckout").value}</b></div>
-        <div><span>Guests</span><b>${document.getElementById("bkGuests").value}</b></div>
-        <div><span>Nights</span><b>${nights}</b></div>
-        <div><span>Total</span><b>$${total.toFixed(2)}</b></div>
-      `;
-      document.getElementById("bookModalOverlay").classList.add("is-open");
-      showToast("Room held — check your reservation summary");
+      const rooms = roomsNeeded();
+      bookBtn.disabled = true;
+      try {
+        const res = await fetch("/api/hotel-bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-auth-token": user.token },
+          body: JSON.stringify({ room_id: room.id, check_in: document.getElementById("bkCheckin").value, check_out: document.getElementById("bkCheckout").value, guests: guestCount(), rooms }),
+        });
+        const d = await res.json();
+        if (res.status === 401) { localStorage.removeItem("tripnest_user"); showToast("Your session expired. Please log in again."); window.setTimeout(() => { window.location.href = "login.html"; }, 1200); return; }
+        if (!res.ok) throw new Error(d.error || "Could not reserve this room");
+        document.getElementById("bookModalTitle").textContent = "Room Reserved";
+        document.getElementById("bookModalLead").textContent = `Your room is held for ${d.hold_minutes} minutes. Pay from My Trips to confirm it.`;
+        document.getElementById("bookModalSummary").innerHTML = `
+          <div><span>Hotel</span><b>${escHtml(hotel.name)}</b></div>
+          <div><span>Room</span><b>${escHtml(room.name)}${rooms > 1 ? " × " + rooms : ""}</b></div>
+          <div><span>Check-in</span><b>${escHtml(d.check_in)}</b></div>
+          <div><span>Check-out</span><b>${escHtml(d.check_out)}</b></div>
+          <div><span>Guests</span><b>${escHtml(d.guests)}</b></div>
+          <div><span>Nights</span><b>${escHtml(d.nights)}</b></div>
+          <div><span>Total (incl. 12% tax)</span><b>$${Number(d.total_price).toFixed(2)}</b></div>
+        `;
+        document.getElementById("bookModalOverlay").classList.add("is-open");
+        refreshAvailability();
+      } catch (err) {
+        showToast(err.message);
+        refreshAvailability();
+      }
     });
     document.getElementById("bookModalClose").addEventListener("click", () => document.getElementById("bookModalOverlay").classList.remove("is-open"));
     document.getElementById("bookModalOverlay").addEventListener("click", (e) => {
       if (e.target.id === "bookModalOverlay") document.getElementById("bookModalOverlay").classList.remove("is-open");
     });
+
   }
 
   function getNights() {
@@ -658,27 +754,23 @@ window.hotelsReady.then(function () {
     return Math.round((outD - inD) / 86400000);
   }
 
-  function calcTotal() {
+  // price = room price x nights x rooms (+12% taxes), the same formula the database uses for hotel_bookings.total_price
+  function priceParts() {
     const nights = Math.max(getNights(), 0);
     const room = hotel.rooms[selectedRoomIndex];
-    const subtotal = room.price * nights;
-    const taxes = subtotal * 0.12;
-    return subtotal + taxes;
+    const rooms = window.__hdRoomsNeeded ? window.__hdRoomsNeeded() : 1;
+    const subtotal = room.price * nights * rooms;
+    const taxes = Math.round(subtotal * 12) / 100;
+    return { nights, room, rooms, subtotal, taxes, total: subtotal + taxes };
   }
 
   function updateBreakdown() {
-    const nights = getNights();
-    const room = hotel.rooms[selectedRoomIndex];
-    const subtotal = Math.max(nights, 0) * room.price;
-    const taxes = subtotal * 0.12;
-    const total = subtotal + taxes;
-
-    document.getElementById("hdSidebarPrice").textContent = `$${room.price}`;
-
+    const p = priceParts();
+    document.getElementById("hdSidebarPrice").textContent = `$${p.room.price}`;
     document.getElementById("hdBreakdown").innerHTML = `
-      <div class="hd-breakdown-row"><span>${room.name} × ${Math.max(nights, 0)} night${nights === 1 ? "" : "s"}</span><span>$${subtotal.toFixed(2)}</span></div>
-      <div class="hd-breakdown-row"><span>Taxes &amp; fees (12%)</span><span>$${taxes.toFixed(2)}</span></div>
-      <div class="hd-breakdown-row is-total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+      <div class="hd-breakdown-row"><span>${escHtml(p.room.name)} × ${p.nights} night${p.nights === 1 ? "" : "s"}${p.rooms > 1 ? " × " + p.rooms + " rooms" : ""}</span><span>$${p.subtotal.toFixed(2)}</span></div>
+      <div class="hd-breakdown-row"><span>Taxes &amp; fees (12%)</span><span>$${p.taxes.toFixed(2)}</span></div>
+      <div class="hd-breakdown-row is-total"><span>Total</span><span>$${p.total.toFixed(2)}</span></div>
     `;
   }
 

@@ -538,3 +538,9 @@ body { padding-top: 84px; background: var(--color-bg-soft); }
   .hd-thumb-strip img:nth-child(n+5) { display: none; }
   .hd-card { padding: 22px; }
 }
+
+/* live availability under the price breakdown */
+.hd-avail { font-size: 13px; font-weight: 600; text-align: center; margin: 10px 0 0; min-height: 18px; }
+.hd-avail.is-ok { color: #15803D; }
+.hd-avail.is-bad { color: #DC2626; }
+.hd-book-btn:disabled { opacity: .55; cursor: not-allowed; }

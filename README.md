@@ -6,6 +6,7 @@ A full-stack DBMS mini project. Users can explore destinations, hotels and packa
 - Customer and Admin login tabs with role-based access (bcrypt password hashing, database sessions with expiry, logout, brute-force lockout)
 - Plan a trip in 6 steps, saved in the database, viewable in **My Trips**
 - **Seat availability:** every package has dated departures with limited seats. Booking runs as one transaction (row lock), so overbooking is impossible; cancelling releases the seats (trigger)
+- **Hotel stays with real availability:** every room type has an inventory. Booking a stay checks availability **night by night** (recursive CTE, so a guest arriving the day another leaves is fine, and two people can never get the last room), runs as one transaction with a row lock, holds the room for 30 minutes, is paid and cancelled from My Trips (the refund follows the room's own cancellation policy), and can belong to a stay-only trip. Totals (nights x rooms x price + 12% tax) are generated columns, a composite foreign key makes sure the room belongs to the hotel, and admins can manage stays from the dashboard.
 - **One connected flow (destination = hub):** Destinations show how many hotels/packages they have -> *Plan Trip* opens the planner on that destination -> hotels and packages are loaded for that destination only -> the saved trip keeps `hotel_id` and `package_id` -> *My Trips* has **Book this trip** (pick a departure, seats are held) -> pay -> the trip becomes *confirmed*. Packages and hotel pages link into the same planner.
 - **The database enforces the flow:** composite foreign keys `(hotel_id, dest_id)` and `(package_id, dest_id)` on `trips` mean a trip can never have a hotel or package from another destination; a unique index on a generated column allows only one active booking per trip; a trigger keeps the trip status in step with its booking.
 - **Booking hold expiry:** a booking holds its seats for 30 minutes. If it is not paid, a MySQL EVENT (`ev_expire_pending_bookings`, every minute) cancels it, releases the seats and writes an email log. Paying at the last second is safe (row lock)
@@ -21,7 +22,7 @@ A full-stack DBMS mini project. Users can explore destinations, hotels and packa
 HTML, CSS, JavaScript | Node.js, Express | MySQL 8 | mysql2, bcryptjs, dotenv (cors only if you set CORS_ORIGIN)
 
 ## Database highlights
-26 tables, 8 triggers, 4 stored procedures, 3 views, 1 scheduled event, composite foreign keys, check constraints, a generated column, and indexes.
+27 tables, 10 triggers, 8 stored procedures, 3 views, 1 scheduled event, a recursive CTE, composite foreign keys, check constraints, a generated column, and indexes.
 ER diagrams: `docs/er-core-tables.png` and `docs/er-hotel-tables.png`.
 
 ## Project structure
@@ -36,7 +37,7 @@ docs/                         ER diagrams
 ## Setup
 1. Install [Node.js (LTS)](https://nodejs.org) and MySQL 8.
 2. Run the SQL scripts in `database/` **in this order** (MySQL Workbench: open file, run all):
-   `01_schema.sql`, `02_upgrade_roles_payments.sql`, `03_upgrade_destination_columns.sql`, `04_upgrade_hotel_details.sql`, `05_upgrade_refunds.sql`, `06_seat_availability.sql`, `07_security.sql`, `08_hold_expiry_and_ratings.sql`, `09_destination_hub.sql`
+   `01_schema.sql`, `02_upgrade_roles_payments.sql`, `03_upgrade_destination_columns.sql`, `04_upgrade_hotel_details.sql`, `05_upgrade_refunds.sql`, `06_seat_availability.sql`, `07_security.sql`, `08_hold_expiry_and_ratings.sql`, `09_destination_hub.sql`, `10_hotel_booking.sql`
    (`01_schema.sql` drops and recreates the `tripnest` database.)
 3. In the `backend` folder, copy `.env.example` to `.env` and set your MySQL password and an admin invite code.
 4. Install and start:
@@ -47,6 +48,9 @@ docs/                         ER diagrams
    ```
 5. Open http://localhost:3000
 
+## Sample data
+The 16 extra hotels (one for every destination), their photos (the destination photo), rooms and the two guest reviews per hotel are **sample data** so every page is complete. Replace them with your own hotels when you like.
+
 ## Overbooking test (viva demo)
 After setup, run `cd backend && node test-overbooking.js`. It makes 10 people book the last 3 seats at the same moment: exactly 3 succeed, 7 are told "Sold out", and the seat counter never goes above the total.
 
@@ -56,6 +60,7 @@ After setup, run `cd backend && node test-overbooking.js`. It makes 10 people bo
 | `node test-overbooking.js` | 10 people, 3 seats at the same moment: exactly 3 succeed |
 | `node test-security.js` | 41 attack checks (needs the server running) |
 | `node test-flow.js` | 24 checks of the connected flow: hub data, the database refusing a mismatched hotel/package, plan trip, book from My Trips, pay, cancel, re-book (needs the server running) |
+| `node test-hotel-booking.js` | 47 checks of hotel stays: night-by-night availability, 10 guests racing for 3 rooms, refunds per room policy, trip stays, expiry, constraints (needs the server running) |
 | `node test-hold-and-ratings.js` | rating triggers + the MySQL event cancelling an unpaid booking (waits up to ~90 s; add `--now` for instant) |
 
 ## Security (what is protected and how)

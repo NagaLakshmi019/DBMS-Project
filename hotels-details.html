@@ -294,6 +294,7 @@
         </div>
 
         <div class="hd-booking-breakdown" id="hdBreakdown"></div>
+        <p class="hd-avail" id="hdAvail" role="status"></p>
 
         <button type="button" class="btn btn-primary hd-book-btn" id="btnBookNow" data-magnetic>
           Reserve This Room
@@ -366,10 +367,10 @@
     <div class="modal-card__icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
     </div>
-    <h3>Room Held For You</h3>
-    <p class="modal-card__lead">Here's your reservation summary — continue to guest details and payment when you're ready.</p>
+    <h3 id="bookModalTitle">Room Held For You</h3>
+    <p class="modal-card__lead" id="bookModalLead">Here's your reservation summary.</p>
     <div class="modal-card__summary" id="bookModalSummary"></div>
-    <p class="hd-booking-note" style="text-align:center;">Full guest-details, payment, and confirmation flow arrives in the next build phase.</p>
+    <a class="btn btn-primary" id="bookModalGo" href="my-trips.html" style="display:block;text-align:center;margin-top:14px">Go to My Trips to pay</a>
   </div>
 </div>
 

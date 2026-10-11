@@ -17,6 +17,7 @@
     <p class="mt-sub">Mee trips, package bookings, saved destinations anni database nunchi vasthayi.</p>
     <section class="mt-card"><h2>Planned Trips</h2><div id="tripsBox">Loading…</div></section>
     <section class="mt-card"><h2>Package Bookings</h2><div id="bookingsBox">Loading…</div></section>
+    <section class="mt-card"><h2>Hotel Stays</h2><div id="staysBox">Loading…</div></section>
     <section class="mt-card"><h2>Refund History</h2><div id="refundBox">Loading…</div></section>
     <section class="mt-card"><h2>Saved Destinations ♥</h2><div id="wishBox">Loading…</div></section>
   </main>
@@ -46,11 +47,25 @@
       <div class="pay-actions"><button id="bookBack" class="ghost">Close</button><button id="bookGo" class="go" disabled>Reserve seats</button></div>
     </div>
   </div>
+  <div class="pay-modal" id="stayModal" hidden>
+    <div class="pay-box">
+      <h3>Book the stay</h3>
+      <p id="stayInfo" class="pay-info"></p>
+      <label class="fl" for="stayRoom">Room type</label>
+      <select id="stayRoom"></select>
+      <label class="fl" for="stayGuests">Guests</label>
+      <input type="number" id="stayGuests" min="1" max="20" value="2" />
+      <p id="stayEst" class="est"></p>
+      <p class="pay-note">Rooms are held for 30 minutes. Pay from Hotel Stays below to confirm. Dates come from your trip.</p>
+      <div id="stayMsg"></div>
+      <div class="pay-actions"><button id="stayBack" class="ghost">Close</button><button id="stayGo" class="go" disabled>Reserve rooms</button></div>
+    </div>
+  </div>
   <div class="pay-modal" id="cancelModal" hidden>
     <div class="pay-box">
       <h3>Cancel booking</h3>
       <p id="cancelInfo" class="pay-info"></p>
-      <p class="pay-note">Refund policy: 7 or more days before travel = 100% refund. 2 to 6 days = 50%. Less than 2 days = no refund. Unpaid bookings need no refund. (Refunds are simulated.)</p>
+      <p class="pay-note" id="cancelPolicy">Refund policy: 7 or more days before travel = 100% refund. 2 to 6 days = 50%. Less than 2 days = no refund. Unpaid bookings need no refund. (Refunds are simulated.)</p>
       <p id="cancelEst" class="est"></p>
       <select id="cancelReason"><option>Change of plans</option><option>Found a better price</option><option>Health or personal reasons</option><option>Other</option></select>
       <div id="cancelMsg"></div>

@@ -36,6 +36,10 @@
       (await api('/api/admin/emails')).map((m) => `<tr><td>${m.email_id}</td><td>${esc(m.to_email)}</td><td>${esc(m.subject)}</td><td style="white-space:normal;min-width:240px">${esc(m.body)}</td><td>${esc(m.status)}</td><td>${day(m.created_at)}</td></tr>`)),
     refunds: async () => table(['ID', 'User', 'Package', 'Booking', 'Refund', '%', 'Reference', 'Status', 'Date'],
       (await api('/api/admin/refunds')).map((r) => `<tr><td>${r.refund_id}</td><td>${esc(r.full_name)}</td><td>${esc(r.package_name)}</td><td>#${r.booking_id}</td><td>$${esc(r.amount)}</td><td>${esc(r.percent_refunded)}%</td><td>${esc(r.refund_ref)}</td><td>${esc(r.status)}</td><td>${day(r.refunded_at)}</td></tr>`)),
+    stays: async () => table(['ID', 'Guest', 'Hotel', 'Room', 'Stay', 'Rooms', 'Total', 'Status', 'Action'],
+      (await api('/api/admin/hotel-bookings')).map((s) => `<tr><td>${s.hotel_booking_id}</td><td>${esc(s.full_name)}</td><td>${esc(s.hotel)}</td><td>${esc(s.room)}</td>
+        <td>${day(s.check_in)} → ${day(s.check_out)}</td><td>${esc(s.rooms_count)}</td><td>$${esc(s.total_price)}</td><td>${esc(s.status)}</td>
+        <td>${s.status === 'cancelled' ? '—' : `<button class="cancelStay" data-id="${s.hotel_booking_id}">Cancel stay</button>`}</td></tr>`)),
     seats: async () => {
       const [deps, pkgs] = await Promise.all([api('/api/admin/departures'), fetch('/api/packages').then((r) => r.json())]);
       const form = `<form id="depForm" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
@@ -63,6 +67,11 @@
       panel.querySelectorAll('button.cancelBk').forEach((btn) => btn.addEventListener('click', async () => {
         if (!confirm('Cancel booking #' + btn.dataset.id + '? Seats are released and the refund policy is applied.')) return;
         try { await api('/api/admin/bookings/' + btn.dataset.id, 'PATCH', { status: 'cancelled' }); loadStats(); show('bookings'); }
+        catch (err) { alert(err.message); }
+      }));
+      panel.querySelectorAll('button.cancelStay').forEach((btn) => btn.addEventListener('click', async () => {
+        if (!confirm('Cancel stay #' + btn.dataset.id + '? The refund follows the room cancellation policy.')) return;
+        try { await api('/api/admin/hotel-bookings/' + btn.dataset.id, 'PATCH', { status: 'cancelled' }); show('stays'); }
         catch (err) { alert(err.message); }
       }));
       const depForm = panel.querySelector('#depForm');
